@@ -1,0 +1,264 @@
+{{-- @push('styles')
+    <x-head.tinymce-config />
+@endpush --}}
+
+<x-base-layout>
+    {{-- @include('blogs.share', ['shareBlog' => $shareBlog]) --}}
+    <?php
+    function nice_number($n)
+    {
+        if (!is_numeric($n)) {
+            return false;
+        }
+        if ($n > 1000000000000) {
+            return round($n / 1000000000000, 1) . 't ';
+        } elseif ($n > 1000000000) {
+            return round($n / 1000000000, 1) . 'b ';
+        } elseif ($n > 1000000) {
+            return round($n / 1000000, 1) . 'm ';
+        } elseif ($n > 1000) {
+            return round($n / 1000, 1) . 'k ';
+        }
+        return number_format($n);
+    }
+    ?>
+    @if (session()->has('success'))
+        <section class="my-4 d-flex justify-content-center w-100">
+            <div class="container">
+                <div class="alert alert-dismissible fade show alert-success" role="alert" data-mdb-color="warning"
+                    id="customxD">
+                    <strong>Success!</strong> {{ session()->get('success') }}
+                    <button type="button" class="btn-close" data-mdb-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        </section>
+    @endif
+    <main
+        class="relative prose max-w-none lg:max-w-full xl:max-w-none prose-img:rounded-xl  dark:prose-invert prose-a:text-teal-600 dark:prose-a:text-teal-500">
+
+        <div id="toast-info">
+
+        </div>
+        <div class="relative  pt-[60%] rounded-xl sm:pt-[50%] md:pt-[42%] ">
+            <img class="absolute top-0 bottom-0 left-0 right-0 w-full h-full m-0 bg-white shadow-md object-fit rounded-xl drop-shadow-md dark:bg-gray-800"
+                src="https://picsum.photos/400/300" alt="" />
+        </div>
+        <div class="relative flex flex-col w-full mt-3 lg:flex-row ">
+            <div class="flex-1 my-2 basis-2/3 lg:w-2/3">
+                <div class="not-prose {{ $blog->adult_warning ? '' : 'hidden' }}">
+                    <div
+                        class="flex flex-col items-center justify-center  px-4 py-4 mb-4 text-sm text-[#1f2833] leading-6 border not-prose  border-teal-200 bg-teal-50 rounded-xl dark:bg-[#fddfd8] ">
+                        <p class="text-base">This blog contains adult content.<a href="#"
+                                class="font-black text-teal-600 ml-2">learn more</a></p>
+                    </div>
+                </div>
+                <div class="not-prose">
+                    @foreach ($blog->tags as $tag)
+                        <x-tag :tag=$tag id="tag{{ $blog->id }}-{{ $tag->id }}" />
+                    @endforeach
+                </div>
+                <h1 class="text-3xl my-55 md:text-4xl lg:text-5xl dark:text-white">
+                    {{ $blog->title }}
+                </h1>
+                {{-- @can('isBlogOwner', $blog) --}}
+                    <div class="flex justify-end not-prose">
+                        <div class="inline-flex rounded-md shadow-sm" role="group">
+                            <a type="button" href="/blogs/edit/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
+                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-50 hover:text-teal-600 focus:z-10 focus:ring-2 focus:ring-teal-600 focus:text-teal-600 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-teal-500 dark:focus:text-white">
+                                {{ svg('iconsax-bul-edit-2', 'w-6 h-6 mr-3 fill-current') }}
+                                Edit
+                            </a>
+                            <a type="button" href="/blogs/manage/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
+                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-50 hover:text-teal-600 focus:z-10 focus:ring-2 focus:ring-teal-600 focus:text-teal-600 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-teal-500 dark:focus:text-white">
+                                <svg aria-hidden="true" class="w-4 h-4 mr-2 fill-current" fill="currentColor"
+                                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z">
+                                    </path>
+                                </svg>
+                                Manage
+                            </a>
+                            <a type="button" href="/blogs/stats/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
+                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-50 hover:text-teal-600 focus:z-10 focus:ring-2 focus:ring-teal-600 focus:text-teal-600 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-teal-500 dark:focus:text-white">
+                                {{ svg('iconsax-lin-status-up', 'w-6 h-6 mr-2') }}
+                                Stats
+                            </a>
+                        </div>
+                    </div>
+                {{-- @endcan --}}
+                <div class={{ $blog->adult_warning ? 'prose-img:blur-lg' : '' }}>
+                    @if ($blog->access == 'follower')
+                        @guest
+                            <article class="w-full my-5 ">
+                                {!! Str::words(strip_tags($blog->description), 50) !!}
+                            </article>
+                            <div class="">
+                                <div
+                                    class="flex flex-col items-center text-center justify-center px-8 py-16 mb-4 text-sm text-[#1f2833] leading-6 border not-prose  border-teal-200 bg-teal-50 rounded-xl dark:bg-[#fddfd8] ">
+                                    <h2 class="mb-8 text-2xl font-black md:text-3xl lg:text-4xl ">This Blog is for followers
+                                        only
+                                    </h2>
+                                    <p class="text-base">Sign up now to read the blog and get access to the full library of
+                                        blogs
+                                        for followers only.</p>
+                                    <div class="">
+                                        <a class="flex items-center justify-center px-4 py-3 my-4 text-sm font-medium text-center text-white no-underline cursor-pointer rounded-xl whitespace-nowrap bg-gradient-to-br from-teal-600 to-pink-500 hover:bg-gradient-to-bl focus:ring-2 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800"
+                                            href="/register">
+                                            {{ __('Sign up now') }}
+                                        </a>
+                                        <span class="text-sm">Already have an account? <a href="/login"
+                                                class="font-black">Sign
+                                                in</a></span>
+                                    </div>
+                                </div>
+                            </div>
+                        @else
+                            {{-- @if ($blog->user_id == auth()->user()->id) --}}
+                            <article class="w-full my-5">
+                                {!! $blog->description !!}
+                            </article>
+                            {{-- @else
+                                @if ($blog->user->isFollowing())
+                                    <article class="w-full my-5">
+                                        {!! $blog->description !!}
+                                    </article>
+                                @else
+                                    <article class="w-full my-5">
+                                        {!! Str::words(strip_tags($blog->description), 50) !!}
+                                    </article>
+                                    <div class="">
+                                        <div
+                                            class="flex flex-col items-center text-center justify-center px-8 py-16 mb-4 text-sm text-[#1f2833] leading-6 border not-prose  border-teal-200 bg-teal-50 rounded-xl dark:bg-[#fddfd8] ">
+                                            <h2 class="mb-8 text-2xl font-black md:text-3xl lg:text-4xl ">This Blog is for
+                                                followers only
+                                            </h2>
+                                            <p class="text-base">Follow the author now to read the blog and get access to the
+                                                full library of blogs
+                                                for followers only.</p>
+                                            <div class="">
+                                                <form method="post" id="follow-{{ $blog->user_id }}" class="follow">
+                                                    @csrf
+                                                    @method('put')
+                                                    <input type="hidden" name="follower_id" id="follower_id"
+                                                        value="{{ auth()->user()->id }}">
+                                                    <input type="hidden" name="user_id" id="user_id"
+                                                        value="{{ $blog->user_id }}">
+                                                    @if ($blog->user->isFollowing())
+                                                        <button type="submit"
+                                                            class="follow_button_{{ $blog->user_id }} my-4 inline-flex justify-center items-center font-medium rounded-lg text-sm px-5 py-2 text-center no-underline cursor-pointer whitespace-nowrap text-white bg-gradient-to-br from-teal-600 to-pink-500 hover:bg-gradient-to-bl focus:ring-2 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800">
+                                                            {{ svg('bi-person-check-fill', 'mr-2 -ml-1 w-5 h-5') }}
+                                                            {{ __('Following') }}
+                                                        </button>
+                                                    @else
+                                                        <button type="submit"
+                                                            class="follow_button_{{ $blog->user_id }} my-4 w-full inline-flex justify-center items-center font-medium rounded-lg text-sm px-5 py-2 text-center no-underline  cursor-pointer whitespace-nowrap text-white bg-gradient-to-br from-teal-600 to-pink-500 hover:bg-gradient-to-bl focus:ring-2 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800">
+                                                            {{ svg('bi-person-plus-fill', 'mr-2 -ml-1 w-5 h-5') }}
+                                                            {{ __('Follow') }}
+                                                        </button>
+                                                    @endif
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endif --}}
+                        @endguest
+                    @elseif($blog->access == 'public')
+                        <article class="w-full my-5">
+                            {!! $blog->description !!}
+                        </article>
+                    @endif
+                </div>
+                <livewire:comment :blog_id="$blog->id" :comments_count="$blog->comments->count()" :canComment="$blog->comment_access == 'enable' ? true:false" />
+                @if ($related->count() > 0)
+                    <div>
+                        <h2 class="flex flex-col items-center justify-center">
+                            Related
+                            <svg class="text-gray-500 h-6 opacity-10 w-20" role="img" viewBox="0 0 136 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M1.525 1.525a3.5 3.5 0 014.95 0L20 15.05 33.525 1.525a3.5 3.5 0 014.95 0L52 15.05 65.525 1.525a3.5 3.5 0 014.95 0L84 15.05 97.525 1.525a3.5 3.5 0 014.95 0L116 15.05l13.525-13.525a3.5 3.5 0 014.95 4.95l-16 16a3.5 3.5 0 01-4.95 0L100 8.95 86.475 22.475a3.5 3.5 0 01-4.95 0L68 8.95 54.475 22.475a3.5 3.5 0 01-4.95 0L36 8.95 22.475 22.475a3.5 3.5 0 01-4.95 0l-16-16a3.5 3.5 0 010-4.95z">
+                                </path>
+                            </svg>
+                        </h2>
+
+                        @foreach ($related as $sblog)
+                            <x-cards.blog-card :blog=$sblog class="not-prose" />
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+            <aside class="my-2 overflow-hidden basis-1/3 lg:pl-5 lg:py-5">
+                <div id="sticky-sidebar">
+                    <x-cards.primary-card :default=false>
+                        <div class="px-4 py-3 rounded-xl dark:bg-gray-800 ">
+                            <div class="grid grid-cols-4 gap-4 justify-between">
+                                <livewire:like-blog :blog_id="$blog->id" :likes_count="$blog->bloglikes->where('status', 1)->count()" :wire:key="$blog->id" />
+                                <div>
+                                    <button type="button"
+                                        class=" flex flex-row items-center mr-1 md:mr-1 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
+                                        data-modal-toggle="shareBlogModal">
+                                        {{ svg('iconsax-bul-share', 'h-6 w-6') }}
+                                        <span class="ml-2">share</span>
+                                    </button>
+                                </div>
+                                <livewire:bookmark :blog_id="$blog->id" :wire:key="$blog->id" />
+                            </div>
+                        </div>
+                    </x-cards.primary-card>
+                    <x-cards.primary-card>
+                        <div class="px-4 py-3 rounded-xl not-prose dark:bg-gray-800 ">
+                            <header class="">
+                                <div class="flex items-center flex-1 ">
+                                    <img class="w-10 h-10 rounded-full" src="{{ asset($blog->user->profile_image) }}"
+                                        onerror="this.onerror=null;this.src=`https://avatars.dicebear.com/api/bottts/:{{ $blog->user->username }}.svg`"
+                                        alt="">
+                                    <div class="ml-2 font-medium">
+                                        <div class="text-gray-900 dark:text-white">{{ $blog->user->username }} </div>
+                                        <div class="text-sm">Joined in
+                                            {{ \Carbon\Carbon::parse($blog->user->created_at)->format('F Y') }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </header>
+                            <div class="mt-3">
+                                {!! $blog->user->short_bio !!}
+                            </div>
+                            <div class="w-full mt-3">
+                                <livewire:subscribe :user_id="$blog->user_id" />
+                            </div>
+                        </div>
+                    </x-cards.primary-card>
+                    <x-cards.primary-card :default=false>
+                        <header class="px-4 py-3 text-2xl font-semibold text-gray-700 dark:text-white">
+                            <span class="modern-badge modern-badge-danger">#Advertisment</span>
+                        </header>
+                        <div
+                            class="px-4 py-3 text-gray-700 border-t border-gray-200 last:rounded-b-lg dark:text-gray-400 dark:hover:text-white dark:border-gray-700  hover:shadow dark:bg-gray-800 dark:hover:bg-gray-700">
+                            <div class="relative  pt-[60%] w-full rounded-xl sm:pt-[50%] md:pt-[42%] ">
+                                <img class="absolute top-0 bottom-0 left-0 right-0 object-cover w-full h-full m-0 bg-white shadow-md rounded-xl drop-shadow-md dark:bg-gray-800"
+                                    src="https://picsum.photos/400/300" alt="" />
+                            </div>
+                        </div>
+                    </x-cards.primary-card>
+                    <x-cards.primary-card :default=false>
+                        <header class="px-4 py-3 text-2xl font-semibold text-gray-700 dark:text-white">
+                            <span>More From {{ $blog->user->username }}</span>
+                        </header>
+                        <div
+                            class="px-4 py-3 text-gray-700 border-t border-gray-200 last:rounded-b-lg dark:text-gray-400 dark:hover:text-white dark:border-gray-700 hover:shadow dark:bg-gray-800 dark:hover:bg-gray-700">
+                            First, why should you make any website faster?
+
+                            ✔️ Decrease bounce rate by 57% (as per study)
+                            ✔️ Increases google ranking
+                            ✔️ Happy Visitors/Customers
+
+                            let's check the steps 👇
+
+                        </div>
+                    </x-cards.primary-card>
+                </div>
+            </aside>
+        </div>
+    </main>
+</x-base-layout>
