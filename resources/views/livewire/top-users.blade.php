@@ -1,7 +1,7 @@
 @if ($topUsers->count() > 3)
     <div class="relative mt-3 w-full  text-base text-left  rounded-xl font-normal">
         <header class="py-3 px-4 text-2xl font-bold tracking-wide text-gray-700 dark:text-white">
-            <h3> Top Users {{ now() }}</h3>
+            <h3> Top Users </h3>
         </header>
         <ul class="p-0 list-none">
             @foreach ($topUsers as $topUser)

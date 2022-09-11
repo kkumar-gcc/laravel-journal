@@ -14,23 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('comments', function (Blueprint $table) {
-         // $table->id();
-            // $table->string('uuid')->nullable()->unique();
-            // $table->text('description');
-            // // $table->foreignId('blog_id')
-            // //     ->constrained("blogs")
-            // //     ->onUpdate('cascade');
-            // $table->unsignedInteger('commentable_id');
-            // $table->string('commentable_type');
-            // $table->foreignId('user_id')
-            //     ->constrained("users")
-            //     ->onUpdate('cascade');
-            // $table->bigInteger("likes")->nullable();
-            // // $table->bigInteger("dislikes")->nullable();
-            // $table->timestamps();
             $table->id();
             $table->string('uuid')->nullable()->unique();
-            $table->text('description');
+            $table->text('body');
             $table->foreignId('blog_id')
                 ->constrained("blogs")
                 ->onUpdate('cascade');

@@ -11,11 +11,11 @@ class EditComment extends Component
 
     use AuthorizesRequests;
     public $comment_id;
-    public $description;
-    public function mount($comment_id,$description)
+    public $message;
+    public function mount($comment_id,$message)
     {
         $this->comment_id = $comment_id;
-        $this->description=$description;
+        $this->message=$message;
     }
     public function render()
     {
@@ -23,10 +23,9 @@ class EditComment extends Component
     }
     public function update()
     {
-
         $comment = Comment::find($this->comment_id);
         $this->authorize('update', $comment);
-        $comment->update(['description' => $this->description]);
+        $comment->update(['body' => $this->message]);
         $this->emit('edited');
     }
 }

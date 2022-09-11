@@ -1,13 +1,12 @@
-<form wire:submit.prevent="update()" class="mt-4">
+
+<form wire:submit.prevent="update" class="mt-4">
     @csrf
     <div class=" mb-5">
-        <div class="form-outline">
-            <textarea id="editor2" wire:model="description"
-                class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-4 focus:ring-teal-500/20 focus:border-teal-600 block w-full p-2.5 focus:placeholder:placeholder-teal-600 focus:text-teal-600"
-                name="description" maxlength="200" rows="4"></textarea>
-            <div class="form-helper"></div>
+        <div wire:ignore>
+            <textarea wire:model="message" class="editor min-h-fit h-48 " name="message" id="comment_edit-{{ $comment_id }}" placeholder="Type your comment... "></textarea>
         </div>
     </div>
+    {{ $message }}
     <x-buttons.secondary class="inline-flex mr-4" type="submit">{{ __('Edit') }}
     </x-buttons.secondary>
     <x-buttons.primary @click="editComment = ! editComment">{{ __('Cancel') }}

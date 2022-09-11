@@ -10,7 +10,7 @@ class Reply extends Model
     use HasFactory;
     use HasFactory;
     protected $fillable=[
-        'description',
+        'body',
         'comment_id',
         'user_id'
     ];
@@ -18,13 +18,13 @@ class Reply extends Model
     {
         return $this->id;
     }
-    public function description(): string
+    public function body(): string
     {
-        return $this->description;
+        return $this->body;
     }
     public function excerpt(int $limit = 100): string
     {
-        return Str::limit(strip_tags($this->description()), $limit);
+        return Str::limit(strip_tags($this->body()), $limit);
     }
     public function comment(){
         return $this->belongsTo(Comment::class);

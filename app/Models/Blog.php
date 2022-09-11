@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,8 +16,10 @@ class Blog extends Model
     protected $fillable = [
         'user_id',
         'title',
-        'description',
-        'image',
+        'body',
+        'cover_image',
+        'meta_description',
+        'meta_title',
         "status",
     ];
     public function id(): int
@@ -29,7 +32,7 @@ class Blog extends Model
     }
     public function body()
     {
-        return $this->description;
+        return $this->body;
     }
     public function excerpt(int $limit = 100): string
     {
@@ -105,6 +108,32 @@ class Blog extends Model
         // }
 
     }
+    // public function scopeTag(Builder $query)
+    public function scopeFeatured($query): Builder
+    {
+         return $query->where('featured',true);
+    }
+    public function scopePublished($query): Builder
+    {
+         return $query->where([['status','posted'],['access',"!=","private"]]);
+    }
+    public function scopeRecentAsc($query): Builder
+    {
+        return $query->orderBy('title','asc');
+    }
+    public function scopeRecent($query): Builder
+    {
+        return $query->orderBy('created_at','desc');
+    }
+    public function scopePopular($query): Builder
+    {
+        return $query->withCount(['bloglikes'])->orderByDesc('bloglikes_count');
+    }
+    public function scopeView($query): Builder
+    {
+        return $query->withCount('blogviews')->orderByDesc('blogviews_count');
+    }
+
     // public function isPinned()
     // {
     //     return $this->blogpins()->where('user_id','=', auth()->user()->id)->exists();

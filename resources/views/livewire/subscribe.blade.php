@@ -7,7 +7,7 @@
     @else
         @if (auth()->user()->id == $user_id)
             <x-buttons.secondary href="/settings">
-                {{ svg('coolicon-edit', 'mr-2 -ml-1 w-6 h-6') }}
+                {{ svg('iconsax-bul-edit-2', 'w-6 h-6 mr-2 -ml-1') }}
                 {{ __('Edit Profile') }}
             </x-buttons.secondary>
         @else

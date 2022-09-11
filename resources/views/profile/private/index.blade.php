@@ -27,7 +27,7 @@
 
         </div>
         <section>
-            <header class="bg-white border border-gray-200 not-pteal dark:border-gray-700 rounded-xl dark:bg-gray-800">
+            <header class="bg-white border border-gray-200 not-pteal dark:border-gray-700 rounded-lg dark:bg-gray-800">
                 <div class="relative  pt-[60%] rounded-xl sm:pt-[30%] md:pt-[22%]">
                     <img class="absolute top-0 bottom-0 left-0 right-0 w-full h-full m-0 bg-white object-fit rounded-t-xl dark:bg-gray-800"
                         src="{{ asset($user->background_image) ?? 'https://picsum.photos/400/300' }}" alt=""

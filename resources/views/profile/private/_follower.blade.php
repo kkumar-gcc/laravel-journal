@@ -5,8 +5,8 @@
             <div class="py-3 px-4 rounded-xl not-prose dark:bg-gray-800 ">
                 <header class="flex flex-col md:flex-row">
                     <div class="flex-1 flex items-center ">
-                        <img class="w-10 h-10 rounded-full"
-                            src="{{ asset($follower->profile_image)}}" onerror="this.onerror=null;this.src=`https://avatars.dicebear.com/api/bottts/:{{ $follower->username }}.svg`"
+                        <img class="w-10 h-10 rounded-full" src="{{ asset($follower->profile_image) }}"
+                            onerror="this.onerror=null;this.src=`https://avatars.dicebear.com/api/bottts/:{{ $follower->username }}.svg`"
                             alt="">
                         <div class="ml-2 font-medium ">
                             <div class="dark:text-white">
@@ -34,8 +34,9 @@
     @endforeach
     {!! $followers->withQueryString()->links('pagination::tailwind') !!}
 @else
-    <div
-        class="py-4 px-5 rounded-xl text-base border   text-gray-700 dark:text-gray-300  dark:border-gray-700 dark:bg-gray-800 ">
-        You don't have any follower.
-    </div>
+    <x-cards.primary-card class="mt-0">
+        <div class="py-4 px-5">
+            You don't have any follower.
+        </div>
+    </x-cards.primary-card>
 @endif

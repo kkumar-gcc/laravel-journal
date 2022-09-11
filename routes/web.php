@@ -33,35 +33,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post("/profile/update", [PrivateProfileController::class, 'store']);
     Route::put("/user/password/update", [UserController::class, 'resetPassword']);
 
-    Route::get("/new-blog", [BlogController::class, 'create'])->name("blog.create");
-    // Route::middleware(['cors'])->group(function () {
-    //     Route::post("blog/draft", [BlogController::class, 'draft'])->name("blog.draft");
-    //     Route::put("blog/create", [BlogController::class, 'post']);
-    //     Route::get("/blogs/edit/{title}", [BlogController::class, 'edit']);
-    //     Route::put("/blogs/edit", [BlogController::class, 'editStore'])->name('blogs.edit');
-    //     Route::get("/blogs/manage/{title}", [BlogController::class, 'manage']);
-    //     Route::put("/blogs/manage/seo", [BlogController::class, 'seo'])->name('blogs.manage.seo');
-    //     Route::put("/blogs/manage", [BlogController::class, 'manageStore'])->name('blogs.manage');
-    //     Route::get("/blogs/stats/{title}", [BlogController::class, 'stats']);
-    //     Route::get("blogs/{id}/statics", [BlogController::class, 'statics']);
-    //     Route::get("/drafts/{id}", [PrivateProfileController::class, 'draft']);
-    //     Route::delete("blog/{id}/delete", [BlogController::class, 'destroy']);
-    //     Route::put("/follow", [FriendshipController::class, 'store'])->name("follow");
-    //     Route::put("/bloglike/create", [BlogLikeController::class, 'like'])->name("bloglike.create");
-    //     Route::put("/blogdislike/create", [BlogLikeController::class, 'dislike'])->name("blogdislike.create");
-    //     Route::put("/commentlike/create", [CommentLikeController::class, 'like'])->name("commentlike.create");
-    //     Route::put("/commentdislike/create", [CommentLikeController::class, 'dislike'])->name("commentdislike.create");
-    //     Route::put("/replylike/create", [ReplyLikeController::class, 'like'])->name("replylike.create");
-    //     Route::put("/replydislike/create", [ReplyLikeController::class, 'dislike'])->name("replydislike.create");
-    //     Route::put("/bookmark/create", [BookmarkController::class, 'store'])->name("bookmark.create");
-    //     Route::put("/blogpin/create", [BlogPinController::class, 'store'])->name("blogpin.create");
-    //     Route::put("/comment/create", [CommentController::class, 'store'])->name("comment.create");
-    //     Route::put("/reply/create", [ReplyController::class, 'store'])->name("reply.create");
-    //     Route::put("tag/create", [TagController::class, 'store'])->name('tag.create');
-    //     Route::get("/example", function () {
-    //         return view('example');
-    //     });
-    // });
+    Route::get("/new-blog", [BlogController::class, 'create'])->name("new-blog");
+    Route::put("/new-blog", [BlogController::class, 'store'])->name("blog.create");
+    Route::get("/blogs/edit/{title}", [BlogController::class, 'edit']);
+    Route::put("/blogs/edit", [BlogController::class, 'editStore'])->name('blogs.edit');
+    Route::get("/blogs/manage/{title}", [BlogController::class, 'manage']);
+    Route::put("/blogs/manage/seo", [BlogController::class, 'seo'])->name('blogs.manage.seo');
+    Route::put("/blogs/manage", [BlogController::class, 'manageStore'])->name('blogs.manage');
+    Route::get("/blogs/stats/{title}", [BlogController::class, 'stats']);
 });
 Route::get("/blogs", [BlogController::class, 'index'])->name('blogs');
 Route::get("/blogs/{slug}", [BlogController::class, 'show']);

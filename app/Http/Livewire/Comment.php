@@ -15,7 +15,7 @@ class Comment extends Component
     public $comments_count;
     public $blog_id;
     public $canComment;
-    public $description, $editedDesc;
+    public $message;
     protected $listeners = ['edited'];
 
     public function edited()
@@ -40,22 +40,22 @@ class Comment extends Component
     {
         if ($this->canComment) {
             ModelsComment::create([
-                'description' =>  $this->description,
+                'body' =>  $this->message,
                 'blog_id' => $this->blog_id,
                 'user_id' => auth()->id()
             ]);
-            $this->reset('description');
+            $this->reset('message');
             $this->comments_count++;
         }
     }
     public function reply($comment_id)
     {
         ModelsReply::create([
-            'description' =>  $this->description,
+            'body' =>  $this->message,
             'comment_id' => $comment_id,
             'user_id' => auth()->id()
         ]);
-        $this->reset('description');
+        $this->reset('message');
     }
 
     public function delete($comment_id)

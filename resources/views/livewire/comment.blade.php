@@ -5,6 +5,7 @@
                     data-comments-count="{{ $comments_count }}">({{ $comments_count }})</span>
             </h2>
         </div>
+
         <div>
             <x-dropdown align="right" width="48">
                 <x-slot name="trigger">
@@ -48,12 +49,8 @@
                     <form wire:submit.prevent="comment">
                         @csrf
                         <div class=" mb-5">
-                            <div class="form-outline">
-                                <textarea wire:model="description" type="text" id="editor2"
-                                    class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-4 focus:ring-teal-500/20 focus:border-teal-600 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-4 dark:focus:border-teal-500 focus:placeholder:placeholder-teal-600 focus:text-teal-600"
-                                    name="short_bio" data-mdb-showcounter="true" maxlength="200" rows="4" wire:model="description"
-                                    placeholder="Type your comment... "></textarea>
-                                <div class="form-helper"></div>
+                            <div wire:ignore>
+                                <textarea wire:model="message" class="editor min-h-fit h-48 " name="message" id="create_comment" placeholder="Type your comment... "></textarea>
                             </div>
                         </div>
                         <x-buttons.secondary type="submit" fullWidth={true}>{{ __('Comment') }}</x-buttons.secondary>
@@ -141,7 +138,7 @@
                         </div>
                     </header>
                     <div class="my-3 prose max-w-none sm:max-w-full prose-img:rounded-xl prose-a:text-teal-600 ">
-                        {!! $comment->description !!}
+                        {!! $comment->body() !!}
                     </div>
                     <footer class="mt-2" x-data="{ open: false }">
                         <div class="flex flew-row">
@@ -177,15 +174,11 @@
                         </div>
                         @auth
                             <div x-show="open" x-transition x-transition.top.duration.500ms x-cloak>
-
                                 <form wire:submit.prevent="reply({{ $comment->id }})" class="mt-4">
                                     @csrf
                                     <div class=" mb-5">
-                                        <div class="form-outline">
-                                            <textarea wire:model="description" type="text" id="editor2"
-                                                class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-4 focus:ring-teal-500/20 focus:border-teal-600 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-4 dark:focus:border-teal-500 focus:placeholder:placeholder-teal-600 focus:text-teal-600"
-                                                name="description" maxlength="200" rows="4" placeholder="Type your reply... "></textarea>
-                                            <div class="form-helper"></div>
+                                        <div wire:ignore>
+                                            <textarea wire:model="message" class="editor min-h-fit h-48 " name="message" id="comment_reply-{{ $comment->id }}" placeholder="Type your comment... "></textarea>
                                         </div>
                                     </div>
                                     <x-buttons.secondary type="submit">{{ __('Reply') }}
@@ -195,7 +188,7 @@
                                 </form>
                             </div>
                             <div x-show="editComment" x-transition x-transition.top.duration.500ms x-cloak>
-                                <livewire:edit-comment :description="$comment->description" :comment_id="$comment->id"
+                                <livewire:edit-comment :message="$comment->body()" :comment_id="$comment->id"
                                     wire:key="edit-{{ $comment->id }}" />
                             </div>
                         @endauth
@@ -227,4 +220,5 @@
         </div>
         <div class="not-prose"> {{ $comments->links('livewire::tailwind') }}</div>
     </div>
+
 </section>

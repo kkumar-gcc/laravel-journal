@@ -1,7 +1,3 @@
-{{-- @push('styles')
-    <x-head.tinymce-config />
-@endpush --}}
-
 <x-base-layout>
     {{-- @include('blogs.share', ['shareBlog' => $shareBlog]) --}}
     <?php
@@ -34,11 +30,7 @@
         </section>
     @endif
     <main
-        class="relative prose max-w-none lg:max-w-full xl:max-w-none prose-img:rounded-xl  dark:prose-invert prose-a:text-teal-600 dark:prose-a:text-teal-500">
-
-        <div id="toast-info">
-
-        </div>
+        class="relative prose max-w-none prose-a:no-underline lg:max-w-full xl:max-w-none prose-img:rounded-xl  dark:prose-invert prose-a:text-teal-600 dark:prose-a:text-teal-500">
         <div class="relative  pt-[60%] rounded-xl sm:pt-[50%] md:pt-[42%] ">
             <img class="absolute top-0 bottom-0 left-0 right-0 w-full h-full m-0 bg-white shadow-md object-fit rounded-xl drop-shadow-md dark:bg-gray-800"
                 src="https://picsum.photos/400/300" alt="" />
@@ -60,37 +52,44 @@
                 <h1 class="text-3xl my-55 md:text-4xl lg:text-5xl dark:text-white">
                     {{ $blog->title }}
                 </h1>
-                {{-- @can('isBlogOwner', $blog) --}}
+                @can('update',  $blog)
                     <div class="flex justify-end not-prose">
-                        <div class="inline-flex rounded-md shadow-sm" role="group">
-                            <a type="button" href="/blogs/edit/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
-                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-50 hover:text-teal-600 focus:z-10 focus:ring-2 focus:ring-teal-600 focus:text-teal-600 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-teal-500 dark:focus:text-white">
-                                {{ svg('iconsax-bul-edit-2', 'w-6 h-6 mr-3 fill-current') }}
-                                Edit
-                            </a>
-                            <a type="button" href="/blogs/manage/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
-                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-50 hover:text-teal-600 focus:z-10 focus:ring-2 focus:ring-teal-600 focus:text-teal-600 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-teal-500 dark:focus:text-white">
-                                <svg aria-hidden="true" class="w-4 h-4 mr-2 fill-current" fill="currentColor"
-                                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z">
-                                    </path>
-                                </svg>
-                                Manage
-                            </a>
-                            <a type="button" href="/blogs/stats/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
-                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-50 hover:text-teal-600 focus:z-10 focus:ring-2 focus:ring-teal-600 focus:text-teal-600 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-teal-500 dark:focus:text-white">
-                                {{ svg('iconsax-lin-status-up', 'w-6 h-6 mr-2') }}
-                                Stats
-                            </a>
-                        </div>
+                        <x-dropdown align="right" width="48">
+                            <x-slot name="trigger">
+                                <x-buttons.primary  class="border hover:text-teal-600 ">
+                                    {{ svg('iconsax-bul-setting-2', 'h-6 w-6') }}
+                                </x-buttons.primary>
+                            </x-slot>
+                            <x-slot name="content">
+                                <ul>
+                                    <li>
+                                        <x-dropdown-link href="/blogs/edit/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}" class="flex ">
+                                            {{ __(' Edit') }}
+                                        </x-dropdown-link>
+                                    </li>
+                                    <li>
+                                        <x-dropdown-link href="/blogs/manage/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}" class="flex ">
+                                            {{ __('Manage') }}
+                                        </x-dropdown-link>
+                                    </li>
+                                    <li>
+                                        <x-dropdown-link href="/blogs/stats/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}" class="flex ">
+                                            {{ __('Stats') }}
+                                        </x-dropdown-link>
+                                    </li>
+                                </ul>
+
+                            </x-slot>
+                        </x-dropdown>
+
+
                     </div>
-                {{-- @endcan --}}
+                @endcan
                 <div class={{ $blog->adult_warning ? 'prose-img:blur-lg' : '' }}>
                     @if ($blog->access == 'follower')
                         @guest
                             <article class="w-full my-5 ">
-                                {!! Str::words(strip_tags($blog->description), 50) !!}
+                                {!! $blog->excerpt(50) !!}
                             </article>
                             <div class="">
                                 <div
@@ -115,16 +114,16 @@
                         @else
                             {{-- @if ($blog->user_id == auth()->user()->id) --}}
                             <article class="w-full my-5">
-                                {!! $blog->description !!}
+                                {{ Illuminate\Mail\Markdown::parse($blog->body()) }}
                             </article>
                             {{-- @else
                                 @if ($blog->user->isFollowing())
                                     <article class="w-full my-5">
-                                        {!! $blog->description !!}
+                                        {!! $blog->body() !!}
                                     </article>
                                 @else
                                     <article class="w-full my-5">
-                                        {!! Str::words(strip_tags($blog->description), 50) !!}
+                                        {!! Str::words(strip_tags($blog->body()), 50) !!}
                                     </article>
                                     <div class="">
                                         <div
@@ -165,7 +164,7 @@
                         @endguest
                     @elseif($blog->access == 'public')
                         <article class="w-full my-5">
-                            {!! $blog->description !!}
+                            {!! $converter->convert($blog->body())!!}
                         </article>
                     @endif
                 </div>
@@ -190,6 +189,7 @@
             </div>
             <aside class="my-2 overflow-hidden basis-1/3 lg:pl-5 lg:py-5">
                 <div id="sticky-sidebar">
+                    <div id="TOC"></div>
                     <x-cards.primary-card :default=false>
                         <div class="px-4 py-3 rounded-xl dark:bg-gray-800 ">
                             <div class="grid grid-cols-4 gap-4 justify-between">

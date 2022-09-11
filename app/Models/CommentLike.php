@@ -20,4 +20,7 @@ class CommentLike extends Model
         'user_id',
         'status'
     ];
+
+
+    
 }

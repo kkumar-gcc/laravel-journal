@@ -1,4 +1,4 @@
-<x-base-layout>
+<x-default-layout>
     <?php
     function nice_number($n)
     {
@@ -18,225 +18,88 @@
         return number_format($n);
     }
     ?>
-    <div class="container-fluid blog-section">
-        <div class="e-card">
-            <div class="card-body profile-body">
-                <h1 class="title mb-4">Create Post</h1>
-                <form method="POST" action="{{ Route('blog.create') }}">
-                    @csrf
-                    @method('PUT')
-                    <input type="hidden" id="blog_id" name="blog_id" value="{{ old('blog_id', $draft->id ?? '') }} " />
+    {{-- <form method="POST" action="{{ Route('blog.create') }}">
+        @csrf
+        @method('PUT')
+        <div class="p-4 flex flex-row items-center">
+            <div class="">
+                <x-buttons.primary href="{{ url()->previous() ?? '/blogs' }}" class="hover:text-teal-600 mr-4">
+                    <svg class="h-6 w-6" viewBox="0 0 456 512" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                        <title>cancel</title>
+                        <path
+                            d="M64 388L196 256 64 124 96 92 228 224 360 92 392 124 260 256 392 388 360 420 228 288 96 420 64 388Z">
+                        </path>
+                    </svg>
+                </x-buttons.primary>
+            </div>
+            <div class="flex-1 flex justify-end items-center">
+                <div>
+                    <x-buttons.primary class="mr-2 md:mr-4">
+                        <span class="hidden md:block">{{ __('Save as draft') }}</span>
 
-                    <div class="form-group mb-4">
-                        <label class="form-label" for="blog_image">Add a cover image</label>
-
-                        <div class="drop-zone" id="blog_image">
-                            <p class="drop-zone__prompt">Drop file here or click to upload</p>
-                            <input type="file" name="image" id="blog_image" class="form-control drop-zone__input">
+                        <span
+                            class="hover:text-teal-600 md:hidden">{{ svg('iconsax-bul-book-saved', 'h-6 w-6') }}</span>
+                    </x-buttons.primary>
+                </div>
+                <div>
+                    <x-modals.full modal="isModalOpen">
+                        <x-slot:title>
+                            <x-buttons.primary x-on:click="isModalOpen = true" class="hover:text-teal-600 mr-2 md:mr-4">
+                                {{ svg('iconsax-bul-setting-2', 'h-6 w-6') }}
+                            </x-buttons.primary>
+                        </x-slot:title>
+                        <div class=" my-6">
+                            <label class="text-xl font-bold line-clamp-3  tracking-wide  block mb-2  text-gray-700"
+                                for="name">Add a cover image</label>
+                            <input type="text" id="name"
+                                class="border border-gray-300 text-gray-600 text-base font-bold focus:shadow-md focus:ring-4 focus:ring-teal-500/20 focus:border-teal-600 block w-full p-3.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-4 dark:focus:border-teal-500"
+                                name="name" value="{{ old('title', $user->name ?? '') }}"
+                                placeholder="Type the canonical link" />
+                            <div class="input-error" id="nameError"></div>
                         </div>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label class="form-label " for="blog_title">Title</label>
-
-                        <input type="text" id="blog_title" class="form-control" name="title"
-                            value="{{ old('title', $draft->title ?? '') }}" />
-                    </div>
-                    <div class="form-group mb-4">
-                        <label class="form-label" for="myeditorinstance">Description</label>
-
-                        <textarea id="myeditorinstance" name="description"> {{ old('description', $draft->description ?? '') }} </textarea>
-                    </div>
-
-                    <input type="hidden" name="tags" id="tag-input" value="{{ old('tags', $tagTitles ?? '') }}">
-                    <div class="form-group mb-4 ">
-                        <label class="form-label" for="js-typeahead-tags">Add Tags</label>
-                        <div class="typeahead__container">
-                            <div class="typeahead__field">
-                                <div class="typeahead__query">
-                                    <input class="js-typeahead-tags form-control" name="tag[query]" placeholder="Search"
-                                        autocomplete="off" id="js-typeahead-tags">
-                                </div>
-                            </div>
+                        <div class=" my-6">
+                            <label class="text-xl font-bold line-clamp-3  tracking-wide  block mb-2  text-gray-700"
+                                for="canonical_link">Customize Canonical Link</label>
+                            <input type="text" id="canonical_link"
+                                class="border border-gray-300 text-gray-600 text-base font-bold focus:shadow-md focus:ring-4 focus:ring-teal-500/20 focus:border-teal-600 block w-full p-3.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-4 dark:focus:border-teal-500"
+                                name="canonical_link" value="{{ old('canonical_link', $blog->canonical_link ?? '') }}"
+                                placeholder="Type the canonical link" />
                         </div>
-                    </div>
-                    <div class="clearfix">
-                        <div class="float-end" id="autoSave">
-
+                        <div class=" my-6">
+                            <livewire:tag-input />
                         </div>
-                    </div>
-                    <button type="submit" class="mt-2 e-btn e-btn-success"> Post
-                    </button>
-                </form>
+                    </x-modals.full>
+                </div>
+                <div>
+                    <x-buttons.secondary type="submit">{{ __('Publish') }}
+                    </x-buttons.secondary>
+                </div>
+            </div>
+
+        </div>
+        <div class=" px-2 mt-2 text-gray-700 sm:px-6 sm:mt-6 md:px-20">
+            <h1 class="text-3xl font-extrabold line-clamp-3  tracking-wide text-gray-700 mb-4">Create Blog</h1>
+
+            <x-auth-validation-errors class="mb-4" :errors="$errors" />
+
+            <div class=" my-6">
+                <label class="text-xl font-bold line-clamp-3  tracking-wide  block mb-2  text-gray-700"
+                    for="title">Title of blog</label>
+                <input type="text" id="title"
+                    class="border border-gray-300 text-gray-600 text-base font-bold focus:ring-4 focus:shadow-md focus:ring-teal-500/20 focus:border-teal-600 block w-full p-3.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-4 dark:focus:border-teal-500"
+                    name="title" value="{{ old('title', $draft->title ?? '') }}" placeholder="Tittle . . . ." />
+                @error('title')
+                    <span class="error">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <textarea id="blog-description" class="hidden" name="body"></textarea>
+            <div id="editor"
+                class="relative my-10 prose max-w-none lg:max-w-full xl:max-w-none prose-img:rounded-xl prose-img:w-full mx-auto  dark:prose-invert prose-a:text-teal-600 dark:prose-a:text-teal-500">
+                <div class="hidden">
+                </div>
             </div>
         </div>
-    </div>
-</x-base-layout>
-{{-- @push('scripts')
-    @include('ajax')
-    <script>
-        $(document).ready(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            typeof $.typeahead === 'function' && $.typeahead({
-                input: '.js-typeahead-tags',
-                minLength: 1,
-                maxItem: 8,
-                maxItemPerGroup: 6,
-                order: "asc",
-                hint: true,
-                blurOnTab: true,
-                correlativeTemplate: ["title"],
-                matcher: function(item, displayKey) {
-                    if (item.id === "BOS") {
-                        item.disabled = true;
-                    }
-                    return true;
-                },
-                multiselect: {
-                    limit: 5,
-                    limitTemplate: 'You can\'t select more than 5 tags',
-                    matchOn: ["title"],
-                    cancelOnBackspace: true,
-                    data: function() {
-                        var deferred = $.Deferred();
-                        var isDraftNull = "{{ $isDraftNull }}";
-                        if (isDraftNull == 1) {
-                            var tags = @json($draft->tags ?? '');
-                            $.each(tags, function() {
-                                Object.assign(this, {
-                                    matchedKey: "title",
-                                    group: "tag",
-                                });
-                            })
-                            deferred.resolve(tags);
-                        }
-                        return deferred;
-                    },
-                    callback: {
-                        onClick: function(node, item, event) {
-                            console.log(item.title);
-                        },
-                        onCancel: function(node, item, event) {
-                            var tags = [];
-                            var temp = [];
-                            if ($("#tag-input").val() != '') {
-                                temp = tags.concat(tags, JSON.parse($("#tag-input").val()));
-                            }
-                            if (temp.includes(item.title)) {
-                                const index = temp.indexOf(item.title);
-                                console.log(index);
-                                if (index > -1) {
-                                    temp.splice(index, 1);
-                                }
-                            }
-                            $("#tag-input").val(JSON.stringify(temp));
-                        }
-                    }
-                },
-                dynamic: true,
-                hint: true,
-                template: function(query, item) {
-
-                    return ` <div class="e-card  shadow-1  ">
-                        <div class="e-card-body">
-                            <a href="/blogs/tagged/` + item.title + `" class="tag-popover"
-                                id="tag-` + item.id + `"><span class="modern-badge  modern-badge-` + item.color +
-                        `">` + item.title + `</span>
-                            </a>
-                            <p class="mt-3 mb-3">Some quick example text to build on the card title and make up the bulk of
-                                the card's content.Some quick example text to build on the card title and make up the bulk of
-                                the card's content.Some quick example text to build on the card title and make up the bulk of
-                                the card's content.Some quick example text to build on the card title and make up the bulk of
-                                the card's content.</p>
-                            <span class="text-muted">` + item.blogs_count + `blogs</span>
-                        </div>
-                    </div>`
-                },
-                templateValue: name,
-                display: ["title", "color", "description"],
-                emptyTemplate: function(query) {
-                    return `no result for "` + query + `"`;
-                },
-                source: {
-                    tag: {
-                        ajax: function(query) {
-                            return {
-                                url: "/tags/search",
-                                type: 'GET',
-                                data: {
-                                    query: query
-                                },
-                                dataType: 'json',
-                                callback: {
-                                    done: function(data) {
-
-                                        return data.tags;
-                                    }
-                                }
-                            }
-                        },
-
-                    }
-                },
-                callback: {
-                    onClickAfter: function(node, a, item, event) {
-                        var tags = [];
-                        var temp = [];
-                        if ($("#tag-input").val() != '') {
-                            temp = tags.concat(tags, JSON.parse($("#tag-input").val()));
-                        }
-                        if (!temp.includes(item.title)) {
-                            temp.push(item.title);
-                        }
-                        $("#tag-input").val(JSON.stringify(temp));
-                    }
-                },
-            });
-
-            function autoSave() {
-                var blog_title = $("#blog_title").val();
-                var blog_description = tinyMCE.activeEditor.getContent();
-                var blog_id = $("#blog_id").val();
-                var tag_input = $("#tag-input").val();
-                if (blog_title != '' && blog_description != '') {
-                    $.ajax({
-                        type: "POST",
-                        url: "{{ route('blog.draft') }}",
-                        data: {
-                            blogTitle: blog_title,
-                            blogDescription: blog_description,
-                            blogId: blog_id,
-                            tags: tag_input,
-
-                        },
-                        beforeSend: function() {
-                            $("#autoSave").html(
-                                " <span class='text-center modern-badge  modern-badge-danger' > <div class='spinner-border spinner-border-sm' role='status' > <span class='visually-hidden'>Loading...</span> </div> Saving...</span>"
-                            );
-                        },
-                        complete: function() {
-                            $("#autoSave").html(
-                                "<span class='text-right modern-badge  modern-badge-success'>Saved</span>"
-                            );
-                        },
-                        success: function(data) {
-
-                            if (data.blogId != '') {
-                                $("#blog_id").val(data.blogId);
-                            }
-                        }
-
-                    });
-                }
-            }
-            setInterval(function() {
-
-                autoSave();
-            }, 10000);
-
-        });
-    </script>
-@endpush --}}
+    </form> --}}
+    <livewire:blog.create />
+</x-default-layout>

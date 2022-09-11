@@ -10,11 +10,11 @@ class EditReply extends Component
 {
     use AuthorizesRequests;
     public $reply_id;
-    public $description;
-    public function mount($reply_id,$description)
+    public $body;
+    public function mount($reply_id,$body)
     {
         $this->reply_id = $reply_id;
-        $this->description=$description;
+        $this->body=$body;
     }
     public function render()
     {
@@ -25,7 +25,7 @@ class EditReply extends Component
 
         $reply = Reply::find($this->reply_id);
         $this->authorize('update', $reply);
-        $reply->update(['description' => $this->description]);
+        $reply->update(['body' => $this->body]);
         $this->emit('replyEdited');
     }
 

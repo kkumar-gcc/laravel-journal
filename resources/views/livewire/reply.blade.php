@@ -58,7 +58,7 @@
                 </div>
             </header>
             <div class="my-3">
-                {!! $reply->description !!}
+                {!! $reply->body() !!}
             </div>
             <footer class="mt-2" x-data="{ open: false }">
                 <div class="flex flew-row">
@@ -86,12 +86,8 @@
                         <form wire:submit.prevent="reply" class="mt-4">
                             @csrf
                             <div class=" mb-5">
-                                <div class="form-outline">
-                                    <textarea wire:model="description" type="text" id="editor2"
-                                        class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-4 focus:ring-teal-500/20 focus:border-teal-600 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-4 dark:focus:border-teal-500 focus:placeholder:placeholder-teal-600 focus:text-teal-600"
-                                        name="short_bio" data-mdb-showcounter="true" maxlength="200" rows="4" wire:model="description"
-                                        placeholder="Type your comment... "></textarea>
-                                    <div class="form-helper"></div>
+                                <div wire:ignore>
+                                    <textarea wire:model="body" class="editor min-h-fit h-48 " name="body" id="reply_reply-{{ $reply->id }}" placeholder="Type your Reply... "></textarea>
                                 </div>
                             </div>
                             <x-buttons.secondary type="submit" >{{ __('Reply') }}
@@ -102,7 +98,7 @@
                     </div>
                     @can('update', $reply)
                         <div x-show="editReply" x-transition x-transition.top.duration.500ms x-cloak>
-                            <livewire:edit-reply :description="$reply->description" :reply_id="$reply->id" wire:key="edit-{{ $reply->id }}" />
+                            <livewire:edit-reply :body="$reply->body()" :reply_id="$reply->id" wire:key="edit-{{ $reply->id }}" />
                         </div>
                     @endcan
                 @endauth

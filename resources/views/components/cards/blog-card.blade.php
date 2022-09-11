@@ -6,10 +6,10 @@
             <div class="flex flex-row mt-3 mb-1 md:mt-0">
                 <div class="flex-1 flex flex-row items-center">
                     <div class="mr-2 text-sm">
-                        {{ nice_number($blog->bloglikes->where('status', 1)->count()) }} <span>likes</span>
+                        {{ $blog->bloglikes->where('status', 1)->count() }} <span>likes</span>
                     </div>
                     <div class="mr-2 text-sm">
-                        {{ nice_number($blog->blogviews->count()) }} <span>views</span>
+                        {{ $blog->blogviews->count() }} <span>views</span>
                     </div>
                 </div>
                 <div>
@@ -19,10 +19,10 @@
 
             <a href="/blogs/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}" class="link link-secondary">
                 <h5 class="mb-2 text-2xl font-bold line-clamp-3  tracking-wide text-gray-900  dark:text-white ">
-                    {{ $blog->title }}
+                    {{ $blog->title() }}
                 </h5>
             </a>
-           {{-- <p>{{ $blog->excerpt(50) }}</p> --}}
+            {{-- <p>{{ $blog->excerpt(50) }}</p> --}}
             @foreach ($blog->tags as $tag)
                 <x-tag :tag=$tag id="tag{{ $blog->id }}-{{ $tag->id }}" />
             @endforeach
@@ -35,7 +35,8 @@
                 <span class="ml-1 text-sm">posted
                     {{ \Carbon\Carbon::parse($blog->created_at)->diffForhumans() }}</span>
             </p>
-            <x-buttons.secondary href="/blogs/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}" class="mt-5 sm:hidden" fullWidth="true">Read Blog</x-buttons.secondary>
+            <x-buttons.secondary href="/blogs/{{ Str::slug($blog->title(), '-') }}-{{ $blog->id() }}"
+                class="mt-5 sm:hidden" fullWidth="true">Read Blog</x-buttons.secondary>
         </div>
         <div
             class="basis-1/3 relative text-center min-h-fit {{ $blog->adult_warning ? 'prose prose-img:blur-lg' : '' }}">

@@ -12,13 +12,22 @@ use App\Models\Friendship;
 use App\Models\Subscriber;
 use App\Models\Tag;
 use App\Models\User;
+use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\URL;
-use Jorenvh\Share\Share;
-use Jorenvh\Share\ShareFacade;
-use Illuminate\Support\Str;
+use League\CommonMark\Environment\Environment;
+use League\CommonMark\Extension\Autolink\AutolinkExtension;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\DisallowedRawHtml\DisallowedRawHtmlExtension;
+use League\CommonMark\Extension\Strikethrough\StrikethroughExtension;
+use League\CommonMark\Extension\Table\TableExtension;
+use League\CommonMark\Extension\TaskList\TaskListExtension;
+use League\CommonMark\MarkdownConverter;
+use League\CommonMark\Extension\SmartPunct\SmartPunctExtension;
+use League\CommonMark\Extension\ExternalLink\ExternalLinkExtension;
+use League\CommonMark\Extension\HeadingPermalink\HeadingPermalinkRenderer;
+use League\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension;
+use League\CommonMark\Extension\TableOfContents\TableOfContentsExtension;
 
 class BlogController extends Controller
 {
@@ -29,26 +38,7 @@ class BlogController extends Controller
      */
     public function index(Request $request)
     {
-
-        $tab = 'newest';
-
-        if ($request->tab == 'likes') {
-            $blogs = Blog::select(['title','id','created_at','user_id'])->where("status", "=", "posted")->with(['user','tags','bloglikes','blogviews','bookmarks'])->withCount(['bloglikes'])->orderByDesc('bloglikes_count')->paginate(10);
-        } else if ($request->tab == 'newest') {
-            $blogs = Blog::latest()->filter()->paginate(10);
-        } else if ($request->tab == 'views') {
-            $blogs = Blog::where("status", "=", "posted")->with(['user','tags','blogviews','bloglikes'])->withCount('blogviews')->orderByDesc('blogviews_count')->paginate(10);
-        } else {
-            $blogs = Blog::where("status", "=", "posted")->with(['user','tags','bloglikes','blogviews'])->orderByDesc('created_at')->paginate(10);
-        }
-        if ($request->tab) {
-            $tab = $request->tab;
-        }
-        return view("blogs.index")->with([
-            "blogs" => $blogs,
-            "blogCount" => $blogs->count(),
-            "tab" => $tab
-        ]);
+        return view("blogs.index");
     }
 
     /**
@@ -144,6 +134,7 @@ class BlogController extends Controller
      */
     public function show(Request $request, $slug)
     {
+
         $titleArray = explode('-', $slug);
         $id = end($titleArray);
         $blog = Blog::find($id);
@@ -161,6 +152,60 @@ class BlogController extends Controller
                 //     ->whatsapp()
                 //     ->reddit()
                 //     ->getRawLinks();
+                //    dd($blog->body());
+                $config = [
+                    'table_of_contents' => [
+                        'html_class' => 'table-of-contents',
+                        'position' => 'top',
+                        'style' => 'bullet',
+                        'min_heading_level' => 1,
+                        'max_heading_level' => 6,
+                        'normalize' => 'relative',
+                        'placeholder' => 'TOC',
+                    ],
+                    'smartpunct' => [
+                        'double_quote_opener' => '“',
+                        'double_quote_closer' => '”',
+                        'single_quote_opener' => '‘',
+                        'single_quote_closer' => '’',
+                    ],
+                    'heading_permalink' => [
+                        'html_class' => 'heading-permalink',
+                        'id_prefix' => 'content',
+                        'fragment_prefix' => 'content',
+                        // 'insert' => 'before',
+                        'min_heading_level' => 1,
+                        'max_heading_level' => 6,
+                        'title' => 'Permalink',
+                        // 'symbol' => HeadingPermalinkRenderer::DEFAULT_SYMBOL,
+                        'aria_hidden' => true,
+                    ],
+                    'external_link' => [
+                        'internal_hosts' => 'www.example.com', // TODO: Don't forget to set this!
+                        'open_in_new_window' => true,
+                        'html_class' => 'external-link',
+                        'nofollow' => '',
+                        'noopener' => 'external',
+                        'noreferrer' => 'external',
+                    ],
+
+                ];
+
+                $environment = new Environment($config);
+                $environment->addExtension(new CommonMarkCoreExtension());
+
+                // Remove any of the lines below if you don't want a particular feature
+                $environment->addExtension(new AutolinkExtension());
+                $environment->addExtension(new DisallowedRawHtmlExtension());
+                $environment->addExtension(new StrikethroughExtension());
+                $environment->addExtension(new TableExtension());
+                $environment->addExtension(new TaskListExtension());
+                $environment->addExtension(new HeadingPermalinkExtension());
+                $environment->addExtension(new TableOfContentsExtension());
+                $environment->addExtension(new SmartPunctExtension());
+                $environment->addExtension(new ExternalLinkExtension());
+
+                $converter = new MarkdownConverter($environment);
 
                 $existView = BlogView::where([['ip_address', "=", $request->ip()], ["blog_id", "=", $id]])->count();
                 if ($existView < 1) {
@@ -169,7 +214,7 @@ class BlogController extends Controller
                     $newView->blog_id = $id;
                     $newView->save();
                 }
-                $related = Blog::where("status", "=", "posted")->with(['user','tags','bloglikes','blogviews'])->whereHas('tags', function ($query) use ($blog) {
+                $related = Blog::where("status", "=", "posted")->with(['user', 'tags', 'bloglikes', 'blogviews'])->whereHas('tags', function ($query) use ($blog) {
                     $query->whereIn('title', $blog->tags->pluck('title'));
                 }, '>=', count($blog->tags->pluck('title')))->where("id", "!=", $blog->id)->limit(5)->withCount('tags')
                     ->get();
@@ -184,7 +229,7 @@ class BlogController extends Controller
                         $q->where('status', '=', 0);
                     }])->orderByDesc('commentlikes_count')->paginate(5)->fragment('comments');
                 } else {
-                    $comments = Comment::where("blog_id", "=", $id)->with(['replies','user','commentlikes'])->orderByDesc("created_at")->paginate(5)->fragment('comments');
+                    $comments = Comment::where("blog_id", "=", $id)->with(['replies', 'user', 'commentlikes'])->orderByDesc("created_at")->paginate(5)->fragment('comments');
                 }
                 return view("blogs.show")->with([
                     "blog" => $blog,
@@ -192,6 +237,7 @@ class BlogController extends Controller
                     "like" => $like,
                     // "tagTitles" => json_encode($tagTitles),
                     "related" => $related,
+                    "converter" => $converter
                     // "shareBlog" => $shareBlog,
                 ]);
             }
@@ -212,8 +258,15 @@ class BlogController extends Controller
      * @param  \App\Models\Blog  $blog
      * @return \Illuminate\Http\Response
      */
+    public function store(StoreBlogRequest $request)
+    {
+        // dd($request);
+        // {{ Str::slug($blog->title(), '-') }}-{{ $blog->id() }}
+        return $request;
+    }
     public function post(Request $request)
     {
+        dd($request->all());
         $blogId = $request->get('blog_id');
         $blogTitle = $request->get('title');
         $blogDescription = $request->get('description');
@@ -261,20 +314,17 @@ class BlogController extends Controller
         $titleArray = explode('-', $title);
         $id = end($titleArray);
         $blog = Blog::find($id);
+        $this->Authorize('view', $blog);
         if ($blog) {
-
-            if (auth()->user()->id == $blog->user_id) {
-                $tagTitles = [];
-                foreach ($blog->tags as $tag) {
-                    $tagTitles[] = $tag->title;
-                }
-                return view("blogs.update")->with([
-                    "blog" => $blog,
-                    "tagTitles" => json_encode($tagTitles),
-                ]);
+            $tagTitles = [];
+            foreach ($blog->tags as $tag) {
+                $tagTitles[] = $tag->title;
             }
+            return view("blogs.update")->with([
+                "blog" => $blog,
+                "tagTitles" => json_encode($tagTitles),
+            ]);
         }
-        return view("error");
     }
     public function editStore(Request $request)
     {
@@ -369,7 +419,7 @@ class BlogController extends Controller
                 }
             }
         }
-        return view("error");
+        return view("404");
     }
     public function detailCard(Request $request)
     {

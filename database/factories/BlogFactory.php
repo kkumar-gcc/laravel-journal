@@ -18,7 +18,7 @@ class BlogFactory extends Factory
     {
         return [
             'title'=>$this->faker->text(30),
-            'description'=>$this->faker->realText(),
+            'body'=>$this->faker->realText(),
             'status'=>$this->faker->randomElement(['posted', 'drafted']),
         ];
     }

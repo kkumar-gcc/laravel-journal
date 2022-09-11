@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('replies', function (Blueprint $table) {
             $table->id();
             $table->string('uuid')->nullable()->unique();
-            $table->text('description');
+            $table->text('body');
             $table->foreignId('comment_id')
                 ->constrained("comments")
                 ->onUpdate('cascade');
@@ -26,18 +26,6 @@ return new class extends Migration
                 ->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
-            // $table->id();
-            // $table->string('uuid')->nullable()->unique();
-            // $table->text('description');
-            // // $table->foreignId('comment_id')
-            // //     ->constrained("comments")
-            // //     ->onUpdate('cascade');
-            // // $table->foreignId('user_id')
-            // //     ->constrained("users")
-            // //     ->onUpdate('cascade');
-            // $table->bigInteger("likes")->nullable();
-            // // $table->bigInteger("dislikes")->nullable();
-            // $table->timestamps();
         });
     }
 

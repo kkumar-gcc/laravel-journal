@@ -16,14 +16,11 @@ return new class extends Migration
         Schema::create('blogs', function (Blueprint $table) {
             $table->id();
             $table->string('uuid')->nullable()->unique();
-            $table->string('image')->nullable();
-            $table->foreignId('user_id')
-                ->constrained("users")
-                ->onUpdate('cascade');
             $table->string('title');
             $table->string("slug")->nullable();
+            $table->string('cover_image')->nullable();
+            $table->text('body');
             $table->string('meta_title')->nullable();
-            $table->text('description');
             $table->text('meta_description')->nullable();
             $table->enum("status", ['posted', 'drafted']);
             $table->enum("access", ['public', 'private','subscriber'])->default('public');
@@ -32,9 +29,12 @@ return new class extends Migration
             $table->boolean("age_confirmation")->default(false);
             $table->boolean("is_pinned")->default(false);
             $table->bigInteger("likes")->nullable();
+            $table->bigInteger("dislikes")->nullable();
             $table->bigInteger("views")->nullable();
             $table->bigInteger("bookmarks")->nullable();
-            // $table->bigInteger("dislikes")->nullable();
+            $table->foreignId('user_id')
+                ->constrained("users")
+                ->onUpdate('cascade');
             $table->softDeletes();
             $table->timestamps();
         });

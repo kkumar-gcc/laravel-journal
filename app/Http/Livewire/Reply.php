@@ -11,7 +11,7 @@ class Reply extends Component
     use AuthorizesRequests;
     public $comment_id;
     public $canReply;
-    public $description;
+    public $body;
     protected $listeners = ['replyEdited'];
 
     public function replyEdited()
@@ -38,11 +38,11 @@ class Reply extends Component
     public function reply()
     {
         ModelsReply::create([
-            'description' =>  $this->description,
+            'body' =>  $this->body,
             'comment_id' => $this->comment_id,
             'user_id' => auth()->id()
         ]);
-        $this->reset('description');
+        $this->reset('body');
     }
 
 }
