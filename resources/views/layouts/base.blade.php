@@ -13,6 +13,26 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+    <style>
+        .milkdown-menu-wrapper {}
+
+        .milkdown {
+            box-shadow: none !important;
+            border:1px solid rgba(216, 222, 233, 1);
+            border-top: none;
+            max-height: 10rem;
+            overflow: hidden;
+            overflow-y: scroll;
+        }
+        .milkdown-menu{
+            z-index: 100;
+        }
+        @media screen and (min-width: 980px) {
+            .editor {
+                padding: 10px 50px !important;
+            }
+        }
+    </style>
 </head>
 
 <body class="font-sans antialiased max-w-7xl mx-auto">

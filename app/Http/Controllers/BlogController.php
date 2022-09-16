@@ -15,19 +15,7 @@ use App\Models\User;
 use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use League\CommonMark\Environment\Environment;
-use League\CommonMark\Extension\Autolink\AutolinkExtension;
-use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
-use League\CommonMark\Extension\DisallowedRawHtml\DisallowedRawHtmlExtension;
-use League\CommonMark\Extension\Strikethrough\StrikethroughExtension;
-use League\CommonMark\Extension\Table\TableExtension;
-use League\CommonMark\Extension\TaskList\TaskListExtension;
-use League\CommonMark\MarkdownConverter;
-use League\CommonMark\Extension\SmartPunct\SmartPunctExtension;
-use League\CommonMark\Extension\ExternalLink\ExternalLinkExtension;
-use League\CommonMark\Extension\HeadingPermalink\HeadingPermalinkRenderer;
-use League\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension;
-use League\CommonMark\Extension\TableOfContents\TableOfContentsExtension;
+
 
 class BlogController extends Controller
 {
@@ -153,59 +141,7 @@ class BlogController extends Controller
                 //     ->reddit()
                 //     ->getRawLinks();
                 //    dd($blog->body());
-                $config = [
-                    'table_of_contents' => [
-                        'html_class' => 'table-of-contents',
-                        'position' => 'top',
-                        'style' => 'bullet',
-                        'min_heading_level' => 1,
-                        'max_heading_level' => 6,
-                        'normalize' => 'relative',
-                        'placeholder' => 'TOC',
-                    ],
-                    'smartpunct' => [
-                        'double_quote_opener' => '“',
-                        'double_quote_closer' => '”',
-                        'single_quote_opener' => '‘',
-                        'single_quote_closer' => '’',
-                    ],
-                    'heading_permalink' => [
-                        'html_class' => 'heading-permalink',
-                        'id_prefix' => 'content',
-                        'fragment_prefix' => 'content',
-                        // 'insert' => 'before',
-                        'min_heading_level' => 1,
-                        'max_heading_level' => 6,
-                        'title' => 'Permalink',
-                        // 'symbol' => HeadingPermalinkRenderer::DEFAULT_SYMBOL,
-                        'aria_hidden' => true,
-                    ],
-                    'external_link' => [
-                        'internal_hosts' => 'www.example.com', // TODO: Don't forget to set this!
-                        'open_in_new_window' => true,
-                        'html_class' => 'external-link',
-                        'nofollow' => '',
-                        'noopener' => 'external',
-                        'noreferrer' => 'external',
-                    ],
 
-                ];
-
-                $environment = new Environment($config);
-                $environment->addExtension(new CommonMarkCoreExtension());
-
-                // Remove any of the lines below if you don't want a particular feature
-                $environment->addExtension(new AutolinkExtension());
-                $environment->addExtension(new DisallowedRawHtmlExtension());
-                $environment->addExtension(new StrikethroughExtension());
-                $environment->addExtension(new TableExtension());
-                $environment->addExtension(new TaskListExtension());
-                $environment->addExtension(new HeadingPermalinkExtension());
-                $environment->addExtension(new TableOfContentsExtension());
-                $environment->addExtension(new SmartPunctExtension());
-                $environment->addExtension(new ExternalLinkExtension());
-
-                $converter = new MarkdownConverter($environment);
 
                 $existView = BlogView::where([['ip_address', "=", $request->ip()], ["blog_id", "=", $id]])->count();
                 if ($existView < 1) {
@@ -237,7 +173,6 @@ class BlogController extends Controller
                     "like" => $like,
                     // "tagTitles" => json_encode($tagTitles),
                     "related" => $related,
-                    "converter" => $converter
                     // "shareBlog" => $shareBlog,
                 ]);
             }

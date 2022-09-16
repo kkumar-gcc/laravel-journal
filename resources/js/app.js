@@ -17,26 +17,19 @@ import { math } from '@milkdown/plugin-math';
 import { clipboard } from '@milkdown/plugin-clipboard';
 import { trailing, trailingPlugin } from '@milkdown/plugin-trailing';
 import { listener, listenerCtx } from '@milkdown/plugin-listener';
-import { SupportedKeys, table, InsertTable } from '@milkdown/preset-gfm';
-// Don't forget to import the style of katex!
-// import 'katex/dist/katex.min.css';
-
-
+import { SupportedKeys, table} from '@milkdown/preset-gfm';
 
 import Alpine from 'alpinejs';
 import Turbolinks from "turbolinks";
 import focus from '@alpinejs/focus';
 import collapse from '@alpinejs/collapse';
 import Clipboard from "@ryangjchandler/alpine-clipboard"
-const defaultValue = {
-    type: 'html',
-    dom: document.querySelector('#editor'),
-};
+
 
 window.milkdown = {
     Editor, defaultValueCtx, rootCtx, nord, tooltipPlugin, tooltip, commonmark, menu, diagram, history
-    , prism, slashPlugin, slash, createDropdownItem, defaultActions, block, emoji, cursor, math, clipboard, trailing, trailingPlugin, listener, listenerCtx, SupportedKeys, table, InsertTable,
-    defaultValue, indent, indentPlugin
+    , prism, slashPlugin, slash, createDropdownItem, defaultActions, block, emoji, cursor, math, clipboard, trailing, trailingPlugin, listener, listenerCtx, SupportedKeys,
+    indent, indentPlugin,table
 }
 
 Alpine.plugin(Clipboard);

@@ -6,7 +6,6 @@
         <div x-show="{{ $modal }}" x-trap.noscroll.inert="{{ $modal }}" x-cloak  @click.away="{{ $modal }}=false" x-transition.duration.500ms
         {{ $attributes->merge(['class' =>'relative w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-12 shadow-lg'])}}>
             <h2 class="text-3xl font-bold" :id="$id('modal-title')"> {{ $slot }}</h2>
-           <p class="mt-2 text-gray-600">Are you sure you want to learn how to create an awesome modal?</p>
            <div class="mt-8 flex space-x-2">
                 <button type="button" @click="{{ $modal }}=false"
                     class="rounded-md border border-gray-200 bg-white px-5 py-2.5">

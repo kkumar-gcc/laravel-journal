@@ -16,6 +16,8 @@ class Comment extends Component
     public $blog_id;
     public $canComment;
     public $message;
+    public $editMessage;
+    public $comment_id;
     protected $listeners = ['edited'];
 
     public function edited()
@@ -36,6 +38,10 @@ class Comment extends Component
             "comments_count" => $this->comments_count
         ]);
     }
+    public function showModal()
+    {
+        return view('livewire.edit-comment');
+    }
     public function comment()
     {
         if ($this->canComment) {
@@ -46,7 +52,25 @@ class Comment extends Component
             ]);
             $this->reset('message');
             $this->comments_count++;
+            $this->message = '';
         }
+    }
+    public function edit($comment_id)
+    {
+        $comment = ModelsComment::find($comment_id);
+        $this->authorize('update', $comment);
+        $this->editMessage = $comment->body();
+        $this->comment_id = $comment_id;
+        $this->emit('commentEdit',$this->editMessage,$this->comment_id);
+    }
+    public function update($comment_id)
+    {
+        $comment = ModelsComment::find($comment_id);
+        $this->authorize('update', $comment);
+        $comment->update(['body' => $this->editMessage ]);
+        $this->editMessage='';
+        $this->emit('commentClose','destroyEditor');
+
     }
     public function reply($comment_id)
     {

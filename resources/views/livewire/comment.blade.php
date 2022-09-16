@@ -1,11 +1,13 @@
 <section class="max-w-full py-8" wire:poll.500s>
+    <div wire:offline class="bg-red-300 p-4">
+        your are offline now
+     </div>
     <header class="flex flex-row items-center justify-between mb-6 not-prose">
         <div class="">
             <h2 class="text-2xl font-bold dark:text-white">Comments <span class=""
                     data-comments-count="{{ $comments_count }}">({{ $comments_count }})</span>
             </h2>
         </div>
-
         <div>
             <x-dropdown align="right" width="48">
                 <x-slot name="trigger">
@@ -33,6 +35,7 @@
                 </x-slot>
             </x-dropdown>
         </div>
+
     </header>
     <div class="">
         @auth
@@ -48,13 +51,43 @@
                 <div class="mt-4">
                     <form wire:submit.prevent="comment">
                         @csrf
-                        <div class=" mb-5">
+                        <div class="mb-5 ">
                             <div wire:ignore>
-                                <textarea wire:model="message" class="editor min-h-fit h-48 " name="message" id="create_comment" placeholder="Type your comment... "></textarea>
+                                <div wire:model="message" id="editor" class="relative">
+                                    {{ $message }}
+                                </div>
                             </div>
                         </div>
-                        <x-buttons.secondary type="submit" fullWidth={true}>{{ __('Comment') }}</x-buttons.secondary>
+                        <x-buttons.secondary type="submit">{{ __('Comment') }}</x-buttons.secondary>
                     </form>
+                </div>
+                <div x-data="{ modal: false }" x-init="@this.on('commentEdit', () => {
+                    modal = true;
+                });
+                @this.on('commentClose', () => {
+                    modal = false;
+                })" x-trap.noscroll.inert="modal">
+                    <div x-show="modal" x-cloak @keyup.escape.window="modal=false" style="display:none"
+                        class="fixed inset-0 w-screen min-h-screen h-auto overflow-y-scroll z-[100] bg-black bg-opacity-20 flex items-center justify-center px-4 py-2 md:px-0">
+                        <div x-show="modal" x-cloak @click.away="modal=false" x-transition.duration.500ms
+                            class='relative w-full max-w-2xl   overflow-y-scroll rounded-xl bg-white p-12 shadow-lg'>
+                            <form wire:submit.prevent="update({{ $comment_id }})" class="mt-4">
+                                @csrf
+                                <div class="mb-5">
+                                    <div <div wire:model="editMessage" wire:ignore id="editor{{ $comment_id }}"
+                                        class="relative">
+
+                                    </div>
+                                </div>
+                                <x-buttons.secondary class="inline-flex mr-4" type="submit">{{ __('Edit') }}
+                                </x-buttons.secondary>
+                                <x-buttons.primary @click="modal=false" wire:click="$emit('destroyEditor')">
+                                    {{ __('Cancel') }}
+                                </x-buttons.primary>
+                            </form>
+                        </div>
+
+                    </div>
                 </div>
             @else
                 <div class="not-prose">
@@ -119,7 +152,7 @@
 
                                         @can('update', $comment)
                                             <li>
-                                                <x-dropdown-link @click="editComment = ! editComment">
+                                                <x-dropdown-link wire:click="edit({{ $comment->id }})">
                                                     {{ __('Edit') }}
                                                 </x-dropdown-link>
                                             </li>
@@ -138,7 +171,9 @@
                         </div>
                     </header>
                     <div class="my-3 prose max-w-none sm:max-w-full prose-img:rounded-xl prose-a:text-teal-600 ">
-                        {!! $comment->body() !!}
+                        <x-markdown flavor="github" :anchors="true" theme="github-dark">
+                            {!! $comment->body() !!}
+                        </x-markdown>
                     </div>
                     <footer class="mt-2" x-data="{ open: false }">
                         <div class="flex flew-row">
@@ -178,7 +213,8 @@
                                     @csrf
                                     <div class=" mb-5">
                                         <div wire:ignore>
-                                            <textarea wire:model="message" class="editor min-h-fit h-48 " name="message" id="comment_reply-{{ $comment->id }}" placeholder="Type your comment... "></textarea>
+                                            <textarea wire:model="message" class="editor min-h-fit h-48 " name="message" id="comment_reply-{{ $comment->id }}"
+                                                placeholder="Type your comment... "></textarea>
                                         </div>
                                     </div>
                                     <x-buttons.secondary type="submit">{{ __('Reply') }}
@@ -187,10 +223,10 @@
                                     </x-buttons.primary>
                                 </form>
                             </div>
-                            <div x-show="editComment" x-transition x-transition.top.duration.500ms x-cloak>
+                            {{-- <div x-show="editComment" x-transition x-transition.top.duration.500ms x-cloak>
                                 <livewire:edit-comment :message="$comment->body()" :comment_id="$comment->id"
                                     wire:key="edit-{{ $comment->id }}" />
-                            </div>
+                            </div> --}}
                         @endauth
                     </footer>
                     {{-- @auth
@@ -222,3 +258,251 @@
     </div>
 
 </section>
+@push('scripts')
+    <script type="text/javascript" defer>
+        window.onload = function() {
+            const defaultValue = {
+                type: 'html',
+                dom: document.querySelector('#editor'),
+            };
+
+            milkdown.Editor
+                .make()
+                .config((ctx) => {
+                    ctx.get(milkdown.listenerCtx)
+                        .beforeMount((ctx) => {
+                            console.log("mout")
+                            // before the editor mounts
+                        })
+                        .mounted((ctx) => {
+                            // after the editor mounts
+                            console.log("mouted")
+                        })
+                        .updated((ctx, doc, prevDoc) => {
+                            // when editor state updates
+                        })
+                        .markdownUpdated((ctx, markdown, prevMarkdown) => {
+                            @this.set('message', markdown);
+                        })
+                        .blur((ctx) => {
+                            // when editor loses focus
+                        })
+                        .focus((ctx) => {
+                            // when focus editor
+                        })
+                        .destroy((ctx) => {
+                            // when editor is being destroyed
+                        });
+                    ctx.set(milkdown.rootCtx, document.querySelector('#editor'));
+                })
+                .use(milkdown.nord)
+                .use(milkdown.commonmark)
+                .use(milkdown.listener)
+                .use(milkdown.history)
+                .use(milkdown.prism)
+                .use(milkdown.emoji)
+                .use(milkdown.cursor)
+                .use(milkdown.math)
+                .use(milkdown.clipboard)
+                .use(milkdown.menu)
+                .use(
+                    milkdown.trailing.configure(milkdown.trailingPlugin, {
+                        shouldAppend: (lastNode, state) => lastNode && !['paragraph'].includes(lastNode.type.name),
+                    })
+                )
+                .use(
+                    milkdown.tooltip.configure(milkdown.tooltipPlugin, {
+                        top: true,
+                    }))
+                .use(
+                    milkdown.slash.configure(milkdown.slashPlugin, {
+                        config: (ctx) => {
+                            // Get default slash plugin items
+                            const actions = milkdown.defaultActions(ctx);
+
+                            // Define a status builder
+                            return ({
+                                isTopLevel,
+                                content,
+                                parentNode
+                            }) => {
+                                // You can only show something at root level
+                                if (!isTopLevel) return null;
+
+                                // Empty content ? Set your custom empty placeholder !
+                                if (!content) {
+                                    return {
+                                        placeholder: 'Type / to use the slash commands...'
+                                    };
+                                }
+
+                                // Define the placeholder & actions (dropdown items) you want to display depending on content
+                                if (content.startsWith('/')) {
+                                    // Add some actions depending on your content's parent node
+                                    if (parentNode.type.name === 'customNode') {
+                                        actions.push({
+                                            id: 'custom',
+                                            dom: createDropdownItem(ctx.get(themeToolCtx), 'Custom',
+                                                'h1'),
+                                            command: () => ctx.get(commandsCtx)
+                                                .call( /* Add custom command here */ ),
+                                            keyword: ['custom'],
+                                            enable: () => true,
+                                        });
+                                    }
+
+                                    return content === '/' ? {
+                                        placeholder: 'Type to filter...',
+                                        actions,
+                                    } : {
+                                        actions: actions.filter(({
+                                                keyword
+                                            }) =>
+                                            keyword.some((key) => key.includes(content.slice(1)
+                                                .toLocaleLowerCase())),
+                                        ),
+                                    };
+                                }
+                            };
+                        },
+                    }),
+                )
+                .use(
+                    milkdown.indent.configure(milkdown.indentPlugin, {
+                        type: 'space', // available values: 'tab', 'space',
+                        size: 4,
+                    }),
+                )
+                .use(milkdown.diagram)
+                .config((ctx) => {
+                    ctx.set(milkdown.defaultValueCtx, defaultValue);
+                }).create();
+            Livewire.on('commentEdit', (editMessage, comment_id) => {
+                Livewire.on('destroyEditor', () => {
+                    alert('hello motherfucker');
+                })
+                const defaultValue1 = editMessage;
+                const id = "#editor" + comment_id;
+                milkdown.Editor
+                    .make()
+                    .config((ctx) => {
+                        ctx.get(milkdown.listenerCtx)
+                            .beforeMount((ctx) => {
+                                console.log("mout")
+                                // before the editor mounts
+                            })
+                            .mounted((ctx) => {
+                                // after the editor mounts
+                                console.log("mouted")
+                            })
+                            .updated((ctx, doc, prevDoc) => {
+                                // when editor state updates
+                            })
+                            .markdownUpdated((ctx, markdown, prevMarkdown) => {
+                                @this.set('editMessage', markdown);
+                            })
+                            .blur((ctx) => {
+                                // when editor loses focus
+                            })
+                            .focus((ctx) => {
+                                // when focus editor
+                            })
+                            .destroy((ctx) => {
+                                // when editor is being destroyed
+                                console.log("destroyed");
+                            });
+                        ctx.set(milkdown.rootCtx, document.querySelector(id));
+                    })
+                    .use(milkdown.nord)
+                    .use(milkdown.commonmark)
+                    .use(milkdown.listener)
+                    .use(milkdown.history)
+                    .use(milkdown.emoji)
+                    .use(milkdown.table)
+                    .use(milkdown.cursor)
+                    .use(milkdown.math)
+                    .use(milkdown.clipboard)
+                    .use(milkdown.menu)
+                    .use(
+                        milkdown.trailing.configure(milkdown.trailingPlugin, {
+                            shouldAppend: (lastNode, state) => lastNode && !['paragraph'].includes(
+                                lastNode
+                                .type.name),
+                        })
+                    )
+                    .use(
+                        milkdown.tooltip.configure(milkdown.tooltipPlugin, {
+                            top: true,
+                        }))
+                    .use(
+                        milkdown.slash.configure(milkdown.slashPlugin, {
+                            config: (ctx) => {
+                                // Get default slash plugin items
+                                const actions = milkdown.defaultActions(ctx);
+
+                                // Define a status builder
+                                return ({
+                                    isTopLevel,
+                                    content,
+                                    parentNode
+                                }) => {
+                                    // You can only show something at root level
+                                    if (!isTopLevel) return null;
+
+                                    // Empty content ? Set your custom empty placeholder !
+                                    if (!content) {
+                                        return {
+                                            placeholder: 'Type / to use the slash commands...'
+                                        };
+                                    }
+
+                                    // Define the placeholder & actions (dropdown items) you want to display depending on content
+                                    if (content.startsWith('/')) {
+                                        // Add some actions depending on your content's parent node
+                                        if (parentNode.type.name === 'customNode') {
+                                            actions.push({
+                                                id: 'custom',
+                                                dom: createDropdownItem(ctx.get(
+                                                        themeToolCtx), 'Custom',
+                                                    'h1'),
+                                                command: () => ctx.get(commandsCtx)
+                                                    .call( /* Add custom command here */ ),
+                                                keyword: ['custom'],
+                                                enable: () => true,
+                                            });
+                                        }
+
+                                        return content === '/' ? {
+                                            placeholder: 'Type to filter...',
+                                            actions,
+                                        } : {
+                                            actions: actions.filter(({
+                                                    keyword
+                                                }) =>
+                                                keyword.some((key) => key.includes(
+                                                    content
+                                                    .slice(1)
+                                                    .toLocaleLowerCase())),
+                                            ),
+                                        };
+                                    }
+                                };
+                            },
+                        }),
+                    )
+                    .use(
+                        milkdown.indent.configure(milkdown.indentPlugin, {
+                            type: 'space', // available values: 'tab', 'space',
+                            size: 4,
+                        }),
+                    )
+                    .use(milkdown.diagram)
+                    .config((ctx) => {
+                        ctx.set(milkdown.defaultValueCtx, editMessage);
+                    })
+                    .create();
+
+            })
+        }
+    </script>
+@endpush

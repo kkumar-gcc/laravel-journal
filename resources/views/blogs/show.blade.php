@@ -52,28 +52,34 @@
                 <h1 class="text-3xl my-55 md:text-4xl lg:text-5xl dark:text-white">
                     {{ $blog->title }}
                 </h1>
-                @can('update',  $blog)
+                @can('update', $blog)
                     <div class="flex justify-end not-prose">
                         <x-dropdown align="right" width="48">
                             <x-slot name="trigger">
-                                <x-buttons.primary  class="border hover:text-teal-600 ">
+                                <x-buttons.primary class="border hover:text-teal-600 ">
                                     {{ svg('iconsax-bul-setting-2', 'h-6 w-6') }}
                                 </x-buttons.primary>
                             </x-slot>
                             <x-slot name="content">
                                 <ul>
                                     <li>
-                                        <x-dropdown-link href="/blogs/edit/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}" class="flex ">
+                                        <x-dropdown-link
+                                            href="/blogs/edit/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
+                                            class="flex ">
                                             {{ __(' Edit') }}
                                         </x-dropdown-link>
                                     </li>
                                     <li>
-                                        <x-dropdown-link href="/blogs/manage/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}" class="flex ">
+                                        <x-dropdown-link
+                                            href="/blogs/manage/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
+                                            class="flex ">
                                             {{ __('Manage') }}
                                         </x-dropdown-link>
                                     </li>
                                     <li>
-                                        <x-dropdown-link href="/blogs/stats/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}" class="flex ">
+                                        <x-dropdown-link
+                                            href="/blogs/stats/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
+                                            class="flex ">
                                             {{ __('Stats') }}
                                         </x-dropdown-link>
                                     </li>
@@ -164,11 +170,32 @@
                         @endguest
                     @elseif($blog->access == 'public')
                         <article class="w-full my-5">
-                            {!! $converter->convert($blog->body())!!}
+                            <x-toc>
+                                # Hello World
+
+                                Blade UI components are **awesome**.
+
+                                ## Sub Title level 2
+
+                                Some content.
+
+                                ### Sub Sub Title level 3
+
+                                #### Sub Sub Title level 4
+
+                                Some content.
+
+                                ## Other Sub Title level 2
+
+                                Some content.
+                            </x-toc>
+                            <x-markdown flavor="github" theme="github-dark">
+                                {!! $blog->body() !!}
+                            </x-markdown>
                         </article>
                     @endif
                 </div>
-                <livewire:comment :blog_id="$blog->id" :comments_count="$blog->comments->count()" :canComment="$blog->comment_access == 'enable' ? true:false" />
+                <livewire:comment :blog_id="$blog->id" :comments_count="$blog->comments->count()" :canComment="$blog->comment_access == 'enable' ? true : false" />
                 @if ($related->count() > 0)
                     <div>
                         <h2 class="flex flex-col items-center justify-center">
@@ -189,7 +216,7 @@
             </div>
             <aside class="my-2 overflow-hidden basis-1/3 lg:pl-5 lg:py-5">
                 <div id="sticky-sidebar">
-                    <div id="TOC"></div>
+
                     <x-cards.primary-card :default=false>
                         <div class="px-4 py-3 rounded-xl dark:bg-gray-800 ">
                             <div class="grid grid-cols-4 gap-4 justify-between">

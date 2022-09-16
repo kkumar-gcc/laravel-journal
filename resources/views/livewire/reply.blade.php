@@ -58,7 +58,9 @@
                 </div>
             </header>
             <div class="my-3">
-                {!! $reply->body() !!}
+                <x-markdown flavor="github" :anchors="true" theme="github-dark">
+                    {!! $reply->body() !!}
+                </x-markdown>
             </div>
             <footer class="mt-2" x-data="{ open: false }">
                 <div class="flex flew-row">
@@ -87,10 +89,11 @@
                             @csrf
                             <div class=" mb-5">
                                 <div wire:ignore>
-                                    <textarea wire:model="body" class="editor min-h-fit h-48 " name="body" id="reply_reply-{{ $reply->id }}" placeholder="Type your Reply... "></textarea>
+                                    <textarea wire:model="body" class="editor min-h-fit h-48 " name="body" id="reply_reply-{{ $reply->id }}"
+                                        placeholder="Type your Reply... "></textarea>
                                 </div>
                             </div>
-                            <x-buttons.secondary type="submit" >{{ __('Reply') }}
+                            <x-buttons.secondary type="submit">{{ __('Reply') }}
                             </x-buttons.secondary>
                             <x-buttons.primary class="ml-4" @click="open = ! open">{{ __('Cancel') }}
                             </x-buttons.primary>

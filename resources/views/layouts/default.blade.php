@@ -22,10 +22,12 @@
         }
         .milkdown-menu{
             z-index: 100;
+
         }
         @media screen and (min-width: 980px) {
             .editor {
                 padding: 50px 50px !important;
+
             }
         }
     </style>

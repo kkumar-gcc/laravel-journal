@@ -136,7 +136,6 @@
 
 
     <div class="md:p-5 lg:p-7">
-        <div id="toast-info"></div>
         <section class="p-2 w-full">
             <header class="border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800">
                 <div class="relative  pt-[60%] rounded-lg sm:pt-[30%] md:pt-[22%] ">

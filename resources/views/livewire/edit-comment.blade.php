@@ -1,12 +1,11 @@
 
-<form wire:submit.prevent="update" class="mt-4">
+{{-- <form wire:submit.prevent="update" class="mt-4">
     @csrf
     <div class=" mb-5">
         <div wire:ignore>
             <textarea wire:model="message" class="editor min-h-fit h-48 " name="message" id="comment_edit-{{ $comment_id }}" placeholder="Type your comment... "></textarea>
         </div>
     </div>
-    {{ $message }}
     <x-buttons.secondary class="inline-flex mr-4" type="submit">{{ __('Edit') }}
     </x-buttons.secondary>
     <x-buttons.primary @click="editComment = ! editComment">{{ __('Cancel') }}
@@ -20,4 +19,8 @@
             edited
         </div>
     </div>
-</form>
+
+</form> --}}
+<div>
+    hi there public 
+</div>
