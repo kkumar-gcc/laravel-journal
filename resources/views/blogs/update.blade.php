@@ -18,5 +18,5 @@
         return number_format($n);
     }
     ?>
-    <livewire:blog.update :blog="$blog"/>
+    <livewire:blogs.update :blog="$blog" :wire:key="$blog->id"/>
 </x-default-layout>

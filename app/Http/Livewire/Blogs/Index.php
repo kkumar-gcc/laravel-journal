@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Blog;
+namespace App\Http\Livewire\Blogs;
 
 use App\Models\Blog;
 use Livewire\Component;
@@ -24,7 +24,7 @@ class Index extends Component
             $blogs = Blog::published()->{$this->tab}()->paginate(10);
         }
 
-        return view('livewire.blog.index')->with(["blogs" => $blogs, "tab" => $this->tab]);
+        return view('livewire.blogs.index')->with(["blogs" => $blogs, "tab" => $this->tab]);
     }
     public function sortBy($sort): void
     {

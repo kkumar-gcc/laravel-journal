@@ -10,7 +10,7 @@ class Bookmark extends Component
 {
     public $blog_id;
     public $bookmarked = false;
-    public $message;
+    public $message ='';
     public function mount($blog_id)
     {
         $this->blog_id = $blog_id;

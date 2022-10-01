@@ -12,12 +12,12 @@ class Reply extends Component
     public $comment_id;
     public $canReply;
     public $body;
-    protected $listeners = ['replyEdited'];
+    // protected $listeners = ['replyEdited'];
 
-    public function replyEdited()
-    {
-        $this->render();
-    }
+    // public function replyEdited()
+    // {
+    //     $this->render();
+    // }
     public function mount($comment_id,$canReply)
     {
         $this->comment_id = $comment_id;
@@ -26,11 +26,19 @@ class Reply extends Component
     public function render()
     {
         return view('livewire.reply',[
-            "replies" => ModelsReply::where('comment_id','=',$this->comment_id)->latest()->cursorPaginate()
+            "replies" => ModelsReply::where('comment_id','=',$this->comment_id)->orderBy('created_at','DESC')->cursorPaginate()
         ]);
+    }
+    public function replyIndex($comment_id){
+        $this->reset('body');
+        // dd($this->body,$comment_id);
+        $this->comment_id = $comment_id;
+        // $this->emit('reply',);
+        $this->emit('replyreply',$this->body,$this->comment_id);
     }
     public function delete($reply_id)
     {
+
         $reply = ModelsReply::find($reply_id);
         $this->authorize('delete', $reply);
         $reply->delete();

@@ -32,9 +32,11 @@
                                                 <span class="book_pin_btn_{{ $pin->blog->id }}"
                                                     id="book_pin_btn_{{ $pin->blog->id }}" title="Bookmark this Article">
                                                     @if ($pin->blog->pinned)
-                                                        @svg('tabler-pinned-off', 'w-5 h-5 text-rose-600 dark:text-rose-500')
+                                                       A
+                                                        {{-- @svg('tabler-pinned-off', 'w-5 h-5 text-rose-600 dark:text-rose-500') --}}
                                                     @else
-                                                        @svg('tabler-pin', 'h-5 w-5')
+                                                        B
+                                                        {{-- @svg('tabler-pin', 'h-5 w-5') --}}
                                                     @endif
                                                 </span>
                                             </button>
@@ -91,7 +93,8 @@
             <h4 class="card-title mt-5 mb-3">Pin Blog (remaining <?php echo 5 - $pins->count(); ?>)</h4>
             <div>
                 @foreach ($blogs as $blog)
-                    <div class="relative mt-3 w-full p-2.5 text-base text-left  border border-transparent rounded-3xl font-normal hover:bg-gray-50 hover:border-gray-200 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+                <x-cards.blog-card :blog="$blog"  />
+                    {{-- <div class="relative mt-3 w-full p-2.5 text-base text-left  border border-transparent rounded-3xl font-normal hover:bg-gray-50 hover:border-gray-200 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
                         id="blog-{{ $blog->id }}">
                         <div class="flex flex-col items-stretch justify-center p-6 sm:flex-row">
                             <div class="basis-1/3 relative text-center min-h-fit">
@@ -164,7 +167,7 @@
                                 </a>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 @endforeach
                 {!! $blogs->withQueryString()->links('pagination::tailwind') !!}
             </div>

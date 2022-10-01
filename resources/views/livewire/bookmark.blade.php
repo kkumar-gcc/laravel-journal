@@ -3,7 +3,7 @@
         <x-buttons.simple wire:click.prevent="bookmark()" :default=false
             class="hover:bg-teal-50 hover:text-teal-500  focus:ring-teal-100">
             <span title="Bookmark this Article">
-                {{ svg('iconsax-lin-bookmark','h-6 w-6') }}
+                {{ svg('iconsax-out-archive-tick', 'h-6 w-6') }}
             </span>
         </x-buttons.simple>
     @else
@@ -11,9 +11,10 @@
             class="hover:bg-teal-50 hover:text-teal-500  focus:ring-teal-100">
             <span title="Bookmark this Article">
                 @if ($bookmarked)
-                    {{ svg('iconsax-bul-bookmark', 'w-6 h-6 text-teal-500') }}
+                    {{ svg('iconsax-bul-archive-tick', 'w-6 h-6 text-teal-500') }}
+
                 @else
-                    {{ svg('iconsax-lin-bookmark', 'h-6 w-6') }}
+                    {{ svg('iconsax-out-archive-tick', 'h-6 w-6') }}
                 @endif
             </span>
         </x-buttons.simple>
@@ -24,8 +25,8 @@
             })" x-cloack
             style="display:none">
             <div tabindex="0" aria-label="group icon" role="img"
-                class="focus:outline-none w-8 h-8 border rounded-full border-gray-200 flex flex-shrink-0 items-center justify-center">
-                {{ svg('iconsax-lin-bookmark','h-6 w-6') }}
+                class="focus:outline-none w-8 h-8 flex flex-shrink-0 items-center justify-center">
+                {{ svg('iconsax-out-archive-tick', 'h-6 w-6') }}
             </div>
             <div class="pl-3 w-full flex items-center justify-center">
                 {{ $message }}

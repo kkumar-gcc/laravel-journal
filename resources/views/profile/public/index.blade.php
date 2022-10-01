@@ -1,71 +1,71 @@
 <x-app-layout>
     <x-slot name="sidebar">
-        <article >
-            {{-- <div
-                class="w-full text-base text-left  border  border-gray-200 rounded-xl font-normal  dark:border-gray-700 dark:bg-gray-800 ">
-                <header class="py-3 px-4 text-2xl font-semibold text-gray-700 dark:text-white">
+        <x-sidebar :topTags="true">
+            <div class="relative mt-3 w-full text-left  rounded-xl font-normal">
+                <header class="py-3 px-4 text-2xl font-bold tracking-wide text-gray-700 dark:text-white">
                     <h3>Social Links</h3>
                 </header>
                 <div class="py-3 px-4 rounded-xl   dark:bg-gray-800 ">
-                    <div class="social-wrap">
+                    <div class="flex flex-wrap mb-4">
                         @if ($user->twitter_url)
-                            <a class="social-link link-icon-twitter" href="{{ $user->twitter_url }}">
-                                {{ svg('bi-twitter') }}
+                            <a class="mr-3 mb-3" href="{{ $user->twitter_url }}">
+                               {{ svg('bi-twitter','h-6 w-6 text-[#1DA1F2]') }}
                             </a>
                         @endif
                         @if ($user->facebook_url)
-                            <a class="social-link link-icon-facebook" href="{{ $user->facebook_url }}">
-                                {{ svg('bi-facebook') }}
+                            <a class="mr-3 mb-3" href="{{ $user->facebook_url }}">
+                                {{ svg('bi-facebook','h-6 w-6 text-[#4267B2]') }}
                             </a>
                         @endif
                         @if ($user->linkedin_url)
-                            <a class="social-link link-icon-linkedin" href="{{ $user->linkedin_url }}">
-                                {{ svg('bi-linkedin') }}
+                            <a class="mr-3 mb-3" href="{{ $user->linkedin_url }}">
+                                {{ svg('bi-linkedin','h-6 w-6 text-[#0077B5]') }}
                             </a>
                         @endif
                         @if ($user->stackoverflow_url)
-                            <a class="social-link" href="{{ $user->stackoverflow_url }}">
-                                <img src="{{ asset('images/stackoverflow-color.svg') }}" style="width: 18px;height:18px">
+                            <a class="mr-3 mb-3" href="{{ $user->stackoverflow_url }}">
+                                {{ svg('bi-stack-overflow','h-6 w-6 text-[#FF0000]') }}
                             </a>
                         @endif
                         @if ($user->reddit_url)
-                            <a class="social-link link-icon-reddit" href="{{ $user->reddit_url }}">
-                                {{ svg('bi-reddit') }}
+                            <a class="mr-3 mb-3" href="{{ $user->reddit_url }}">
+                               {{ svg('bi-reddit','h-6 w-6 text-[#FF4500]') }}
                             </a>
                         @endif
                         @if ($user->instagram_url)
-                            <a class="social-link link-icon-instagram" href="{{ $user->instagram_url }}">
-                                {{ svg('bi-instagram') }}
+                            <a class="mr-3 mb-3" href="{{ $user->instagram_url }}">
+                                {{ svg('iconsax-out-instagram','h-6 w-6 text-[#e95950]') }}
                             </a>
                         @endif
                         @if ($user->youtube_url)
-                            <a class="social-link link-icon-youtube" href="{{ $user->youtube_url }}">
-                                {{ svg('bi-youtube') }}
+                            <a class="mr-3 mb-3" href="{{ $user->youtube_url }}">
+                                {{ svg('bi-youtube','h-6 w-6 text-[#FF0000]') }}
                             </a>
                         @endif
                         @if ($user->quora_url)
-                            <a class="social-link link-icon-quora" href="{{ $user->quora_url }}">
-                                {{ svg('bi-quora') }}
+                            <a class="mr-3 mb-3" href="{{ $user->quora_url }}">
+                                {{ svg('bi-quora','h-6 w-6 text-[#FF0000]') }}
                             </a>
                         @endif
-                        @if ($user->laracasts_url)
+                        {{-- @if ($user->laracasts_url)
                             <a class="social-link " href="{{ $user->laracasts_url }}">
-                                <img src="{{ asset('images/laracasts-original.svg') }}" style="width: 18px;height:18px">
+                                <img src="{{ asset('images/laracasts-original.svg') }}"
+                                    style="width: 18px;height:18px">
                             </a>
-                        @endif
+                        @endif --}}
                         @if ($user->github_url)
-                            <a class="social-link link-icon-github" href="{{ $user->github_url }}">
-                                {{ svg('bi-github') }}
+                            <a class="mr-3 mb-3" href="{{ $user->github_url }}">
+                                {{ svg('bi-github','h-6 w-6') }}
                             </a>
                         @endif
                         @if ($user->medium_url)
-                            <a class="social-link link-icon-medium" href="{{ $user->medium_url }}">
-                                {{ svg('bi-medium') }}
+                            <a class="mr-3 mb-3" href="{{ $user->medium_url }}">
+                                {{ svg('bi-medium','h-6 w-6') }}
                             </a>
                         @endif
                         @if ($user->codepen_url)
-                            <a class="social-link link-icon-codepen" href="{{ $user->codepen_url }}">
-                                {{ svg('feathericon-codepen') }}
+                            <a class="mr-3 mb-3" href="{{ $user->codepen_url }}">
+                                {{ svg('iconsax-out-3d-cube-scan','h-6 w-6') }}
                             </a>
                         @endif
                     </div>
@@ -76,41 +76,39 @@
                     @endauth
                 </div>
             </div>
-            <div
-                class="relative mt-3 w-full  text-base text-left  border  border-gray-200 rounded-xl font-normal   hover:shadow-md dark:border-gray-700 dark:bg-gray-800 ">
-                <header class="py-3 px-4 text-2xl font-semibold text-gray-700 dark:text-white">
-                    <h3> Personal Info</h3>
+            <div class="relative mt-3 w-full text-left  rounded-xl font-normal">
+                <header class="py-3 px-4 text-2xl font-bold tracking-wide text-gray-700 dark:text-white">
+                  <h3> Personal Info</h3>
                 </header>
                 <ul class="p-0 list-none">
                     <li
-                        class="border-t py-3 px-4 last:rounded-b-xl border-gray-200  dark:hover:text-white dark:border-gray-700 hover:bg-gray-100 hover:shadow-md dark:bg-gray-800 dark:hover:bg-gray-700">
+                        class="py-3 px-4  dark:hover:text-white hover:bg-gray-50 hover:shadow-sm dark:bg-gray-800 dark:hover:bg-gray-700">
 
                         <div class="flex flex-row">
-                            {{ svg('uni-bag-alt-o') }}
+                            {{ svg('iconsax-bul-bag-happy','h-5 w-5 text-teal-500') }}
                             <span class="ml-2">UI Manager / CSS Aficionado</span>
                         </div>
                     </li>
                     <li
-                        class="border-t py-3 px-4 last:rounded-b-xl border-gray-200  dark:hover:text-white dark:border-gray-700 hover:bg-gray-100 hover:shadow-md dark:bg-gray-800 dark:hover:bg-gray-700">
+                        class="py-3 px-4  dark:hover:text-white hover:bg-gray-50 hover:shadow-sm dark:bg-gray-800 dark:hover:bg-gray-700">
 
                         <div class="flex flex-row">
-                            {{ svg('zondicon-location') }}
+                            {{ svg('iconsax-bol-location','h-5 w-5 text-teal-500') }}
                             <span class="ml-2">kanpur</span>
                         </div>
                     </li>
                     <li
-                        class="border-t py-3 px-4 last:rounded-b-xl border-gray-200  dark:hover:text-white dark:border-gray-700 hover:bg-gray-100 hover:shadow-md dark:bg-gray-800 dark:hover:bg-gray-700">
+                        class="py-3 px-4  dark:hover:text-white hover:bg-gray-50 hover:shadow-sm dark:bg-gray-800 dark:hover:bg-gray-700">
 
                         <div class="flex flex-row">
-                            {{ svg('heroicon-s-cake') }}
+                            {{ svg('iconsax-bul-cake','h-5 w-5 text-teal-500') }}
                             <span class="ml-2">Member Since
                                 {{ \Carbon\Carbon::parse($user->created_at)->format('M , Y') }}</span>
                         </div>
                     </li>
                 </ul>
-            </div> --}}
-        </article>
-        <x-sidebar :topTags="true"/>
+            </div>
+        </x-sidebar>
     </x-slot>
     <?php
     function nice_number($n)
@@ -140,7 +138,7 @@
             <header class="border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800">
                 <div class="relative  pt-[60%] rounded-lg sm:pt-[30%] md:pt-[22%] ">
                     <img class="absolute m-0 top-0 left-0 right-0 bottom-0 w-full h-full object-fit rounded-t-lg  bg-white dark:bg-gray-800"
-                        src="{{ asset($user->background_image) ?? 'https://picsum.photos/400/300' }}" alt="" />
+                        src="https://live.staticflickr.com/65535/52391254003_99ade44739_h.jpg" alt="" />
                 </div>
                 <div class="my-4 flex flex-col md:flex-row px-6">
                     <div class="basis-1/3 mb-4 w-full md:w-1/3 flex items-start justify-center relative">
@@ -170,13 +168,11 @@
                     <li class="mr-2" role="presentation">
                         <a class="inline-block p-4 rounded-t-lg border-b-4  {{ $tab == 'blogs' ? 'text-teal-600  dark:text-teal-500  border-teal-600 dark:border-teal-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700 dark:hover:border-gray-300' }}"
                             href="{{ $user->username }}?tab=blogs#details" role="tab">Blogs
-                            <span>({{ nice_number($user->blogs->where('status', '=', 'posted')->count()) }})</span>
                         </a>
                     </li>
                     <li class="mr-2" role="presentation">
                         <a class="inline-block p-4 rounded-t-lg border-b-4  {{ $tab == 'bookmarks' ? 'text-teal-600 dark:text-teal-500  border-teal-600 dark:border-teal-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700 dark:hover:border-gray-300' }}"
                             href="{{ $user->username }}?tab=bookmarks#details" role="tab">Bookmarks
-                            <span>({{ nice_number($user->bookmarks->count()) }})</span>
                         </a>
                     </li>
                 </ul>

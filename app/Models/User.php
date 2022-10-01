@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Str;
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -59,11 +59,11 @@ class User extends Authenticatable
     {
         return $this->email;
     }
-    public function firstName(): string
+    public function firstName(): ?string
     {
        return $this->first_name;
     }
-    public function lastName(): string
+    public function lastName(): ?string
     {
        return $this->last_name;
     }
@@ -72,7 +72,7 @@ class User extends Authenticatable
     {
        return $this->username;
     }
-    public function shortBio(): string
+    public function shortBio(): ?string
     {
        return $this->short_bio;
     }
@@ -80,13 +80,17 @@ class User extends Authenticatable
     {
        return $this->about_me;
     }
-    public function location(): string
+    public function location(): ?string
     {
        return $this->location;
     }
     public function twitterUrl(): ?string
     {
        return $this->twitter_url;
+    }
+    public function websiteUrl(): ?string
+    {
+       return $this->website_url;
     }
     public function isBanned(): bool
     {
@@ -173,7 +177,7 @@ class User extends Authenticatable
     }
     public function avatarUrl():string
     {
-        return 'https://www.gravatar.com/avatar/'.md5(Str::lower(trim($this->email)));
+        return 'https://www.gravatar.com/avatar/'.md5(Str::lower(trim('krishkumar9352@gmail.com')));
     }
 
 }

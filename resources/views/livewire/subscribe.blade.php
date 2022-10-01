@@ -1,7 +1,7 @@
 <div>
     @guest
         <x-buttons.secondary type="button">
-            {{ svg('iconsax-bro-user-add','mr-2 -ml-1 w-6 h-6') }}
+            {{ svg('iconsax-bro-user-add', 'mr-2 -ml-1 w-6 h-6') }}
             {{ __('Follow') }}
         </x-buttons.secondary>
     @else
@@ -11,12 +11,15 @@
                 {{ __('Edit Profile') }}
             </x-buttons.secondary>
         @else
-            <x-buttons.secondary type="button" wire:click.prevent="subscribe()" :default="$subscribed ? false:true" class="{{ $subscribed ? 'text-gray-800 shadow-gray-100 bg-gray-100 border-gray-100':'' }}">
+            <x-buttons.secondary type="button" wire:click.prevent="subscribe()" :default="$subscribed ? false : true"
+                class="{{ $subscribed ? 'text-gray-800 shadow-gray-100 bg-gray-100 border-gray-100' : '' }}">
                 <span wire:loading.remove>
                     @if ($subscribed)
-                    {{ svg('iconsax-bul-user-add', 'mr-2 -ml-1 w-6 h-6') }}
+                        {{-- {{ svg('iconsax-bul-user-tick', 'mr-2 -ml-1 w-6 h-6') }} --}}
+                        {{ svg('iconsax-lin-tick-circle', 'mr-2 -ml-1 w-5 h-5') }}
                     @else
-                    {{ svg('iconsax-bro-user-add','mr-2 -ml-1 w-6 h-6') }}
+                        {{-- {{ svg('iconsax-bro-user-add') }} --}}
+                        {{ svg('iconsax-lin-add-circle', 'mr-2 -ml-1 w-5 h-5') }}
                     @endif
                 </span>
                 <div wire:loading>
@@ -35,15 +38,21 @@
                     {{ __('Follow') }}
                 @endif
             </x-buttons.secondary>
-            <div class="fixed bottom-3 right-3 p-3 mt-4 bg-white shadow flex flex-shrink-0 rounded-md"
+            <div class="fixed bottom-3 z-20 right-3 p-3 mt-4 bg-white shadow flex flex-shrink-0 rounded-md"
                 x-data="{ show: false }" x-show="show" x-transition.origin.bottom.duration.500ms x-init="@this.on('changed', () => {
                     show = true;
-                    setTimeout(() => show = false, 10000)
+                    setTimeout(() => show = false, 100000)
                 })"
                 x-cloack style="display:none">
-                <div tabindex="0" aria-label="group icon" role="img"
-                    class="focus:outline-none w-8 h-8 border rounded-full border-gray-200 flex flex-shrink-0 items-center justify-center">
-                    {{ svg('iconsax-bro-user-add','w-5 h-5') }}
+                <div class=" flex-1 flex flex-shrink-0 items-center justify-center">
+                    {{-- {{ svg('iconsax-bro-user-add', 'w-5 h-5') }} --}}
+                    @if ($subscribed)
+                        {{-- {{ svg('iconsax-bul-user-tick', 'mr-2 -ml-1 w-6 h-6') }} --}}
+                        {{ svg('iconsax-lin-tick-circle', 'w-5 h-5') }}
+                    @else
+                        {{-- {{ svg('iconsax-bro-user-add') }} --}}
+                        {{ svg('iconsax-lin-add-circle', 'w-5 h-5') }}
+                    @endif
                 </div>
                 <div class="pl-3 w-full flex items-center justify-center">
                     {{ $message }}

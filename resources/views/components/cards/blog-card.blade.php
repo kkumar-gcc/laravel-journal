@@ -1,6 +1,6 @@
-@props(['blog'])
+@props(['blog', 'private' => false,'pin'=>false])
 <div
-    {{ $attributes->merge(['class' => 'border border-gray-200  relative  mt-8 mt-3 w-full px-2 md:p-2.5 text-base text-left p-1  rounded-lg  font-normal shadow-sm']) }}>
+    {{ $attributes->merge(['class' => 'border border-gray-200  relative  mt-8 first:mt-0 mt-3 w-full px-2 md:p-2.5 text-base text-left p-1  rounded-lg  font-normal shadow-sm']) }}>
     <div class="flex flex-col-reverse items-stretch justify-center p-4 sm:p-6 sm:flex-row ">
         <div class="basis-2/3 mt-2 relative leading-normal sm:mt-0 sm:pr-4">
             <div class="flex flex-row mt-3 mb-1 md:mt-0">
@@ -13,7 +13,49 @@
                     </div>
                 </div>
                 <div>
-                    <livewire:bookmark :blog_id="$blog->id" :wire:key="$blog->id" />
+                    @if ($private)
+                        <div>
+                            @can('update', $blog)
+                            <x-dropdown align="right" width="48">
+                                <x-slot name="trigger">
+                                    <x-buttons.primary class="border hover:text-teal-600 px-2">
+                                        {{ svg('iconsax-bul-setting-2', 'h-4 w-4') }}
+                                    </x-buttons.primary>
+                                </x-slot>
+                                <x-slot name="content">
+                                    <ul>
+                                        <li>
+                                            <x-dropdown-link
+                                                href="/blogs/edit/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
+                                                class="flex ">
+                                                {{ __(' Edit') }}
+                                            </x-dropdown-link>
+                                        </li>
+                                        <li>
+                                            <x-dropdown-link
+                                                href="/blogs/manage/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
+                                                class="flex ">
+                                                {{ __('Manage') }}
+                                            </x-dropdown-link>
+                                        </li>
+                                        <li>
+                                            <x-dropdown-link
+                                                href="/blogs/stats/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
+                                                class="flex ">
+                                                {{ __('Stats') }}
+                                            </x-dropdown-link>
+                                        </li>
+                                    </ul>
+
+                                </x-slot>
+                            </x-dropdown>
+                            @endcan
+                        </div>
+                    @elseif($pin)
+                        {{ $slot }}
+                    @else
+                        <livewire:bookmark :blog_id="$blog->id" :wire:key="$blog->id" />
+                    @endif
                 </div>
             </div>
 

@@ -21,8 +21,8 @@
         <!-- Page Content -->
         <main>
             <div class="flex-col-reverse flex justify-between lg:flex-row">
-                <div class="flex-none w-full lg:w-[28%]  px-0 md:px-12 lg:px-8 lg:border-r lg:border-gray-200">
-                   {{ $sidebar ?? '' }}
+                <div class="flex-none w-full lg:w-[28%] md:min-h-[calc(100vh-81px)]  px-0 md:px-12 lg:px-8 lg:border-r lg:border-gray-200">
+                    {{ $sidebar ?? '' }}
                 </div>
                 <div class="flex-1 w-full lg:w-[70%]">
                     {{ $slot }}
@@ -31,7 +31,8 @@
         </main>
     </div>
     @livewireScripts
-    <script src="https://cdn.jsdelivr.net/gh/livewire/turbolinks@v0.1.x/dist/livewire-turbolinks.js" data-turbolinks-eval="false" data-turbo-eval="false"></script>
+    <script src="https://cdn.jsdelivr.net/gh/livewire/turbolinks@v0.1.x/dist/livewire-turbolinks.js"
+        data-turbolinks-eval="false" data-turbo-eval="false"></script>
 </body>
 
 </html>

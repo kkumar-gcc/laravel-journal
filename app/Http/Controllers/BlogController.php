@@ -3,19 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBlogRequest;
-use App\Http\Requests\UpdateBlogRequest;
 use App\Models\Blog;
-use App\Models\BlogLike;
 use App\Models\BlogView;
 use App\Models\Comment;
-use App\Models\Friendship;
-use App\Models\Subscriber;
 use App\Models\Tag;
 use App\Models\User;
-use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 
 class BlogController extends Controller
 {
@@ -126,7 +120,6 @@ class BlogController extends Controller
         $titleArray = explode('-', $slug);
         $id = end($titleArray);
         $blog = Blog::find($id);
-        $like = NULL;
         if ($blog) {
             if ($blog->status == "posted") {
                 // $shareBlog =  ShareFacade::page(
@@ -154,30 +147,13 @@ class BlogController extends Controller
                     $query->whereIn('title', $blog->tags->pluck('title'));
                 }, '>=', count($blog->tags->pluck('title')))->where("id", "!=", $blog->id)->limit(5)->withCount('tags')
                     ->get();
-                if ($request->tab == 'likes') {
-                    $comments = Comment::where("blog_id", "=", $id)->withCount(['commentlikes' => function ($q) {
-                        $q->where('status', '=', 1);
-                    }])->orderByDesc('commentlikes_count')->paginate(5)->fragment('comments');
-                } else if ($request->tab == 'newest') {
-                    $comments = Comment::where("blog_id", "=", $id)->orderByDesc("updated_at")->paginate(5)->fragment('comments');
-                } else if ($request->tab == 'dislikes') {
-                    $comments = Comment::where("blog_id", "=", $id)->withCount(['commentlikes' => function ($q) {
-                        $q->where('status', '=', 0);
-                    }])->orderByDesc('commentlikes_count')->paginate(5)->fragment('comments');
-                } else {
-                    $comments = Comment::where("blog_id", "=", $id)->with(['replies', 'user', 'commentlikes'])->orderByDesc("created_at")->paginate(5)->fragment('comments');
-                }
                 return view("blogs.show")->with([
                     "blog" => $blog,
-                    "comments" => $comments,
-                    "like" => $like,
-                    // "tagTitles" => json_encode($tagTitles),
                     "related" => $related,
-                    // "shareBlog" => $shareBlog,
                 ]);
             }
         }
-        return view("error");
+        return abort(404);;
     }
     /**
      * Show the form for editing the specified resource.
@@ -371,48 +347,27 @@ class BlogController extends Controller
     public function tagSearch(Request $request, $title)
     {
         $searchTag = Tag::where("title", "=", $title)->first();
-
-        $blogCount = Blog::where("status", "=", "posted")->whereHas('tags', function ($q) use ($title) {
-            $q->where('title', $title);
-        })->count();
-        $tab = 'newest';
-        if ($request->tab == 'likes') {
-            $blogs = Blog::where("status", "=", "posted")->whereHas('tags', function ($q) use ($title) {
-                $q->where('title', $title);
-            })->withCount(['bloglikes' => function ($q) {
-                $q->where('status', '=', 1);
-            }])->orderByDesc('bloglikes_count')->paginate(10);
-        } else if ($request->tab == 'newest') {
-            $blogs = Blog::where("status", "=", "posted")->whereHas('tags', function ($q) use ($title) {
-                $q->where('title', $title);
-            })->orderByDesc('created_at')->paginate(10);
-        } else if ($request->tab == 'views') {
-            $blogs = Blog::where("status", "=", "posted")->whereHas('tags', function ($q) use ($title) {
-                $q->where('title', $title);
-            })->withCount('blogviews')->orderByDesc('blogviews_count')->paginate(10);
-        } else {
-            $blogs = Blog::where("status", "=", "posted")->whereHas('tags', function ($q) use ($title) {
-                $q->where('title', $title);
-            })->orderByDesc('created_at')->paginate(10);
-        }
-
-        if ($request->tab) {
-            $tab = $request->tab;
-        }
-        $topBlogs = Blog::where("status", "=", "posted")->withCount('blogviews')->orderByDesc('blogviews_count')->limit(5)->get();
-
-        $topUsers = User::limit(5)->get();
-        $topTags = Tag::withCount(['blogs' => function ($q) {
-            $q->where('status', '=', "posted");
-        }])->orderByDesc('blogs_count')->limit(10)->get();
+        // if ($request->tab == 'likes') {
+        //     $blogs = Blog::where("status", "=", "posted")->whereHas('tags', function ($q) use ($title) {
+        //         $q->where('title', $title);
+        //     })->withCount(['bloglikes' => function ($q) {
+        //         $q->where('status', '=', 1);
+        //     }])->orderByDesc('bloglikes_count')->paginate(10);
+        // } else if ($request->tab == 'newest') {
+        //     $blogs = Blog::where("status", "=", "posted")->whereHas('tags', function ($q) use ($title) {
+        //         $q->where('title', $title);
+        //     })->orderByDesc('created_at')->paginate(10);
+        // } else if ($request->tab == 'views') {
+        //     $blogs = Blog::where("status", "=", "posted")->whereHas('tags', function ($q) use ($title) {
+        //         $q->where('title', $title);
+        //     })->withCount('blogviews')->orderByDesc('blogviews_count')->paginate(10);
+        // } else {
+        //     $blogs = Blog::where("status", "=", "posted")->whereHas('tags', function ($q) use ($title) {
+        //         $q->where('title', $title);
+        //     })->orderByDesc('created_at')->paginate(10);
+        // }
         return view("blogs.tagged")->with([
-            "blogs" => $blogs,
-            "blogCount" => $blogCount,
-            "searchTag" => $searchTag,
-            "tab" => $tab,
-            "topUsers" => $topUsers,
-            "topTags" => $topTags,
-            "topBlogs" => $topBlogs
+            "searchTag"=>$searchTag
         ]);
     }
 

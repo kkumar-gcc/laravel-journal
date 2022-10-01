@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTagRequest;
 use App\Http\Requests\UpdateTagRequest;
 use App\Models\Tag;
+use Illuminate\Http\Request;
 
 class TagController extends Controller
 {
@@ -13,9 +14,26 @@ class TagController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if ($request->tab == 'name') {
+            $tags = Tag::withCount(['blogs' => function ($q) {
+                $q->where('status', '=', "posted");
+            }])->orderBy('title')->paginate(18);
+        } else if ($request->tab == 'newest') {
+            $tags = Tag::withCount(['blogs' => function ($q) {
+                $q->where('status', '=', "posted");
+            }])->orderByDesc('created_at')->paginate(18);
+        } else  if ($request->tab == 'popular') {
+            $tags = Tag::withCount(['blogs' => function ($q) {
+                $q->where('status', '=', "posted");
+            }])->orderByDesc('blogs_count')->paginate(18);
+        } else {
+            $tags = Tag::withCount(['blogs' => function ($q) {
+                $q->where('status', '=', "posted");
+            }])->paginate(18);
+        }
+        return view('tags.index')->with(["tags" => $tags]);
     }
 
     /**

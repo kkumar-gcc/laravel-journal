@@ -45,9 +45,10 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function show(Comment $comment)
+    public function show($slug)
     {
-        //
+        $comment =Comment::find($slug);
+        return view("comments.show")->with(["comment"=>$comment]);
     }
 
     /**

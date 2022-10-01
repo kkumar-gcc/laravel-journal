@@ -2,7 +2,7 @@
     @if ($drafts->count() > 0)
         <div>
             @foreach ($drafts as $draft)
-            <x-cards.blog-card :blog="$draft" />
+            <x-cards.blog-card :blog="$draft" :private="true"/>
             @endforeach
             {!! $drafts->withQueryString()->links('pagination::tailwind') !!}
         </div>

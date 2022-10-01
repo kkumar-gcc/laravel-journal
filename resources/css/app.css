@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/**
+ * Fix milkdown dropdown element offset
+*/
+.milkdown-menu-wrapper {
+    position: relative;
+}

@@ -18,22 +18,34 @@
         return number_format($n);
     }
     ?>
-    @if (session()->has('success'))
-        <section class="my-4 d-flex justify-content-center w-100">
-            <div class="container">
-                <div class="alert alert-dismissible fade show alert-success" role="alert" data-mdb-color="warning"
-                    id="customxD">
-                    <strong>Success!</strong> {{ session()->get('success') }}
-                    <button type="button" class="btn-close" data-mdb-dismiss="alert" aria-label="Close"></button>
+    {{-- <div>
+        <div class="fixed top-3 right-3 p-3 mt-4 z-20 bg-white shadow flex flex-shrink-0 rounded-md"
+            x-data="{ show: false }" x-show="show" x-transition.origin.bottom.duration.500ms x-init="@this.on('changed', () => {
+                show = true;
+                setTimeout(() => show = false, 10000)
+            })"
+            x-cloack style="display:none">
+            <div tabindex="0" aria-label="group icon" role="img"
+                class="focus:outline-none w-8 h-8 flex flex-shrink-0 items-center justify-center">
+                {{ svg('iconsax-bul-tick-circle', 'h-6 w-6 text-teal-500') }}
+
+            </div>
+            <div class="pl-3 w-full flex items-center justify-center">
+                @if (session()->has('message'))
+                    {{ session('message') }}
+                @endif
+                <div aria-label="close icon" @click="show=false" role="button"
+                    class="ml-3 focus:outline-none cursor-pointer">
+                    <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/notification_1-svg4.svg" alt="icon">
                 </div>
             </div>
-        </section>
-    @endif
+        </div>
+    </div> --}}
     <main
         class="relative prose max-w-none prose-a:no-underline lg:max-w-full xl:max-w-none prose-img:rounded-xl  dark:prose-invert prose-a:text-teal-600 dark:prose-a:text-teal-500">
         <div class="relative  pt-[60%] rounded-xl sm:pt-[50%] md:pt-[42%] ">
             <img class="absolute top-0 bottom-0 left-0 right-0 w-full h-full m-0 bg-white shadow-md object-fit rounded-xl drop-shadow-md dark:bg-gray-800"
-                src="https://picsum.photos/400/300" alt="" />
+                src="https://live.staticflickr.com/65535/52390100407_ac668fab12_h.jpg" alt="" />
         </div>
         <div class="relative flex flex-col w-full mt-3 lg:flex-row ">
             <div class="flex-1 my-2 basis-2/3 lg:w-2/3">
@@ -87,8 +99,6 @@
 
                             </x-slot>
                         </x-dropdown>
-
-
                     </div>
                 @endcan
                 <div class={{ $blog->adult_warning ? 'prose-img:blur-lg' : '' }}>
@@ -170,26 +180,7 @@
                         @endguest
                     @elseif($blog->access == 'public')
                         <article class="w-full my-5">
-                            <x-toc>
-                                # Hello World
-
-                                Blade UI components are **awesome**.
-
-                                ## Sub Title level 2
-
-                                Some content.
-
-                                ### Sub Sub Title level 3
-
-                                #### Sub Sub Title level 4
-
-                                Some content.
-
-                                ## Other Sub Title level 2
-
-                                Some content.
-                            </x-toc>
-                            <x-markdown flavor="github" theme="github-dark">
+                            <x-markdown theme="github-dark">
                                 {!! $blog->body() !!}
                             </x-markdown>
                         </article>
@@ -215,76 +206,76 @@
                 @endif
             </div>
             <aside class="my-2 overflow-hidden basis-1/3 lg:pl-5 lg:py-5">
-                <div id="sticky-sidebar">
 
-                    <x-cards.primary-card :default=false>
-                        <div class="px-4 py-3 rounded-xl dark:bg-gray-800 ">
-                            <div class="grid grid-cols-4 gap-4 justify-between">
-                                <livewire:like-blog :blog_id="$blog->id" :likes_count="$blog->bloglikes->where('status', 1)->count()" :wire:key="$blog->id" />
-                                <div>
-                                    <button type="button"
-                                        class=" flex flex-row items-center mr-1 md:mr-1 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
-                                        data-modal-toggle="shareBlogModal">
-                                        {{ svg('iconsax-bul-share', 'h-6 w-6') }}
-                                        <span class="ml-2">share</span>
-                                    </button>
-                                </div>
-                                <livewire:bookmark :blog_id="$blog->id" :wire:key="$blog->id" />
+                <x-cards.primary-card :default=false>
+                    <div class="px-4 py-3 rounded-xl dark:bg-gray-800 ">
+                        <div class="grid grid-cols-4 gap-4 justify-between">
+                            <livewire:like-blog :blog_id="$blog->id" :likes_count="$blog->bloglikes->where('status', 1)->count()" :wire:key="$blog->id" />
+                            <div>
+                                <button type="button"
+                                    class=" flex flex-row items-center mr-1 md:mr-1 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
+                                    data-modal-toggle="shareBlogModal">
+                                    {{ svg('iconsax-bul-share', 'h-6 w-6') }}
+                                    <span class="ml-2">share</span>
+                                </button>
                             </div>
+                            <livewire:bookmark :blog_id="$blog->id" :wire:key="$blog->id" />
                         </div>
-                    </x-cards.primary-card>
-                    <x-cards.primary-card>
-                        <div class="px-4 py-3 rounded-xl not-prose dark:bg-gray-800 ">
-                            <header class="">
-                                <div class="flex items-center flex-1 ">
-                                    <img class="w-10 h-10 rounded-full" src="{{ asset($blog->user->profile_image) }}"
-                                        onerror="this.onerror=null;this.src=`https://avatars.dicebear.com/api/bottts/:{{ $blog->user->username }}.svg`"
-                                        alt="">
-                                    <div class="ml-2 font-medium">
-                                        <div class="text-gray-900 dark:text-white">{{ $blog->user->username }} </div>
-                                        <div class="text-sm">Joined in
-                                            {{ \Carbon\Carbon::parse($blog->user->created_at)->format('F Y') }}
-                                        </div>
+                    </div>
+                </x-cards.primary-card>
+                <x-cards.primary-card>
+                    <div class="px-4 py-3 rounded-xl not-prose dark:bg-gray-800 ">
+                        <header class="">
+                            <div class="flex items-center flex-1 ">
+                                <img class="w-10 h-10 rounded-full" src="{{ asset($blog->user->profile_image) }}"
+                                    onerror="this.onerror=null;this.src=`https://avatars.dicebear.com/api/bottts/:{{ $blog->user->username }}.svg`"
+                                    alt="">
+                                <div class="ml-2 font-medium">
+                                    <div class="text-gray-900 dark:text-white">{{ $blog->user->username }} </div>
+                                    <div class="text-sm">Joined in
+                                        {{ \Carbon\Carbon::parse($blog->user->created_at)->format('F Y') }}
                                     </div>
                                 </div>
-                            </header>
-                            <div class="mt-3">
-                                {!! $blog->user->short_bio !!}
                             </div>
-                            <div class="w-full mt-3">
-                                <livewire:subscribe :user_id="$blog->user_id" />
-                            </div>
-                        </div>
-                    </x-cards.primary-card>
-                    <x-cards.primary-card :default=false>
-                        <header class="px-4 py-3 text-2xl font-semibold text-gray-700 dark:text-white">
-                            <span class="modern-badge modern-badge-danger">#Advertisment</span>
                         </header>
-                        <div
-                            class="px-4 py-3 text-gray-700 border-t border-gray-200 last:rounded-b-lg dark:text-gray-400 dark:hover:text-white dark:border-gray-700  hover:shadow dark:bg-gray-800 dark:hover:bg-gray-700">
-                            <div class="relative  pt-[60%] w-full rounded-xl sm:pt-[50%] md:pt-[42%] ">
-                                <img class="absolute top-0 bottom-0 left-0 right-0 object-cover w-full h-full m-0 bg-white shadow-md rounded-xl drop-shadow-md dark:bg-gray-800"
-                                    src="https://picsum.photos/400/300" alt="" />
-                            </div>
+                        <div class="mt-3">
+                            <x-markdown flavor="github" :anchors="true" theme="github-dark">
+                                {{ $blog->user->shortBio() }}
+                            </x-markdown>
                         </div>
-                    </x-cards.primary-card>
-                    <x-cards.primary-card :default=false>
-                        <header class="px-4 py-3 text-2xl font-semibold text-gray-700 dark:text-white">
-                            <span>More From {{ $blog->user->username }}</span>
-                        </header>
-                        <div
-                            class="px-4 py-3 text-gray-700 border-t border-gray-200 last:rounded-b-lg dark:text-gray-400 dark:hover:text-white dark:border-gray-700 hover:shadow dark:bg-gray-800 dark:hover:bg-gray-700">
-                            First, why should you make any website faster?
-
-                            ✔️ Decrease bounce rate by 57% (as per study)
-                            ✔️ Increases google ranking
-                            ✔️ Happy Visitors/Customers
-
-                            let's check the steps 👇
-
+                        <div class="w-full mt-3">
+                            <livewire:subscribe :user_id="$blog->user_id" />
                         </div>
-                    </x-cards.primary-card>
-                </div>
+                    </div>
+                </x-cards.primary-card>
+                <x-cards.primary-card :default=false>
+                    <header class="px-4 py-3 text-2xl font-semibold text-gray-700 dark:text-white">
+                        <span class="modern-badge modern-badge-danger">#Advertisment</span>
+                    </header>
+                    <div
+                        class="px-4 py-3 text-gray-700 border-t border-gray-200 last:rounded-b-lg dark:text-gray-400 dark:hover:text-white dark:border-gray-700  hover:shadow dark:bg-gray-800 dark:hover:bg-gray-700">
+                        <div class="relative  pt-[60%] w-full rounded-xl sm:pt-[50%] md:pt-[42%] ">
+                            <img class="absolute top-0 bottom-0 left-0 right-0 object-cover w-full h-full m-0 bg-white shadow-md rounded-xl drop-shadow-md dark:bg-gray-800"
+                                src="https://picsum.photos/400/300" alt="" />
+                        </div>
+                    </div>
+                </x-cards.primary-card>
+                <x-cards.primary-card :default=false>
+                    <header class="px-4 py-3 text-2xl font-semibold text-gray-700 dark:text-white">
+                        <span>More From {{ $blog->user->username }}</span>
+                    </header>
+                    <div
+                        class="px-4 py-3 text-gray-700 border-t border-gray-200 last:rounded-b-lg dark:text-gray-400 dark:hover:text-white dark:border-gray-700 hover:shadow dark:bg-gray-800 dark:hover:bg-gray-700">
+                        First, why should you make any website faster?
+
+                        ✔️ Decrease bounce rate by 57% (as per study)
+                        ✔️ Increases google ranking
+                        ✔️ Happy Visitors/Customers
+
+                        let's check the steps 👇
+
+                    </div>
+                </x-cards.primary-card>
             </aside>
         </div>
     </main>

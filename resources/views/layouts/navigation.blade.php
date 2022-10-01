@@ -21,10 +21,10 @@
                     <x-nav-link :href="route('tags')" :active="request()->routeIs('tags')">
                         {{ __('Tags') }}
                     </x-nav-link>
-                    <x-nav-link :href="'writers'" :active="request()->routeIs('writers')">
-                        {{ __('Writers') }}
+                    <x-nav-link :href="'/users'" :active="request()->routeIs('users')">
+                        {{ __('Users') }}
                     </x-nav-link>
-                    <x-nav-link :href="'writers'" :active="request()->routeIs('writers')">
+                    <x-nav-link :href="'/writers'" :active="request()->routeIs('writers')">
                         {{ __('Projects') }}
                     </x-nav-link>
                 </div>
@@ -33,6 +33,13 @@
             <!-- Settings Dropdown -->
             <div class="hidden lg:flex sm:items-center sm:ml-6">
                 @auth
+                    <div class="mr-8">
+                       <livewire:notification-indicator />
+                    </div>
+                    <div class="mr-8">
+                        <x-buttons.secondary class="ml-4" href="/new-blog">{{ __('New Blog') }}
+                        </x-buttons.secondary>
+                    </div>
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <img class="w-10 h-10 rounded-full cursor-pointer"
@@ -74,7 +81,6 @@
                         </x-slot>
                     </x-dropdown>
                 @endauth
-
             </div>
 
             <!-- Hamburger -->
@@ -107,10 +113,10 @@
             <x-responsive-nav-link :href="route('tags')" :active="request()->routeIs('tags')">
                 {{ __('Tags') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="'writers'" :active="request()->routeIs('writers')">
-                {{ __('Writers') }}
+            <x-responsive-nav-link :href="'/users'" :active="request()->routeIs('users')">
+                {{ __('Users') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="'writers'" :active="request()->routeIs('writers')">
+            <x-responsive-nav-link :href="'/writers'" :active="request()->routeIs('writers')">
                 {{ __('Projects') }}
             </x-responsive-nav-link>
         </div>
@@ -131,12 +137,19 @@
             </div>
         @else
             <div class="flex justify-between py-3 font-medium translate-x-1 px-[4%]">
+
                 <div class="flex items-center space-x-4">
                     <x-avatar :user="auth()->user()" class="w-12 h-12 rounded-full" />
                     <div class="space-y-1 font-medium dark:text-white">
                         <div>{{ Auth::user()->username }}</div>
                     </div>
                 </div>
+                <div>
+                    <x-buttons.secondary class="ml-4" href="/new-blog">
+                        {{ svg('iconsax-lin-add', 'h-6 w-6') }}
+                    </x-buttons.secondary>
+                </div>
+
             </div>
             <x-responsive-nav-link href="/users/{{ Auth::user()->username }}">
                 {{ __('Profile') }}
@@ -157,8 +170,7 @@
                 {{ __('My Bookmarks') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link href="/settings?tab=profile">
-                {{ __(' Account
-                                                Settings') }}
+                {{ __(' Account Settings') }}
             </x-responsive-nav-link>
             <div class="mt-3 space-y-1">
                 <!-- Authentication -->

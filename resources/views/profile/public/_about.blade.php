@@ -1,8 +1,8 @@
 <div
-    class="mt-3 w-full text-base text-left  border  border-gray-200 rounded-lg font-normal  dark:border-gray-700 dark:bg-gray-800 ">
+    class="mt-3 w-full">
     <header class="py-3 px-4 flex flex-row text-2xl font-semibold text-gray-700 dark:text-white">
-        <div class="flex-1">
-            <h3> About Me </h3>
+        <div class="flex-1 flex items-center">
+            <h5 class="text-3xl font-extrabold line-clamp-3  tracking-wide text-gray-700">About Me </h3>
         </div>
         @auth
             <button type="button"
@@ -13,9 +13,11 @@
         @endauth
     </header>
     <div
-        class="py-3 px-4 rounded-lg text-base  text-gray-700 dark:text-gray-300   dark:bg-gray-800 ">
+        class="py-3 px-4 rounded-lg relative prose max-w-none prose-a:no-underline lg:max-w-full xl:max-w-none prose-img:rounded-xl prose-img:mx-auto  dark:prose-invert prose-a:text-teal-600 dark:prose-a:text-teal-500">
         @if ($user->about_me)
-            {!! $user->about_me !!}
+            <x-markdown flavor="github" :anchors="true" theme="github-dark">
+                {!! $user->aboutMe() !!}
+            </x-markdown>
         @else
             {{ $user->username }} hasn't updated "about me".
         @endif

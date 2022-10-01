@@ -15,14 +15,17 @@ class Comment extends Component
     public $comments_count;
     public $blog_id;
     public $canComment;
-    public $message;
-    public $editMessage;
+    public $body;
+    // public $editbody;
     public $comment_id;
     protected $listeners = ['edited'];
 
     public function edited()
     {
         $this->render();
+    }
+    public function childReply($body,$comment_id){
+        $this->replyIndex($comment_id);
     }
     public function mount($blog_id, $canComment, $comments_count)
     {
@@ -46,40 +49,47 @@ class Comment extends Component
     {
         if ($this->canComment) {
             ModelsComment::create([
-                'body' =>  $this->message,
+                'body' =>  $this->body,
                 'blog_id' => $this->blog_id,
                 'user_id' => auth()->id()
             ]);
-            $this->reset('message');
+            $this->reset('body');
             $this->comments_count++;
-            $this->message = '';
+            $this->body = '';
         }
     }
     public function edit($comment_id)
     {
         $comment = ModelsComment::find($comment_id);
         $this->authorize('update', $comment);
-        $this->editMessage = $comment->body();
+        $this->body = $comment->body();
         $this->comment_id = $comment_id;
-        $this->emit('commentEdit',$this->editMessage,$this->comment_id);
+        $this->emit('commentEdit',$this->body,$this->comment_id);
+    }
+    public function replyIndex($comment_id){
+        $this->reset('body');
+        // dd($this->body,$comment_id);
+        $this->comment_id = $comment_id;
+        $this->emit('reply',$this->body,$this->comment_id);
     }
     public function update($comment_id)
     {
         $comment = ModelsComment::find($comment_id);
         $this->authorize('update', $comment);
-        $comment->update(['body' => $this->editMessage ]);
-        $this->editMessage='';
-        $this->emit('commentClose','destroyEditor');
-
+        $comment->update(['body' => $this->body ]);
+        $this->reset('body');
+        $this->body='';
+        $this->emit('editorClose','destroyEditor');
     }
     public function reply($comment_id)
     {
         ModelsReply::create([
-            'body' =>  $this->message,
+            'body' =>  $this->body,
             'comment_id' => $comment_id,
             'user_id' => auth()->id()
         ]);
-        $this->reset('message');
+        $this->reset('body');
+        // $this->emit('editorClose','destroyEditor');
     }
 
     public function delete($comment_id)

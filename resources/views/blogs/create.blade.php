@@ -101,5 +101,5 @@
             </div>
         </div>
     </form> --}}
-    <livewire:blog.create />
+    <livewire:blogs.create />
 </x-default-layout>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Blog;
+namespace App\Http\Livewire\Blogs;
 
 use App\Models\Blog;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -19,6 +19,7 @@ class Update extends Component
     public $message;
 
     public $photo;
+    public $tags=[];
 
     protected $rules = [
         // 'cover_image' => ['required', 'mimes:png,jpg,svg,gif', 'max:2048'],
@@ -34,18 +35,16 @@ class Update extends Component
     public function render()
     {
         $this->authorize('view', $this->blog);
-        return view('livewire.blog.update');
+        return view('livewire.blogs.update');
     }
     public function update()
-
     {
         $this->authorize('update', $this->blog);
         $this->validate();
-        $blog = Blog::create([
+        $this->blog->update([
             'title'=>$this->title,
             'body'=>$this->body,
-            'user_id'=>auth()->id()
          ]);
-        return redirect()->to('/blogs/'.Str::slug($this->title, '-').'-'.$blog->id);
+        return redirect()->to('/blogs/'.Str::slug($this->title, '-').'-'.$this->blog->id);
     }
 }

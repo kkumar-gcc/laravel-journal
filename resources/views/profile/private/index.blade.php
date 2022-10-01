@@ -22,22 +22,21 @@
         return number_format($n);
     }
     ?>
-    <main class="relative pteal max-w-none lg:max-w-full xl:max-w-none pteal-img:rounded-xl dark:pteal-invert pteal-a:text-teal-600 dark:pteal-a:text-teal-500">
-        <div id="toast-info">
-
-        </div>
+    <main
+        class="relative pteal max-w-none lg:max-w-full xl:max-w-none pteal-img:rounded-xl dark:pteal-invert pteal-a:text-teal-600 dark:pteal-a:text-teal-500">
         <section>
             <header class="bg-white border border-gray-200 not-pteal dark:border-gray-700 rounded-lg dark:bg-gray-800">
                 <div class="relative  pt-[60%] rounded-xl sm:pt-[30%] md:pt-[22%]">
                     <img class="absolute top-0 bottom-0 left-0 right-0 w-full h-full m-0 bg-white object-fit rounded-t-xl dark:bg-gray-800"
-                        src="{{ asset($user->background_image) ?? 'https://picsum.photos/400/300' }}" alt=""
+                        src="https://live.staticflickr.com/65535/52391254003_99ade44739_h.jpg" alt=""
                         id="background_image" />
                 </div>
                 <div class="flex flex-col px-6 my-4 md:flex-row">
                     <div class="relative flex items-start justify-center w-full mb-4 basis-1/3 md:w-1/3">
                         <img class="z-10 w-40 h-40 -mt-24 rounded-full ring-8 ring-white dark:ring-gray-500"
-                            src="{{ asset($user->profile_image)}}" onerror="this.onerror=null;this.src=`https://avatars.dicebear.com/api/bottts/:{{ $user->username }}.svg`" alt="Bordered avatar"
-                            id="profile_image">
+                            src="{{ asset($user->profile_image) }}"
+                            onerror="this.onerror=null;this.src=`https://avatars.dicebear.com/api/bottts/:{{ $user->username }}.svg`"
+                            alt="Bordered avatar" id="profile_image">
                     </div>
                     <div class="flex flex-col items-center justify-center mb-4 basis-2/3 md:flex-row md:items-start">
                         <div class="flex-1">
@@ -48,17 +47,17 @@
                             </div>
                         </div>
                         <div class="mt-3 ">
-                                <x-buttons.secondary href="/users/{{ $user->username }}">
-                                    {{ svg('iconsax-bul-edit-2', 'w-6 h-6 mr-2 -ml-1') }}
-                                    {{ __('Public Profile') }}
-                                </x-buttons.secondary>
+                            <x-buttons.secondary href="/users/{{ $user->username }}">
+                                {{ svg('iconsax-bul-edit-2', 'w-6 h-6 mr-2 -ml-1') }}
+                                {{ __('Public Profile') }}
+                            </x-buttons.secondary>
                         </div>
                     </div>
                 </div>
             </header>
         </section>
         <div class="relative flex flex-col w-full mt-3 lg:flex-row ">
-            <aside class="basis-1/4 not-pteal" aria-label="Sidebar">
+            <aside class="basis-1/4 not-prose" aria-label="Sidebar">
                 <div id="sticky-sidebar" class="hidden py-4 overflow-y-auto rounded lg:block">
                     <ul class="space-y-2">
                         <li>
@@ -94,7 +93,7 @@
                         <li>
                             <a href="/settings?tab=drafts"
                                 class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white {{ $tab == 'drafts' ? 'bg-gray-100 dark:bg-gray-700' : '' }} hover:bg-gray-100 dark:hover:bg-gray-700">
-                               <span class="flex-1 ml-3 whitespace-nowrap">drafts</span>
+                                <span class="flex-1 ml-3 whitespace-nowrap">drafts</span>
                             </a>
                         </li>
                         <li>
@@ -124,13 +123,13 @@
                         <li>
                             <a href="/settings?tab=podcasts"
                                 class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white {{ $tab == 'podcasts' ? 'bg-gray-100 dark:bg-gray-700' : '' }} hover:bg-gray-100 dark:hover:bg-gray-700">
-                               <span class="flex-1 ml-3 whitespace-nowrap">Podcasts</span>
+                                <span class="flex-1 ml-3 whitespace-nowrap">Podcasts</span>
                             </a>
                         </li>
                         <li>
                             <a href="/settings?tab=comments"
                                 class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white {{ $tab == 'comments' ? 'bg-gray-100 dark:bg-gray-700' : '' }} hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <span class="flex-1 ml-3 whitespace-nowrap">Comments</span>
+                                <span class="flex-1 ml-3 whitespace-nowrap">Comments</span>
                             </a>
                         </li>
                     </ul>
@@ -193,119 +192,70 @@
                 </div>
                 <div class="mt-4 lg:hidden">
                     <div class="mt-4 mb-4 overflow-y-hidden dark:border-gray-700">
-                        <ul class="flex -mb-px text-sm font-medium text-center flex-nowrap whitespace-nowrap" role="tablist">
+                        <ul class="flex -mb-px text-sm font-medium text-center flex-nowrap whitespace-nowrap"
+                            role="tablist">
                             <li class="mr-2" role="presentation">
                                 <a class="inline-block p-4 rounded-t-lg border-b-4  {{ $tab == 'general' ? 'text-teal-600  dark:text-teal-500  border-teal-600 dark:border-teal-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700' }}"
-                                href="/settings?tab=general" role="tab">General</a>
+                                    href="/settings?tab=general" role="tab">General</a>
                             </li>
                             <li class="mr-2" role="presentation">
                                 <a class="inline-block p-4 rounded-t-lg border-b-4  {{ $tab == 'profile' ? 'text-teal-600  dark:text-teal-500  border-teal-600 dark:border-teal-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700' }}"
-                                href="/settings?tab=profile" role="tab">Profile</a>
+                                    href="/settings?tab=profile" role="tab">Profile</a>
                             </li>
                             <li class="mr-2" role="presentation">
                                 <a class="inline-block p-4 rounded-t-lg border-b-4  {{ $tab == 'password' ? 'text-teal-600  dark:text-teal-500  border-teal-600 dark:border-teal-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700' }}"
-                                href="/settings?tab=password" role="tab">Password</a>
+                                    href="/settings?tab=password" role="tab">Password</a>
                             </li>
                             <li class="mr-2" role="presentation">
                                 <a class="inline-block p-4 rounded-t-lg border-b-4  {{ $tab == 'social_links' ? 'text-teal-600  dark:text-teal-500  border-teal-600 dark:border-teal-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700' }}"
-                                href="/settings?tab=socila_links" role="tab">Social Links</a>
+                                    href="/settings?tab=socila_links" role="tab">Social Links</a>
                             </li>
                             <li class="mr-2" role="presentation">
                                 <a class="inline-block p-4 rounded-t-lg border-b-4  {{ $tab == 'blogs' ? 'text-teal-600  dark:text-teal-500  border-teal-600 dark:border-teal-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700' }}"
-                                href="/settings?tab=blogs" role="tab">Blogs</a>
+                                    href="/settings?tab=blogs" role="tab">Blogs</a>
                             </li>
                             <li class="mr-2" role="presentation">
                                 <a class="inline-block p-4 rounded-t-lg border-b-4  {{ $tab == 'drafts' ? 'text-teal-600  dark:text-teal-500  border-teal-600 dark:border-teal-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700' }}"
-                                href="/settings?tab=drafts" role="tab">Drafts</a>
+                                    href="/settings?tab=drafts" role="tab">Drafts</a>
                             </li>
                             <li class="mr-2" role="presentation">
                                 <a class="inline-block p-4 rounded-t-lg border-b-4  {{ $tab == 'bookmarks' ? 'text-teal-600  dark:text-teal-500  border-teal-600 dark:border-teal-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700' }}"
-                                href="/settings?tab=bookmarks" role="tab">Bookmarks</a>
+                                    href="/settings?tab=bookmarks" role="tab">Bookmarks</a>
                             </li>
                             <li class="mr-2" role="presentation">
                                 <a class="inline-block p-4 rounded-t-lg border-b-4  {{ $tab == 'follower' ? 'text-teal-600  dark:text-teal-500  border-teal-600 dark:border-teal-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700' }}"
-                                href="/settings?tab=follower" role="tab">Follower</a>
+                                    href="/settings?tab=follower" role="tab">Follower</a>
                             </li>
                             <li class="mr-2" role="presentation">
                                 <a class="inline-block p-4 rounded-t-lg border-b-4  {{ $tab == 'following' ? 'text-teal-600  dark:text-teal-500  border-teal-600 dark:border-teal-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700' }}"
-                                href="/settings?tab=following" role="tab">Following</a>
+                                    href="/settings?tab=following" role="tab">Following</a>
                             </li>
                             <li class="mr-2" role="presentation">
                                 <a class="inline-block p-4 rounded-t-lg border-b-4  {{ $tab == 'podcasts' ? 'text-teal-600  dark:text-teal-500  border-teal-600 dark:border-teal-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700' }}"
-                                href="/settings?tab=podcasts" role="tab">Podcasts</a>
+                                    href="/settings?tab=podcasts" role="tab">Podcasts</a>
                             </li>
                             <li class="mr-2" role="presentation">
                                 <a class="inline-block p-4 rounded-t-lg border-b-4  {{ $tab == 'comments' ? 'text-teal-600  dark:text-teal-500  border-teal-600 dark:border-teal-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700' }}"
-                                href="/settings?tab=comments" role="tab">Comments</a>
+                                    href="/settings?tab=comments" role="tab">Comments</a>
                             </li>
 
                         </ul>
                     </div>
-                    {{-- <nav class="tabs mobile-nav-tab">
-                        <ul class="mb-3 nav nav-tabs -primary" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link {{ $tab == 'profile' ? 'active' : '' }}" href="/settings?tab=profile"
-                                    role="tab">Edit Profile</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link {{ $tab == 'password' ? 'active' : '' }}" href="/settings?tab=password"
-                                    role="tab">Password
-                                </a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link {{ $tab == 'social_links' ? 'active' : '' }}" href="/settings?tab=social_links"
-                                    role="tab">Social Links</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link {{ $tab == 'blogs' ? 'active' : '' }}" href="/settings?tab=blogs"
-                                    role="tab">Blogs
-                                    ({{ nice_number($user->blogs->where('status', '=', 'posted')->count()) }})
-                                </a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link {{ $tab == 'drafts' ? 'active' : '' }}" href="/settings?tab=drafts"
-                                    role="tab">Drafts
-                                    ({{ nice_number($user->blogs->where('status', '=', 'drafted')->count()) }})
-                                </a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link {{ $tab == 'bookmarks' ? 'active' : '' }}" href="/settings?tab=bookmarks"
-                                    role="tab">Bookmarks
-                                    ({{ nice_number($user->bookmarks->count()) }})</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link {{ $tab == 'follower' ? 'active' : '' }}" href="/settings?tab=follower"
-                                    role="tab">Follower</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link {{ $tab == 'following' ? 'active' : '' }}" href="/settings?tab=following"
-                                    role="tab">Following</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link {{ $tab == 'pins' ? 'active' : '' }}" href="/settings?tab=pins"
-                                    role="tab">Pinned</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link {{ $tab == 'podcasts' ? 'active' : '' }}" href="/settings?tab=podcasts"
-                                    role="tab">Podcasts</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link {{ $tab == 'comments' ? 'active' : '' }}" href="/settings?tab=comments"
-                                    role="tab">Comments</a>
-                            </li>
-                        </ul>
-                    </nav> --}}
                 </div>
             </aside>
 
-            <div class="flex-1 py-4 my-2 basis-3/4 lg:pl-8 not-pteal">
+            <div class="flex-1 py-4 my-2 md:w-3/4 basis-3/4 lg:pl-8 not-prose ">
                 <div id="loading"></div>
                 @if ($tab == 'profile')
-                    @include('profile.private._profile', ['user' => $user])
+                    <div class="w-full">
+                        <livewire:profile.edit-profile />
+                    </div>
                 @elseif ($tab == 'password')
                     @include('profile.private._password', ['user' => $user])
                 @elseif ($tab == 'social_links')
-                    @include('profile.private._social', ['user' => $user])
+                    <div class="w-full">
+                        <livewire:profile.social />
+                    </div>
                 @elseif($tab == 'blogs')
                     @include('profile.private._blog', ['blogs' => $blogs])
                 @elseif ($tab == 'drafts')
@@ -317,8 +267,8 @@
                 @elseif($tab == 'following')
                     @include('profile.private._following', ['followings' => $followings])
                 @elseif ($tab == 'pins')
-                    <div id="pinTab" class="not-pteal">
-                        @include('profile.private._pin', ['pins' => $pins, 'blogs' => $blogs])
+                    <div class="w-full">
+                        <livewire:profile.pin-blog />
                     </div>
                 @elseif($tab == 'comments')
                     @include('profile.private._comment', ['comments' => $comments])

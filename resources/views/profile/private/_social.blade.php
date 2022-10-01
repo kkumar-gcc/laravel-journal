@@ -4,7 +4,6 @@
             <h3>Social Links</h3>
         </header>
         <div class="border-t py-4 px-5 last:rounded-b-xl border-gray-200 ">
-
             @if (session()->has('success'))
                 <div class="response-message response-success">
                     <p>{{ session()->get('success') }}</p>

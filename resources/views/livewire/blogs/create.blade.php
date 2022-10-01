@@ -51,7 +51,7 @@
 
             </div>
             <div>
-                <x-buttons.primary class="mr-2 md:mr-4">
+                <x-buttons.primary class="mr-2 md:mr-4" wire:click="draft">
                     <span class="hidden md:block">{{ __('Save as draft') }}</span>
 
                     <span class="hover:text-teal-600 md:hidden">{{ svg('iconsax-bul-book-saved', 'h-6 w-6') }}</span>
@@ -154,6 +154,10 @@
 @push('scripts')
     <script type="text/javascript" defer>
         window.onload = function() {
+            const defaultValue = {
+                type: 'html',
+                dom: document.querySelector('#editor'),
+            };
             milkdown.Editor
                 .make()
                 .config((ctx) => {
@@ -265,7 +269,7 @@
                 )
                 .use(milkdown.diagram)
                 .config((ctx) => {
-                    ctx.set(milkdown.defaultValueCtx, milkdown.defaultValue);
+                    ctx.set(milkdown.defaultValueCtx, defaultValue);
                 }).create();
         }
     </script>

@@ -1,5 +1,4 @@
 <?php
-
 return [
     'code_highlighting' => [
         /*
@@ -57,8 +56,7 @@ return [
      * More info: https://commonmark.thephpleague.com/2.1/extensions/overview/
      */
     'extensions' => [
-        // League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension::class,
-        // League\CommonMark\Extension\Table\TableExtension::class
+        
     ],
 
     /*

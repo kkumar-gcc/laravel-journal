@@ -6,9 +6,10 @@ namespace App\Providers;
 
 use App\Models\Comment;
 use App\Policies\CommentPolicy;
+use App\Policies\NotificationPolicy;
 use Illuminate\Auth\Access\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-
+use Illuminate\Notifications\DatabaseNotification as Notification;
 class AuthServiceProvider extends ServiceProvider
 {
     /**
@@ -21,6 +22,7 @@ class AuthServiceProvider extends ServiceProvider
     // ];
     protected $policies = [
         Comment::class => CommentPolicy::class,
+        Notification::class => NotificationPolicy::class,
     ];
     /**
      * Register any authentication / authorization services.

@@ -1,15 +1,14 @@
-<div class="w-full px-2 md:px-12  my-4 relative">
-    @if (session()->has('deleteSuccess'))
-        <section class=" d-flex justify-content-center my-4 w-100">
-            <div class="container">
-                <div class="alert alert-dismissible fade show alert-success" role="alert" data-mdb-color="warning"
-                    id="customxD">
-                    <strong>Success!</strong> {{ session()->get('deleteSuccess') }}
-                    <button type="button" class="btn-close" data-mdb-dismiss="alert" aria-label="Close"></button>
-                </div>
-            </div>
-        </section>
-    @endif
+<div>
+    <div wire:loading class="fixed bg-white bottom-3 left-3 mb-2 flex justify-center">
+        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-teal-500" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+            </circle>
+            <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+            </path>
+        </svg>
+    </div>
     <div class="tabs mb-4  mt-4 dark:border-gray-700 overflow-y-hidden">
         <ul class="flex flex-nowrap  whitespace-nowrap  -mb-px text-sm font-medium text-center -primary "
             role="tablist">
@@ -27,8 +26,20 @@
             </li>
         </ul>
     </div>
-    @foreach ($blogs as $blog)
-        <x-cards.blog-card :blog=$blog />
-    @endforeach
-    {!! $blogs->withQueryString()->links('livewire::tailwind') !!}
+    @if ($blogs->count() > 0)
+        @foreach ($blogs as $blog)
+            <x-cards.blog-card :blog=$blog />
+        @endforeach
+        {!! $blogs->withQueryString()->links('livewire::tailwind') !!}
+    @else
+        <div class="e-card e-card-hover ">
+            <div class="card-body text-center">
+                There is no blog related to <a href="/blogs/tagged/{{ $searchTag->title }}" class="tag-popover"
+                    id="tagError-{{ $searchTag->id }}"><span class="modern-badge  modern-badge-{{ $searchTag->color }}">
+                        #{{ $searchTag->title }} </a>. Please try our <a href="/tags?tab=popular">popular tags</a>.
+                </span>
+                </a>
+            </div>
+        </div>
+    @endif
 </div>

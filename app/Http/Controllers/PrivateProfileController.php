@@ -84,18 +84,14 @@ class PrivateProfileController extends Controller
                 "tab" => $tab
             ]);
         } else if ($request->tab == 'pins') {
-            $tab = 'pins';
-            $pins = BlogPin::where("user_id", "=", auth()->user()->id)->get();
-            $blogs = Blog::where("user_id", "=", auth()->user()->id)->where([['status', '=', 'posted'], ["pinned", "=", false]])->paginate(5);
-            return view("profile.private.index")->with([
+            $tab = 'pins';return view("profile.private.index")->with([
                 "user" =>  $user,
                 "tab" => $tab,
-                "pins" => $pins,
-                "blogs" => $blogs
             ]);
         } else if ($request->tab == 'comments') {
             $tab = 'comments';
-            $comments = Comment::where('user_id', '=', Auth()->user()->id)->paginate(5);
+            $comments = Comment::where('user_id', '=', Auth()->user()->id)->get();
+            // ->paginate(5);
             return view("profile.private.index")->with([
                 "user" =>  $user,
                 "comments" => $comments,
