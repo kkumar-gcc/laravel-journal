@@ -1,9 +1,13 @@
 <div wire:ignore>
     <div class="milkdown-container space-y-4">
         <div class="milkdownEditor relative">
-            <div class="default">
-                {{ $slot }}
-            </div>
+            {{-- <div class="default"> --}}
+                {{--
+                    Turbolinks messes up livewire call
+                    using slot is not possible because of this
+                --}}
+                {{-- {{ $slot }} --}}
+            {{-- </div> --}}
         </div>
         <button class="clear-button" type="button">Clear</button>
     </div>
@@ -22,29 +26,46 @@
         we visit a link via `turbolinks:load`.
 
         This way we don't need to worry about the context of each milkdown component
+
+        @once and @push directives only work the first time the page is loaded from
+        the server. If there is no <milkdown /> component on first page load,
+        the scripts will never be pushed to the stack and the result is that milkdown
+        initialization script will never run since turbolinks won't run php directives.
+
+        The solution would be to always import the script with the base layout
     --}}
-    @once
+    {{-- @once
         @push('scripts')
             <script data-turbolinks-eval="false">
-                document.addEventListener('turbolinks:load', function() {
+                document.addEventListener('livewire:load', function() {
+                    console.log('Initializing milkdown')
                     document.querySelectorAll('.milkdown-container').forEach(async (element) => {
                         const milkdownWrapper = element.querySelector('.milkdownEditor .milkdown-menu-wrapper');
                         if (milkdownWrapper) {
                             milkdownWrapper.parentNode.innerHTML = '';
                         }
-                        const defaultValue = {
-                            type: 'html',
-                            dom: element.querySelector('.default'),
-                        };
+
+                        /**
+                         * Turbolinks messes up livewire call
+                         * using slot is not possible because of this
+                         */
+                        // const defaultValue = {
+                        //     type: 'html',
+                        //     dom: element.querySelector('.default'),
+                        // };
+
                         const editor = await milkdown.Editor
                             .make()
                             .config((ctx) => {
                                 ctx.get(milkdown.listenerCtx)
                                     .markdownUpdated((ctx, markdown, prevMarkdown) => {
-                                        @this.set('body', markdown);
+                                        // @this.set('body', markdown);
                                     })
-                                ctx.set(milkdown.defaultValueCtx, defaultValue);
-                                ctx.set(milkdown.rootCtx, document.querySelector('.milkdownEditor'));
+                                // Do a fetch request here to get markdown
+                                // Sample
+                                // const markdown = axios.get(url-to-resource)
+                                // ctx.set(milkdown.defaultValueCtx, markdown);
+                                ctx.set(milkdown.rootCtx, element.querySelector('.milkdownEditor'));
                             })
                             .use(milkdown.nord)
                             .use(milkdown.listener)
@@ -130,6 +151,7 @@
                             )
                             .use(milkdown.diagram)
                             .create()
+
                         // Sample action for each component
                         element.querySelector('.clear-button').addEventListener('click', () => {
                             editor.action(milkdown.replaceAll(''))
@@ -138,5 +160,5 @@
                 })
             </script>
         @endpush
-    @endonce
+    @endonce --}}
 </div>
