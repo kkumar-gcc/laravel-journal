@@ -34,9 +34,9 @@
         aria-labelledby="modal-title-1" x-on:keydown.escape.prevent.stop="{{ $modal }}=false" style="display: none;">
         <div x-show="{{ $modal }}" class="fixed inset-0 bg-black bg-opacity-10" style="display: none;"></div>
         <div x-show="{{ $modal }}" x-transition="" x-on:click="{{ $modal }} = false"
-            class="relative flex min-h-screen items-center justify-center p-4" style="display: none;">
+            class="relative flex min-h-screen items-center justify-center md:p-4" style="display: none;">
             <div x-on:click.stop="" x-trap.noscroll.inert="{{ $modal }}"
-                class="relative w-full  md:max-w-3xl overflow-y-auto rounded-xl bg-white p-12 shadow-lg">
+                class="relative w-full min-h-screen md:h-auto  md:max-w-3xl overflow-y-auto md:rounded-xl bg-white p-6 md:p-12">
                 <header class="flex items-center">
                     <h5 class="text-3xl font-extrabold line-clamp-3  tracking-wide text-gray-700">{{ $header }}</h5>
                     <div class="flex-1 flex justify-end">

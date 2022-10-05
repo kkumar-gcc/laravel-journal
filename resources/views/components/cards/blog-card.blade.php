@@ -1,6 +1,6 @@
 @props(['blog', 'private' => false,'pin'=>false])
 <div
-    {{ $attributes->merge(['class' => 'border border-gray-200  relative  mt-8 first:mt-0 mt-3 w-full px-2 md:p-2.5 text-base text-left p-1  rounded-lg  font-normal shadow-sm']) }}>
+    {{ $attributes->merge(['class' => 'border border-gray-200  relative  mt-8 first:mt-0 mt-3 w-full px-2 md:p-2.5 text-base text-left p-1  rounded-lg  font-normal shadow-sm hover:shadow-md']) }}>
     <div class="flex flex-col-reverse items-stretch justify-center p-4 sm:p-6 sm:flex-row ">
         <div class="basis-2/3 mt-2 relative leading-normal sm:mt-0 sm:pr-4">
             <div class="flex flex-row mt-3 mb-1 md:mt-0">
@@ -26,21 +26,21 @@
                                     <ul>
                                         <li>
                                             <x-dropdown-link
-                                                href="/blogs/edit/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
+                                                href="/blogs/edit/{{ $blog->slug }}"
                                                 class="flex ">
                                                 {{ __(' Edit') }}
                                             </x-dropdown-link>
                                         </li>
                                         <li>
                                             <x-dropdown-link
-                                                href="/blogs/manage/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
+                                                href="/blogs/manage/{{ $blog->slug }}"
                                                 class="flex ">
                                                 {{ __('Manage') }}
                                             </x-dropdown-link>
                                         </li>
                                         <li>
                                             <x-dropdown-link
-                                                href="/blogs/stats/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
+                                                href="/blogs/stats/{{ $blog->slug }}"
                                                 class="flex ">
                                                 {{ __('Stats') }}
                                             </x-dropdown-link>
@@ -59,7 +59,7 @@
                 </div>
             </div>
 
-            <a href="/blogs/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}" class="link link-secondary">
+            <a href="/blogs/{{ $blog->slug }}" class="link link-secondary">
                 <h5 class="mb-2 text-2xl font-bold line-clamp-3  tracking-wide text-gray-900  dark:text-white ">
                     {{ $blog->title() }}
                 </h5>
@@ -77,7 +77,7 @@
                 <span class="ml-1 text-sm">posted
                     {{ \Carbon\Carbon::parse($blog->created_at)->diffForhumans() }}</span>
             </p>
-            <x-buttons.secondary href="/blogs/{{ Str::slug($blog->title(), '-') }}-{{ $blog->id() }}"
+            <x-buttons.secondary href="/blogs/{{ $blog->slug }}"
                 class="mt-5 sm:hidden" fullWidth="true">Read Blog</x-buttons.secondary>
         </div>
         <div

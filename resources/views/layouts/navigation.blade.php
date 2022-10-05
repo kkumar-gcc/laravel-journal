@@ -32,21 +32,33 @@
 
             <!-- Settings Dropdown -->
             <div class="hidden lg:flex sm:items-center sm:ml-6">
+                <div class="mr-8">
+                    <x-modals.full modal="previewModal">
+                        <x-slot:header>
+                            search
+                        </x-slot:header>
+                        <x-slot:title>
+                            <button x-on:click="previewModal = true">
+                                <span x-on:click="previewModal = true"
+                                    class="hover:text-teal-600">{{ svg('iconsax-lin-search-normal-1', 'h-6 w-6') }}</span>
+                            </button>
+                        </x-slot:title>
+
+                    </x-modals.full>
+                </div>
+
                 @auth
-                    <div class="mr-8">
-                       <livewire:notification-indicator />
+                    <div class="mr-6">
+                        <livewire:notification-indicator />
                     </div>
-                    <div class="mr-8">
+                    <div class="mr-6">
                         <x-buttons.secondary class="ml-4" href="/new-blog">{{ __('New Blog') }}
                         </x-buttons.secondary>
                     </div>
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
-                            <img class="w-10 h-10 rounded-full cursor-pointer"
-                                src="{{ asset(Auth::user()->profile_image) }}"
-                                onerror="this.onerror=null;this.src=`https://avatars.dicebear.com/api/bottts/:{{ Auth::user()->username }}.svg`"
-                                alt="User dropdown">
-
+                            <x-avatar search="{{ auth()->user()->emailAddress() }}" :src="auth()->user()->profile_image = ''"
+                                class="h-12 w-12 bg-gray-50 rounded-full cursor-pointer" provider="gravatar" />
                         </x-slot>
                         <x-slot name="content">
                             <div class="py-3 px-4 text-sm text-gray-900 dark:text-white">
@@ -80,13 +92,36 @@
 
                         </x-slot>
                     </x-dropdown>
+                @else
+                    <div class="flex justify-center mt-4">
+                        @if (Route::has('login'))
+                            <div class="flex items-center ml-6 ">
+                                <x-buttons.primary type="button" href="{{ route('login') }}">
+                                    {{ __('Sign In') }}</x-buttons.primary>
+                            </div>
+                        @endif
+                        @if (Route::has('register'))
+                            <div class="flex items-center ml-6 ">
+                                <x-buttons.secondary type="button" href="{{ route('register') }}">
+                                    {{ __('Sign Up') }}</x-buttons.secondary>
+                            </div>
+                        @endif
+                    </div>
                 @endauth
             </div>
 
             <!-- Hamburger -->
             <div class="-mr-2 flex items-center lg:hidden">
+                <div class="mr-6">
+                    {{ svg('iconsax-lin-search-normal-1', 'h-5 w-5') }}
+                </div>
+                @auth
+                    <div class="mr-4">
+                        <livewire:notification-indicator />
+                    </div>
+                @endauth
                 <button @click="open = ! open"
-                    class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
+                    class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{ 'hidden': open, 'inline-flex': !open }" class="inline-flex"
                             stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -139,7 +174,8 @@
             <div class="flex justify-between py-3 font-medium translate-x-1 px-[4%]">
 
                 <div class="flex items-center space-x-4">
-                    <x-avatar :user="auth()->user()" class="w-12 h-12 rounded-full" />
+                    <x-avatar search="{{ auth()->user()->emailAddress() }}" :src="auth()->user()->profile_image = ''"
+                        class="h-12 w-12 bg-gray-50 rounded-full" provider="gravatar" />
                     <div class="space-y-1 font-medium dark:text-white">
                         <div>{{ Auth::user()->username }}</div>
                     </div>

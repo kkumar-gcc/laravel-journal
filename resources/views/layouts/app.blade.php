@@ -15,7 +15,7 @@
     @livewireStyles
 </head>
 
-<body class="font-sans antialiased max-w-7xl mx-auto">
+<body class="font-sans antialiased max-w-7xl mx-auto 2xl:shadow-lg 2xl:border-x">
     <div class="min-h-screen bg-white">
         @include('layouts.navigation')
         <!-- Page Content -->
@@ -31,8 +31,6 @@
         </main>
     </div>
     @livewireScripts
-    <script src="https://cdn.jsdelivr.net/gh/livewire/turbolinks@v0.1.x/dist/livewire-turbolinks.js"
-        data-turbolinks-eval="false" data-turbo-eval="false"></script>
 </body>
 
 </html>

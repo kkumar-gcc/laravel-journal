@@ -1,10 +1,10 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Scripts;
 
 use Illuminate\View\Component;
 
-class Toc extends Component
+class Milkdown extends Component
 {
     /**
      * Create a new component instance.
@@ -23,6 +23,6 @@ class Toc extends Component
      */
     public function render()
     {
-        return view('components.toc');
+        return view('components.scripts.milkdown');
     }
 }

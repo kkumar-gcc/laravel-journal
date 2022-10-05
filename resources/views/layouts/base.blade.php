@@ -18,24 +18,27 @@
 
         .milkdown {
             box-shadow: none !important;
-            border:1px solid rgba(216, 222, 233, 1);
+            border: 1px solid rgba(216, 222, 233, 1);
             border-top: none;
-            max-height: 10rem;
+            /* max-height: 10rem; */
             overflow: hidden;
             overflow-y: scroll;
         }
-        .milkdown-menu{
+
+        .milkdown-menu {
             z-index: 100;
         }
+
         @media screen and (min-width: 980px) {
             .editor {
                 padding: 10px 50px !important;
             }
         }
     </style>
+    @bukStyles(true)
 </head>
 
-<body class="font-sans antialiased max-w-7xl mx-auto">
+<body class="font-sans antialiased max-w-7xl mx-auto 2xl:shadow-lg 2xl:border-x">
 
     <div class="min-h-screen bg-white">
         @include('layouts.navigation')
@@ -47,9 +50,9 @@
     </div>
 
     @livewireScripts
+    @bukScripts(true)
     @stack('scripts')
-    <script src="https://cdn.jsdelivr.net/gh/livewire/turbolinks@v0.1.x/dist/livewire-turbolinks.js"
-        data-turbolinks-eval="false" data-turbo-eval="false"></script>
+    <x-scripts.milkdown/>
 </body>
 
 </html>

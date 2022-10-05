@@ -1,4 +1,4 @@
-<div x-data="{ tags: [], newTag: '' }">
+<div x-data="{ tags: @entangle('tags'), newTag: '' }">
     <label class="text-xl font-bold line-clamp-3  tracking-wide  block mb-2  text-gray-700" for="name">Tags</label>
     <template x-for="tag in tags">
         <input type="hidden" :value="tag" name="tags">
@@ -13,10 +13,17 @@
                 </button>
             </span>
         </template>
+        <div class="not-prose">
+            @foreach ($tags as $tag)
+                {{ $tag }}
+            @endforeach
+        </div>
+        Current time: {{ now() }}
         {{-- @keydown.enter.prevent="if (newTag.trim() !== '') tags.push(newTag.trim()); newTag = ''"
             @keydown.backspace="if (newTag.trim() === '') tags.pop()" x-model="newTag" placeholder="Add tags . . ."
              --}}
-        <input type="text" wire:model="search" @keydown.enter.prevent
+
+        <input type="text" wire:model.lazy="search" @keydown.enter.prevent
             x-bind:placeholder="(tags.length < 5) ? 'Add tags . . .' : 'you can only choose 5 tags.'"
             x-bind:disabled="(tags.length < 5) ? false: true"
             class="border border-gray-300 text-gray-600 text-base font-bold focus:shadow-md focus:ring-4 focus:ring-teal-500/20 focus:border-teal-600 block w-full p-3.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-4 dark:focus:border-teal-500" />

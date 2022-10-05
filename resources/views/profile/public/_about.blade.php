@@ -15,7 +15,7 @@
     <div
         class="py-3 px-4 rounded-lg relative prose max-w-none prose-a:no-underline lg:max-w-full xl:max-w-none prose-img:rounded-xl prose-img:mx-auto  dark:prose-invert prose-a:text-teal-600 dark:prose-a:text-teal-500">
         @if ($user->about_me)
-            <x-markdown flavor="github" :anchors="true" theme="github-dark">
+            <x-markdown flavor="github" anchors theme="github-dark">
                 {!! $user->aboutMe() !!}
             </x-markdown>
         @else

@@ -54,12 +54,12 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get("/new-blog", [BlogController::class, 'create'])->name("new-blog");
     Route::put("/new-blog", [BlogController::class, 'store'])->name("blog.create");
-    Route::get("/blogs/edit/{title}", [BlogController::class, 'edit']);
+    Route::get("/blogs/edit/{slug}", [BlogController::class, 'edit']);
     Route::put("/blogs/edit", [BlogController::class, 'editStore'])->name('blogs.edit');
-    Route::get("/blogs/manage/{title}", [BlogController::class, 'manage']);
+    Route::get("/blogs/manage/{slug}", [BlogController::class, 'manage']);
     Route::put("/blogs/manage/seo", [BlogController::class, 'seo'])->name('blogs.manage.seo');
     Route::put("/blogs/manage", [BlogController::class, 'manageStore'])->name('blogs.manage');
-    Route::get("/blogs/stats/{title}", [BlogController::class, 'stats']);
+    Route::get("/blogs/stats/{slug}", [BlogController::class, 'stats']);
     Route::get("/notifications",[NotificationController::class,"index"]);
 });
 Route::get("/blogs", [BlogController::class, 'index'])->name('blogs');

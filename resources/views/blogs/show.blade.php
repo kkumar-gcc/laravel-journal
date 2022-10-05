@@ -42,7 +42,8 @@
         </div>
     </div> --}}
     <main
-        class="relative prose max-w-none prose-a:no-underline lg:max-w-full xl:max-w-none prose-img:rounded-xl  dark:prose-invert prose-a:text-teal-600 dark:prose-a:text-teal-500">
+        class="relative my-10 prose max-w-none lg:max-w-full xl:max-w-none prose-img:rounded-xl prose-img:w-full mx-auto  prose-a:no-underline  dark:prose-invert prose-a:text-teal-600 dark:prose-a:text-teal-500 prose-table px-2">
+
         <div class="relative  pt-[60%] rounded-xl sm:pt-[50%] md:pt-[42%] ">
             <img class="absolute top-0 bottom-0 left-0 right-0 w-full h-full m-0 bg-white shadow-md object-fit rounded-xl drop-shadow-md dark:bg-gray-800"
                 src="https://live.staticflickr.com/65535/52390100407_ac668fab12_h.jpg" alt="" />
@@ -58,7 +59,7 @@
                 </div>
                 <div class="not-prose">
                     @foreach ($blog->tags as $tag)
-                        <x-tag :tag=$tag id="tag{{ $blog->id }}-{{ $tag->id }}" />
+                        <x-tag :tag=$tag />
                     @endforeach
                 </div>
                 <h1 class="text-3xl my-55 md:text-4xl lg:text-5xl dark:text-white">
@@ -76,21 +77,21 @@
                                 <ul>
                                     <li>
                                         <x-dropdown-link
-                                            href="/blogs/edit/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
+                                            href="/blogs/edit/{{ $blog->slug}}"
                                             class="flex ">
                                             {{ __(' Edit') }}
                                         </x-dropdown-link>
                                     </li>
                                     <li>
                                         <x-dropdown-link
-                                            href="/blogs/manage/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
+                                            href="/blogs/manage/{{ $blog->slug}}"
                                             class="flex ">
                                             {{ __('Manage') }}
                                         </x-dropdown-link>
                                     </li>
                                     <li>
                                         <x-dropdown-link
-                                            href="/blogs/stats/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
+                                            href="/blogs/stats/{{ $blog->slug}}"
                                             class="flex ">
                                             {{ __('Stats') }}
                                         </x-dropdown-link>
@@ -130,7 +131,9 @@
                         @else
                             {{-- @if ($blog->user_id == auth()->user()->id) --}}
                             <article class="w-full my-5">
-                                {{ Illuminate\Mail\Markdown::parse($blog->body()) }}
+                                <x-markdown flavor="github" anchors theme="github-dark">
+                                    {!! $blog->body() !!}
+                                </x-markdown>
                             </article>
                             {{-- @else
                                 @if ($blog->user->isFollowing())
@@ -180,7 +183,7 @@
                         @endguest
                     @elseif($blog->access == 'public')
                         <article class="w-full my-5">
-                            <x-markdown theme="github-dark">
+                            <x-markdown flavor="github" anchors theme="github-dark">
                                 {!! $blog->body() !!}
                             </x-markdown>
                         </article>
@@ -223,13 +226,22 @@
                         </div>
                     </div>
                 </x-cards.primary-card>
+                <x-cards.primary-card :default=false>
+                    <header class="px-4 py-3 text-2xl font-semibold text-gray-700 dark:text-white">
+                        Table of Contents
+                    </header>
+                    <div
+                        class="px-4 py-3 text-gray-700 border-t border-gray-200 last:rounded-b-lg dark:text-gray-400 dark:hover:text-white dark:border-gray-700  hover:shadow dark:bg-gray-800 dark:hover:bg-gray-700">
+                        <x-toc>{!! $blog->body() !!}</x-toc>
+                    </div>
+                </x-cards.primary-card>
+
                 <x-cards.primary-card>
                     <div class="px-4 py-3 rounded-xl not-prose dark:bg-gray-800 ">
                         <header class="">
                             <div class="flex items-center flex-1 ">
-                                <img class="w-10 h-10 rounded-full" src="{{ asset($blog->user->profile_image) }}"
-                                    onerror="this.onerror=null;this.src=`https://avatars.dicebear.com/api/bottts/:{{ $blog->user->username }}.svg`"
-                                    alt="">
+                                <x-avatar search="{{ $blog->user->emailAddress() }}" :src="$blog->user->profile_image = ''"
+                                    class="h-10 w-10 bg-gray-50 rounded-full cursor-pointer" provider="gravatar" />
                                 <div class="ml-2 font-medium">
                                     <div class="text-gray-900 dark:text-white">{{ $blog->user->username }} </div>
                                     <div class="text-sm">Joined in

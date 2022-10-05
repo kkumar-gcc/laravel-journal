@@ -14,7 +14,7 @@
             <div x-show="modal" x-transition="" x-on:click="modal = false"
                 class="relative flex min-h-screen items-center justify-center p-4" style="display: none;">
                 <div x-on:click.stop="" x-trap.noscroll.inert="modal"
-                    class="relative w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-12 shadow-lg">
+                    class="relative w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-12  shadow-2xl">
                     <header class="flex items-center ">
                         <h5 class="text-3xl font-extrabold line-clamp-3  tracking-wide text-gray-700"></h5>
                         <div class="flex-1 flex justify-end">
@@ -77,9 +77,8 @@
             @if ($canComment)
                 <div>
                     <div class="flex items-center space-x-4 not-prose">
-                        <img class="w-10 h-10 rounded-full cursor-pointer "
-                            src="{{ asset(Auth::user()->profile_image ?? 'https://picsum.photos/400/300') }}"
-                            alt="User dropdown">
+                        <x-avatar search="{{ auth()->user()->emailAddress() }}" :src="auth()->user()->profile_image = ''"
+                            class="h-10 w-10 bg-gray-50 rounded-full" provider="gravatar" />
                         <div class="space-y-1 font-medium ">
                             <p>Add a comment</p>
                         </div>
@@ -94,74 +93,13 @@
                                     </div>
                                 </div> --}}
                                 <div class="container mx-auto">
-                                    <x-milkdown>
-                                    </x-milkdown>
-                                </div>
-
-                                <div class="container mx-auto space-y-4" data-turbolinks-permanent>
-                                    <div class="flex align-items-center space-x-4">
-                                        <button wire:click="doSomething" type="button">EmitEvent</button>
-                                    </div>
+                                    <x-milkdown />
                                 </div>
                             </div>
                             <x-buttons.secondary type="submit">
                                 {{ __('Comment') }}
                             </x-buttons.secondary>
                         </form>
-                    </div>
-                    <div x-data="{ modal: false }" class="flex justify-center" x-init="@this.on('commentEdit', () => {
-                        modal = true;
-                    });
-                    @this.on('editorClose', () => {
-                        modal = false;
-                    })">
-                        <div x-show="modal" class="fixed inset-0 overflow-y-auto z-[100]" role="dialog" aria-modal="true"
-                            aria-labelledby="modal-title-1" x-on:keydown.escape.prevent.stop="modal=false"
-                            style="display: none;">
-                            <div x-show="modal" class="fixed inset-0 bg-black bg-opacity-20" style="display: none;"></div>
-                            <div x-show="modal" x-transition="" x-on:click="modal = false"
-                                class="relative flex min-h-screen items-center justify-center p-4" style="display: none;">
-                                <div x-on:click.stop="" x-trap.noscroll.inert="modal"
-                                    class="relative w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-12 shadow-lg">
-                                    <header class="flex items-center ">
-                                        <h5 class="text-3xl font-extrabold line-clamp-3  tracking-wide text-gray-700"></h5>
-                                        <div class="flex-1 flex justify-end">
-                                            <x-buttons.primary @click="modal=false" class="hover:text-teal-600">
-                                                <svg class="h-6 w-6" viewBox="0 0 456 512"
-                                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-                                                    <title>cancel</title>
-                                                    <path
-                                                        d="M64 388L196 256 64 124 96 92 228 224 360 92 392 124 260 256 392 388 360 420 228 288 96 420 64 388Z">
-                                                    </path>
-                                                </svg>
-                                            </x-buttons.primary>
-                                        </div>
-                                    </header>
-                                    <div class="mt-8">
-                                        <form wire:submit.prevent="update({{ $comment_id }})" class="mt-4">
-                                            @csrf
-                                            <div class="mb-5">
-                                                {{-- <div wire:model="body" wire:ignore id="editor1" class="relative">
-                                                </div> --}}
-                                                <x-milkdown>
-                                                    <div class="hidden">
-                                                        <x-markdown flavor="github" :anchors="true" theme="github-dark">
-                                                            {!! $body !!}
-                                                        </x-markdown>
-                                                    </div>
-                                                </x-milkdown>
-                                            </div>
-                                            <x-buttons.secondary class="inline-flex mr-4" type="submit">
-                                                {{ __('Edit') }}
-                                            </x-buttons.secondary>
-                                            <x-buttons.primary @click="modal=false" wire:click="$emit('destroyEditor')">
-                                                {{ __('Cancel') }}
-                                            </x-buttons.primary>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             @else
@@ -176,25 +114,29 @@
         @else
             <x-cards.primary-card class="flex items-center w-full p-4 space-x-4 not-prose">
                 <img class="w-10 h-10 rounded-full cursor-pointer md:w-11 md:h-11 "
-                    src="{{ asset(Auth::user()->profile_image ?? 'https://picsum.photos/400/300') }}"
-                    alt="User dropdown">
+                    src="{{ asset(Auth::user()->profile_image ?? 'https://picsum.photos/400/300') }}" alt="User dropdown">
                 <div class="space-y-1 font-medium ">
                     <p>Add a comment</p>
                 </div>
             </x-cards.primary-card>
         @endauth
         <hr>
-        <div class="my-3" id="comments">
+        <div class="my-3" id="comments" x-data="{ showReply: false, openEdit: 0 }">
             @foreach ($comments as $comment)
-                <x-cards.primary-card x-data="{ showReply: false, editComment: false }" class="p-3 md:p-6 group" :default=false
-                    id="comment-{{ $comment->id }}">
+                <x-cards.primary-card class="p-3 md:p-6 group" :default=false x-data="{
+                    id: {{ $comment->id }},
+                    get editComment() {
+                        return this.openEdit === this.id
+                    },
+                    set editComment(value) {
+                        this.openEdit = value ? this.id : null
+                    },
+                }" id="comment-{{ $comment->id }}">
                     <header class="flex flex-row not-prose">
                         <div class="flex-1">
                             <div class="flex items-center space-x-4">
-                                <img class="w-10 h-10 rounded-full md:w-11 md:h-11"
-                                    src="{{ asset($comment->user->profile_image) }}"
-                                    onerror="this.onerror=null;this.src=`https://avatars.dicebear.com/api/bottts/:{{ $comment->user->username }}.svg`"
-                                    alt="">
+                                <x-avatar search="{{ $comment->user->emailAddress() }}" :src="$comment->user->profile_image = ''"
+                                    class="h-12 w-12 bg-gray-50 rounded-full" provider="gravatar" />
                                 <div class="font-medium ">
                                     <a class="user-popover dark:text-white"
                                         href="/users/{{ $comment->user->username }}"
@@ -204,7 +146,8 @@
                                         @endif
                                     </a>
                                     <div class="text-sm">
-                                        {{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}</div>
+                                        <x-carbon :date="$comment->created_at" human />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -229,7 +172,7 @@
 
                                         @can('update', $comment)
                                             <li>
-                                                <x-dropdown-link wire:click="edit({{ $comment->id }})">
+                                                <x-dropdown-link @click="editComment = ! editComment">
                                                     {{ __('Edit') }}
                                                 </x-dropdown-link>
                                             </li>
@@ -248,9 +191,36 @@
                         </div>
                     </header>
                     <div class="my-3 prose max-w-none sm:max-w-full prose-img:rounded-xl prose-a:text-teal-600 ">
-                        <x-markdown flavor="github" :anchors="true" theme="github-dark">
-                            {!! $comment->body() !!}
-                        </x-markdown>
+                        <div x-show="!editComment">
+                            <x-markdown flavor="github">
+                                {!! $comment->body() !!}
+                            </x-markdown>
+                        </div>
+                        <div class="mt-8" x-show="editComment" x-cloak @keyup.enter>
+                            <form wire:submit.prevent="update({{ $comment->id() }})" class="mt-4">
+                                @csrf
+                                <div class="mb-5">
+                                    {{-- <div wire:model="body" wire:ignore id="editor1" class="relative">
+                                    </div> --}}
+                                    <x-milkdown>
+                                        <div class="hidden">
+                                            <x-markdown flavor="github" anchors>
+                                                {!! $comment->body() !!}
+                                            </x-markdown>
+                                        </div>
+                                    </x-milkdown>
+
+
+                                </div>
+                                <x-buttons.secondary class="inline-flex mr-4" type="submit"
+                                    @click="editComment = ! editComment">
+                                    {{ __('Edit') }}
+                                </x-buttons.secondary>
+                                <x-buttons.primary @click="editComment=false" wire:click="$emit('destroyEditor')">
+                                    {{ __('Cancel') }}
+                                </x-buttons.primary>
+                            </form>
+                        </div>
                     </div>
                     <footer class="mt-2" x-data="{ open: false }">
                         <div class="flex flew-row">

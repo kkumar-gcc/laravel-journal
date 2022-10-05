@@ -108,7 +108,7 @@
                             </x-cards.primary-card>
                         @elseif ($unreadNotification->data['type'] == 'new_blog')
                             <div
-                                class='border border-gray-200  relative  mt-8 first:mt-0 w-full px-2 md:p-2.5 text-base text-left p-1  rounded-lg  font-normal shadow-sm'>
+                                class='border border-gray-200  relative  mt-8 first:mt-0 w-full px-2 md:p-2.5 text-base text-left p-1  rounded-lg  font-normal shadow-sm hover:shadow-md'>
                                 <div class="flex flex-col-reverse items-stretch justify-center p-4 sm:p-6 sm:flex-row ">
                                     <div class="basis-2/3 mt-2 relative leading-normal sm:mt-0 sm:pr-4">
                                         <div class="flex flex-row mt-3 mb-1 md:mt-0">
@@ -188,7 +188,7 @@
                     </x-cards.primary-card>
                 @elseif ($notification->data['type'] == 'new_blog')
                     <div
-                        class='border border-gray-200  relative  mt-8 first:mt-0 w-full px-2 md:p-2.5 text-base text-left p-1  rounded-lg  font-normal shadow-sm'>
+                        class='border border-gray-200  relative  mt-8 first:mt-0 w-full px-2 md:p-2.5 text-base text-left p-1  rounded-lg  font-normal shadow-sm hover:shadow-md'>
                         <div class="flex flex-col-reverse items-stretch justify-center p-4 sm:p-6 sm:flex-row ">
                             <div class="basis-2/3 mt-2 relative leading-normal sm:mt-0 sm:pr-4">
                                 <div class="flex flex-row mt-3 mb-1 md:mt-0">

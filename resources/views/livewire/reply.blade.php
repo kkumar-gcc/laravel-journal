@@ -4,9 +4,8 @@
             <header class="flex flex-row not-prose">
                 <div class="flex-1">
                     <div class="flex items-center space-x-4 user-popover">
-                        <img class="w-10 h-10 rounded-full md:w-11 md:h-11" src="{{ asset($reply->user->profile_image) }}"
-                            onerror="this.onerror=null;this.src=`https://avatars.dicebear.com/api/bottts/:{{ $reply->user->username }}.svg`"
-                            alt="">
+                        <x-avatar search="{{ $reply->user->emailAddress() }}" :src="$reply->user->profile_image = ''"
+                            class="h-12 w-12 bg-gray-50 rounded-full" provider="gravatar" />
                         <div class="font-medium">
                             <a class="user-popover dark:text-white" href="/users/{{ $reply->user->username }}"
                                 id="user{{ $reply->id }}-{{ $reply->user_id }}">{{ $reply->user->username() }}
@@ -16,7 +15,7 @@
                         @endif --}}
                             </a>
                             <div class="text-sm ">
-                                {{ \Carbon\Carbon::parse($reply->created_at)->diffForHumans() }}
+                                <x-carbon :date="$reply->created_at" human />
                             </div>
                         </div>
                     </div>
@@ -88,7 +87,7 @@
                                     name="description" maxlength="200" rows="4"></textarea> --}}
                                 <x-milkdown>
                                     <div class="hidden">
-                                        <x-markdown flavor="github" :anchors="true" theme="github-dark">
+                                        <x-markdown flavor="github" anchors theme="github-dark">
                                             {!! $body !!}
                                         </x-markdown>
                                     </div>

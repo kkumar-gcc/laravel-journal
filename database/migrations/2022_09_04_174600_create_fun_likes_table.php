@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('fun_likes', function (Blueprint $table) {
             $table->id();
-            $table->string('uuid')->nullable()->unique();
+            $table->uuid('uuid')->nullable()->unique();
             $table->string('link')->nullable();
             $table->foreignId('user_id')
                 ->constrained("users")

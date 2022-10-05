@@ -5,17 +5,14 @@ namespace App\Models;
 use App\Traits\Search;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Cviebrock\EloquentSluggable\Sluggable;
 class Tag extends Model
 {
     use HasFactory;
     use Search;
+    use Sluggable;
     // use HasSlu;
-    public function id(): int
-    {
-        return $this->id;
-    }
-
+    
     public function title(): string
     {
         return $this->title;
@@ -28,10 +25,10 @@ class Tag extends Model
     {
         return $this->color;
     }
-    public function slug(): string
-    {
-        return $this->slug;
-    }
+    // public function slug(): string
+    // {
+    //     return $this->title;
+    // }
     public function creator(): int
     {
         return $this->user;
@@ -57,7 +54,15 @@ class Tag extends Model
     ];
     protected $searchable = [
         'title',
-        // 'description',
-        // 'slug'
+        'description',
+        'slug'
     ];
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+        ];
+    }
 }

@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\Tag;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-
+use \Cviebrock\EloquentSluggable\Services\SlugService;
 class TagSeeder extends Seeder
 {
     /**
@@ -31,6 +31,7 @@ class TagSeeder extends Seeder
                 [
                     'title' => $key,
                     'color' => $value,
+                    'slug'=>SlugService::createSlug(Tag::class, 'slug', $key),
                 ]
             );
             $tag->save();

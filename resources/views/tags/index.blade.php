@@ -4,16 +4,15 @@
     </x-slot>
     <div class="p-2 md:p-5 lg:p-7">
         <div class="">
-            <h1 class="inline-block mb-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white"> Search
+            <h1 class="inline-block mb-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white"> All
                 Tags</h1>
         </div>
-        <div class=" my-3 flex flex-row justify-between items-center">
+        {{-- <div class=" my-3 flex flex-row justify-between items-center">
             <div class="flex-1 mr-4">
                 <input id="search-input" autocomplete="off" type="search"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-4 focus:ring-teal-500/20 focus:border-teal-600 block w-full p-2.5  "
                     placeholder="Search by tag name" name="search">
-                {{-- <span class="input-group-text border-0"><i class="fas fa-search" id="mdb-5-search-icon"></i></span> --}}
-            </div>
+                </div>
 
             <button id="tagShortDropdownButton" data-dropdown-toggle="tagShortDropdown"
                 data-dropdown-placement="bottom-end"
@@ -23,8 +22,6 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
             </button>
-
-            <!-- Dropdown menu -->
             <div id="tagShortDropdown"
                 class="hidden z-10  bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700"
                 data-popper-reference-hidden="" data-popper-escaped="" data-popper-placement="bottom-end">
@@ -45,9 +42,8 @@
                 </ul>
             </div>
 
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4 pt-4"
-            id="tag-show">
+        </div> --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4 pt-4" id="tag-show">
 
             @foreach ($tags as $tag)
                 <x-cards.primary-card :default=false class="mt-0">
@@ -55,9 +51,9 @@
                         <x-tag :tag=$tag id="tag-{{ $tag->id }}" class="not-prose" />
                     </header>
                     <div class="px-4 py-3 text-gray-700 last:rounded-b-lg ">
-                        <p class="mb-3">Some quick example text to build on the card title and make up the
-                            bulk of
-                            the card's content.</p>
+                        @if ($tag->description())
+                            <p class="mb-3">{{ $tag->description() }}</p>
+                        @endif
                         <span class="text-muted">{{ $tag->blogs_count }} blogs</span>
                     </div>
                 </x-cards.primary-card>

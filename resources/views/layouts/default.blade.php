@@ -30,7 +30,7 @@
     </style>
 </head>
 
-<body class="font-sans antialiased max-w-7xl mx-auto">
+<body class="font-sans antialiased max-w-7xl mx-auto 2xl:shadow-lg 2xl:border-x">
     <div class="min-h-screen bg-white">
         <!-- Page Content -->
         <main class="w-full">
@@ -40,8 +40,6 @@
 
     @livewireScripts
     @stack('scripts')
-    <script src="https://cdn.jsdelivr.net/gh/livewire/turbolinks@v0.1.x/dist/livewire-turbolinks.js"
-        data-turbolinks-eval="false" data-turbo-eval="false"></script>
 
 </body>
 

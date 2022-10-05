@@ -24,10 +24,10 @@ import { listener, listenerCtx } from '@milkdown/plugin-listener';
 import {table,gfm,InsertTable } from '@milkdown/preset-gfm';
 import { replaceAll, insert, destroy } from '@milkdown/utils';
 import Alpine from 'alpinejs';
-import Turbolinks from "turbolinks";
 import focus from '@alpinejs/focus';
 import collapse from '@alpinejs/collapse';
 import Clipboard from "@ryangjchandler/alpine-clipboard"
+
 const hasMark = (state, type) => {
     if (!type) return false;
     const { from, $from, to, empty } = state.selection;
@@ -299,7 +299,6 @@ Alpine.plugin(focus);
 Alpine.plugin(collapse);
 window.Alpine = Alpine;
 Alpine.start();
-Turbolinks.start();
 
 
 

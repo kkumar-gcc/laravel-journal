@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('uuid')->nullable()->unique();
+            $table->uuid('uuid')->nullable()->unique();
             $table->string('email')->unique();
             $table->string('username')->unique();
             $table->string('name')->nullable();
@@ -40,9 +40,10 @@ return new class extends Migration
             $table->string('codepen_url')->nullable();
             $table->string('github_url')->nullable();
             $table->string('laracasts_url')->nullable();
-            $table->boolean('show_follower')->default(true);
+            $table->boolean('show_subscriber')->default(true);
             $table->boolean('show_following')->default(true);
             $table->boolean('is_banned')->default(true);
+            $table->boolean('is_admin')->default(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

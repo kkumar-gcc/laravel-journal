@@ -6,7 +6,7 @@
     },
     "devDependencies": {
         "@defstudio/vite-livewire-plugin": "^0.2.6",
-        "@tailwindcss/forms": "^0.5.2",
+        "@tailwindcss/forms": "^0.5.3",
         "@tailwindcss/line-clamp": "^0.4.2",
         "@tailwindcss/typography": "^0.5.7",
         "alpinejs": "^3.4.2",
@@ -38,6 +38,7 @@
         "@milkdown/plugin-trailing": "^6.4.0",
         "@milkdown/preset-commonmark": "^6.4.0",
         "@milkdown/preset-gfm": "^6.4.0",
+        "@milkdown/prose": "^6.4.1",
         "@milkdown/theme-nord": "^6.4.0",
         "@milkdown/utils": "^6.4.1",
         "@ryangjchandler/alpine-clipboard": "^2.2.0",

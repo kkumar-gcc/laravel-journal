@@ -58,14 +58,6 @@ class Comment extends Component
             $this->body = '';
         }
     }
-    public function edit($comment_id)
-    {
-        $comment = ModelsComment::find($comment_id);
-        $this->authorize('update', $comment);
-        $this->body = $comment->body();
-        $this->comment_id = $comment_id;
-        $this->emit('commentEdit',$this->body,$this->comment_id);
-    }
     public function replyIndex($comment_id){
         $this->reset('body');
         // dd($this->body,$comment_id);
@@ -78,7 +70,6 @@ class Comment extends Component
         $this->authorize('update', $comment);
         $comment->update(['body' => $this->body ]);
         $this->reset('body');
-        $this->body='';
         $this->emit('editorClose','destroyEditor');
     }
     public function reply($comment_id)

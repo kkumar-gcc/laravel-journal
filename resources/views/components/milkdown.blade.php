@@ -1,3 +1,4 @@
+@props(['model' => 'body'])
 <div wire:ignore>
     <div class="milkdown-container space-y-4">
         <div class="milkdownEditor relative">
@@ -5,7 +6,7 @@
                 {{ $slot }}
             </div>
         </div>
-        <button class="clear-button" type="button">Clear</button>
+        {{-- <button class="clear-button" type="button">Clear</button> --}}
     </div>
 
     {{--
@@ -25,8 +26,9 @@
     --}}
     @once
         @push('scripts')
-            <script data-turbolinks-eval="false">
-                document.addEventListener('turbolinks:load', function() {
+            <script defer>
+                window.onload = function() {
+                    var model = "{{ $model }}";
                     document.querySelectorAll('.milkdown-container').forEach(async (element) => {
                         const milkdownWrapper = element.querySelector('.milkdownEditor .milkdown-menu-wrapper');
                         if (milkdownWrapper) {
@@ -41,10 +43,10 @@
                             .config((ctx) => {
                                 ctx.get(milkdown.listenerCtx)
                                     .markdownUpdated((ctx, markdown, prevMarkdown) => {
-                                        @this.set('body', markdown);
+                                        @this.set(model, markdown);
                                     })
                                 ctx.set(milkdown.defaultValueCtx, defaultValue);
-                                ctx.set(milkdown.rootCtx, document.querySelector('.milkdownEditor'));
+                                ctx.set(milkdown.rootCtx, element.querySelector('.milkdownEditor'));
                             })
                             .use(milkdown.nord)
                             .use(milkdown.listener)
@@ -131,11 +133,12 @@
                             .use(milkdown.diagram)
                             .create()
                         // Sample action for each component
-                        element.querySelector('.clear-button').addEventListener('click', () => {
-                            editor.action(milkdown.replaceAll(''))
-                        })
+                        // element.querySelector('.clear-button').addEventListener('click', () => {
+                        //     editor.action(milkdown.replaceAll(''))
+                        // })
                     })
-                })
+                };
+                // document.addEventListener('livewire:load',milkdownEditor)
             </script>
         @endpush
     @endonce

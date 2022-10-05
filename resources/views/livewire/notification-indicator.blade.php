@@ -1,6 +1,6 @@
 <div>
     <a href="/notifications" class="inline-flex relative items-center p-1 text-sm font-medium text-center ">
-        {{ svg('iconsax-lin-notification-bing', 'w-6 h-6') }}
+        {{ svg('iconsax-lin-notification-bing', 'w-5 h-5 md:h-6 md:w-6') }}
         <span class="sr-only">Notifications</span>
         @if (auth()->user()->unreadNotifications->count() > 0 &&
             auth()->user()->unreadNotifications->count() <= 9)

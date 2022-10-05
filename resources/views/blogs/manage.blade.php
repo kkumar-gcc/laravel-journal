@@ -13,13 +13,13 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/blogs/edit/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
+                        <a href="/blogs/edit/{{ $blog->slug}}"
                             class="flex items-center p-2 text-base font-normal text-gray-900  dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                             <span class="flex-1 ml-3 whitespace-nowrap">Edit</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/blogs/stats/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
+                        <a href="/blogs/stats/{{ $blog->slug}}"
                             class="flex items-center p-2 text-base font-normal text-gray-900  dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                             <span class="flex-1 ml-3 whitespace-nowrap">Stats</span>
                         </a>
@@ -108,6 +108,64 @@
                                     </li>
                                 </ul>
                             </div>
+                            <div class="px-5 py-16 min-h-[20rem] flex items-center justify-center">
+                                <!-- Copying this code is against the product license. Just buy the dang thing and save yourself the effort. -->
+
+                                <div x-data="{ value: false }" class="flex items-center justify-center"
+                                    x-id="['toggle-label']">
+                                    <!-- Copying this code is against the product license. Just buy the dang thing and save yourself the effort. -->
+                                    <input type="hidden" name="sendNotifications" :value="value"
+                                        value="false">
+                                    <!-- Copying this code is against the product license. Just buy the dang thing and save yourself the effort. -->
+                                    <label @click="$refs.toggle.click(); $refs.toggle.focus()" :id="$id('toggle-label')"
+                                        class="text-gray-900" id="toggle-label-1">
+                                        Send notification
+                                        <!-- Copying this code is against the product license. Just buy the dang thing and save yourself the effort. -->s
+                                    </label>
+                                    <!-- Copying this code is against the product license. Just buy the dang thing and save yourself the effort. -->
+                                    <button x-ref="toggle" type="button" role="switch" @click="value=!value"
+                                        class="relative ml-4 inline-flex w-14 rounded-full py-1 px-0"
+                                        :class="value ? 'bg-gray-900 border-2 border-white' :
+                                            'bg-white border-2 border-gray-900'">
+                                        <!-- Copying this code is against the product license. Just buy the dang thing and save yourself the effort. -->
+                                        <span :class="value ? 'bg-white translate-x-6' : 'bg-gray-900 translate-x-1'"
+                                            class="h-6 w-6 rounded-full transition bg-gray-900 translate-x-1"
+                                            aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div x-data="{ value: false }" x-id="['toggle-label']" tabindex="0" class="group">
+                                <input type="hidden" name="sendNotifications" :value="value" value="false">
+                                <label @click="value=!value" @click="$refs.toggle.click(); $refs.toggle.focus()"
+                                    :id="$id('toggle-label')" class="cursor-pointer select-none">
+                                    Send notification
+                                </label>
+                                <div tabindex="0" class="relative cursor-pointer select-none" x-ref="toggle" role="switch" @click="value=!value">
+                                    <div
+                                        class="relative w-12 h-4 bg-gray-200 shadow-gray-400 rounded-full shadow-inner">
+                                        <div class="
+                                      dot
+                                      absolute
+                                      w-6
+                                      h-6
+                                      rounded-full
+                                      drop-shadow-2xl
+                                      shadow-md
+                                      -top-[5px]
+                                      transition
+                                      flex
+                                      items-center
+                                      justify-center
+                                      my-auto
+                                      group-hover:ring-[20px]
+                                      group-hover:ring-gray-500/[0.50]
+                                      "
+                                            :class="value ? 'right-0 bg-teal-600 shadow-teal-500' :
+                                                'left-0 bg-black shadow-black '">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="mb-6">
                                 <label for="general_comment"
                                     class="block mb-5 text-base font-medium text-gray-900 dark:text-white">Reader
@@ -129,8 +187,9 @@
                                         </div>
                                     </li>
                                     <li class="relative">
-                                        <input type="radio" id="reader-follower" name="blog_access" value="follower"
-                                            class="hidden peer" {{ $blog->access == 'follower' ? 'checked' : '' }}>
+                                        <input type="radio" id="reader-follower" name="blog_access"
+                                            value="follower" class="hidden peer"
+                                            {{ $blog->access == 'follower' ? 'checked' : '' }}>
                                         <label for="reader-follower"
                                             class="inline-flex items-center justify-between w-full p-3 text-gray-500 bg-white border border-gray-200  cursor-pointer peer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-teal-500 peer-checked:border-teal-600 peer-checked:text-teal-600 hover:text-gray-600 hover:bg-gray-50 peer-checked:hover:bg-white dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
                                             <div class="block">
@@ -246,4 +305,20 @@
 
         </div>
     </div>
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('ehczlyothi', () => ({
+                value: false
+            }))
+            Alpine.bind('ehczlyothi', () => ({
+                ['@click']() {
+                    return this.value = !this.value
+                },
+                [':class']() {
+                    return this.value ? 'bg-gray-900 border-2 border-white' :
+                        'bg-white border-2 border-gray-900'
+                },
+            }))
+        })
+    </script>
 </x-app-layout>

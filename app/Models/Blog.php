@@ -9,10 +9,10 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
-
+use Cviebrock\EloquentSluggable\Sluggable;
 class Blog extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory,SoftDeletes,Sluggable;
     protected $fillable = [
         'user_id',
         'title',
@@ -21,11 +21,8 @@ class Blog extends Model
         'meta_description',
         'meta_title',
         "status",
+        'slug'
     ];
-    public function id(): int
-    {
-        return $this->id;
-    }
     public function title(): string
     {
         return $this->title;
@@ -38,7 +35,10 @@ class Blog extends Model
     {
         return Str::limit(strip_tags($this->body()), $limit);
     }
-
+    // public function slug() :string
+    // {
+    //     return $this->slug;
+    // }
     public function createdAt(): ?Carbon
     {
         return $this->created_at;
@@ -138,4 +138,12 @@ class Blog extends Model
     // {
     //     return $this->blogpins()->where('user_id','=', auth()->user()->id)->exists();
     // }
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+        ];
+    }
 }

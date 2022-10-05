@@ -1,7 +1,7 @@
 <div class="not-prose ">
     <x-cards.primary-card :default=false class="p-0">
         <header class="py-4 px-5 text-2xl font-semibold text-gray-700 dark:text-white">
-            <h3>Social Links</h3>
+            <h3>Profile</h3>
         </header>
         <div class="border-t py-4 px-5 last:rounded-b-xl border-gray-200">
             <div>
@@ -129,15 +129,14 @@
                 <div class=" mb-4">
                     <label class="block mb-2 text-base font-medium text-gray-900 dark:text-white" for="editor2">About
                         Me</label>
-                    <div>
-                        <div wire:model="aboutMe" id="editor3" wire:ignore
-                            class="sticky top-0 z-20 my-10 prose max-w-none lg:max-w-full xl:max-w-none prose-img:rounded-xl prose-img:w-full mx-auto  dark:prose-invert prose-a:text-teal-600 dark:prose-a:text-teal-500">
+                    <div class="my-5">
+                        <x-milkdown :model="'aboutMe'">
                             <div class="hidden">
-                                <x-markdown flavor="github" :anchors="true" theme="github-dark">
+                                <x-markdown flavor="github" anchors>
                                     {!! $aboutMe !!}
                                 </x-markdown>
                             </div>
-                        </div>
+                        </x-milkdown>
                     </div>
                     @error('aboutMe')
                         <span class="error">{{ $message }}</span>
@@ -157,110 +156,3 @@
         </div>
     </x-cards.primary-card>
 </div>
-@push('scripts')
-    <script defer>
-        function myvar() {
-            const defaultValue = {
-                type: 'html',
-                dom: document.querySelector('#editor3'),
-            };
-            milkdown.Editor
-                .make()
-                .config((ctx) => {
-                    ctx.get(milkdown.listenerCtx)
-                        .markdownUpdated((ctx, markdown, prevMarkdown) => {
-                            @this.set('aboutMe', markdown);
-                        })
-                    ctx.set(milkdown.rootCtx, document.querySelector('#editor3'));
-                    ctx.set(milkdown.defaultValueCtx, defaultValue);
-                })
-                .use(milkdown.nord)
-                .use(milkdown.commonmark)
-                .use(milkdown.listener)
-                .use(milkdown.history)
-                .use(milkdown.emoji)
-                .use(milkdown.table)
-                .use(milkdown.cursor)
-                .use(milkdown.math)
-                .use(milkdown.clipboard)
-                .use(milkdown.menu)
-                .use(
-                    milkdown.trailing.configure(milkdown.trailingPlugin, {
-                        shouldAppend: (lastNode, state) => lastNode && !['paragraph'].includes(
-                            lastNode
-                            .type.name),
-                    })
-                )
-                .use(
-                    milkdown.tooltip.configure(milkdown.tooltipPlugin, {
-                        top: true,
-                    }))
-                .use(
-                    milkdown.slash.configure(milkdown.slashPlugin, {
-                        config: (ctx) => {
-                            // Get default slash plugin items
-                            const actions = milkdown.defaultActions(ctx);
-
-                            // Define a status builder
-                            return ({
-                                isTopLevel,
-                                content,
-                                parentNode
-                            }) => {
-                                // You can only show something at root level
-                                if (!isTopLevel) return null;
-
-                                // Empty content ? Set your custom empty placeholder !
-                                if (!content) {
-                                    return {
-                                        placeholder: 'Type / to use the slash commands...'
-                                    };
-                                }
-
-                                // Define the placeholder & actions (dropdown items) you want to display depending on content
-                                if (content.startsWith('/')) {
-                                    // Add some actions depending on your content's parent node
-                                    if (parentNode.type.name === 'customNode') {
-                                        actions.push({
-                                            id: 'custom',
-                                            dom: createDropdownItem(ctx.get(
-                                                    themeToolCtx), 'Custom',
-                                                'h1'),
-                                            command: () => ctx.get(commandsCtx)
-                                                .call( /* Add custom command here */ ),
-                                            keyword: ['custom'],
-                                            enable: () => true,
-                                        });
-                                    }
-
-                                    return content === '/' ? {
-                                        placeholder: 'Type to filter...',
-                                        actions,
-                                    } : {
-                                        actions: actions.filter(({
-                                                keyword
-                                            }) =>
-                                            keyword.some((key) => key.includes(
-                                                content
-                                                .slice(1)
-                                                .toLocaleLowerCase())),
-                                        ),
-                                    };
-                                }
-                            };
-                        },
-                    }),
-                )
-                .use(
-                    milkdown.indent.configure(milkdown.indentPlugin, {
-                        type: 'space', // available values: 'tab', 'space',
-                        size: 4,
-                    }),
-                )
-                .use(milkdown.diagram)
-                .create()
-        }
-        window.onload = myvar;
-        // document.addEventListener("turbolinks:load", myvar());
-    </script>
-@endpush
