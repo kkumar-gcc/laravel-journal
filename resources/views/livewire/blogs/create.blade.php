@@ -55,8 +55,7 @@
             <div>
                 <x-buttons.primary class="mr-2 md:mr-4" wire:click="draft">
                     <span class="hidden md:block">{{ __('Save as draft') }}</span>
-                    <span
-                        class="hover:text-skin-600 md:hidden">{{ svg('iconsax-bul-book-saved', 'h-6 w-6') }}</span>
+                    <span class="hover:text-skin-600 md:hidden">{{ svg('iconsax-bul-book-saved', 'h-6 w-6') }}</span>
                 </x-buttons.primary>
             </div>
             <div>
@@ -69,46 +68,34 @@
                             {{ svg('iconsax-bul-setting-2', 'h-6 w-6') }}
                         </x-buttons.primary>
                     </x-slot:title>
-                    <div class=" my-6">
-                        <label class="text-xl font-bold line-clamp-3  tracking-wide  block mb-2  text-gray-700"
-                            for="name">Add a cover image</label>
-                        @if ($coverImage)
-                            coverImage Preview:
-                            <div class="relative  pt-[60%] rounded-xl sm:pt-[50%] md:pt-[42%] ">
-                                <img class="absolute top-0 bottom-0 left-0 right-0 w-full h-full m-0 bg-skin-base shadow-md object-fit rounded-xl drop-shadow-md dark:bg-gray-800"
-                                    src="{{ $coverImage->temporaryUrl() }}" alt="" />
+                    <div class="mb-4">
+                        <label class="text-xl font-bold line-clamp-3  tracking-wide  block mb-2  text-gray-700">Add a
+                            cover image</label>
+                        <div class="flex flex-row mb-8 items-center">
+                            <div class="">
+                                @if ($coverImage)
+                                    <img src="{{ $coverImage->temporaryUrl() }}"
+                                        class="max-h-56 max-w-[224px] bg-gray-50 mr-8"
+                                        alt="" />
+                                @endif
                             </div>
-                        @endif
-                        <div x-data="{ isUploading: false, progress: 0 }" x-on:livewire-upload-start="isUploading = true"
-                            x-on:livewire-upload-finish="isUploading = false"
-                            x-on:livewire-upload-error="isUploading = false"
-                            x-on:livewire-upload-progress="progress = $event.detail.progress">
-
-                            <!-- File Input -->
-
-                            <input type="file" wire:model="coverImage"
-                                class="text-sm my-4 py-4 px-2 text-grey-500
-                            file:mr-5 file:py-3 file:px-10
-                            file:rounded-lg
-                            file:border file:border-solid
-                            file:shadow-sm
-                            hover:file:shadow-md
-                            file:text-md file:font-semibold
-                          file:bg-skin-base
-                            hover:file:cursor-pointer hover:file:opacity-80
-                          ">
-                            <!-- Progress Bar -->
-
-                            <div x-show="isUploading">
-
-                                <progress max="100" x-bind:value="progress"></progress>
-
+                            <div x-data="{ isUploading: false, progress: 0 }" x-on:livewire-upload-start="isUploading = true"
+                                x-on:livewire-upload-finish="isUploading = false"
+                                x-on:livewire-upload-error="isUploading = false"
+                                x-on:livewire-upload-progress="progress = $event.detail.progress" class="flex-1">
+                                <!-- File Input -->
+                                <input type="file" wire:model="coverImage" id="cover_image" class="sr-only" />
+                                <label
+                                    class="bg-skin-base  capatalize py-2 px-4 leading-6  border inline-flex flex-row justify-center items-center no-underline rounded-md font-semibold cursor-pointer transition duration-200 ease-in-out shadow-sm shadow-gray-100"
+                                    for="cover_image">
+                                    change
+                                </label>
+                                <div x-show="isUploading" class="mb-2">
+                                    <progress max="100" x-bind:value="progress"></progress>
+                                </div>
+                                <x-error class="text-red-500" field="coverImage" />
                             </div>
-
                         </div>
-                        @error('coverImage')
-                            <span class="error">{{ $message }}</span>
-                        @enderror
                     </div>
                     <div class="my-4">
                         <label class="text-xl font-bold line-clamp-3  tracking-wide  block mb-2  text-gray-700"
@@ -180,7 +167,8 @@
     <div class=" mt-2 text-gray-700 px-6 sm:mt-6 md:px-20">
         <h1 class="text-3xl font-extrabold line-clamp-3  tracking-wide text-gray-700 mb-4">Create Blog</h1>
         <div class="my-4">
-            <label class="text-xl font-bold line-clamp-3  tracking-wide  block mb-2  text-gray-700" for="title">Title
+            <label class="text-xl font-bold line-clamp-3  tracking-wide  block mb-2  text-gray-700"
+                for="title">Title
                 of blog</label>
             <x-form.input-field type="text" id="title" wire:model="title" placeholder="Tittle . . . ." />
             <x-error field="title" class="text-rose-500" />

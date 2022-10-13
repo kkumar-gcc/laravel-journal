@@ -61,8 +61,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get("/blogs/edit/{slug}", [BlogController::class, 'edit']);
     Route::put("/blogs/edit", [BlogController::class, 'editStore'])->name('blogs.edit');
     Route::get("/blogs/manage/{slug}", [BlogController::class, 'manage']);
-    Route::put("/blogs/manage/seo", [BlogController::class, 'seo'])->name('blogs.manage.seo');
-    Route::put("/blogs/manage", [BlogController::class, 'manageStore'])->name('blogs.manage');
     Route::get("/blogs/stats/{slug}", [BlogController::class, 'stats']);
     Route::get("/notifications",[NotificationController::class,"index"]);
 });

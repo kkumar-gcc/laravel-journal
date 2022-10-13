@@ -5,15 +5,12 @@
             <header class="bg-skin-base border border-gray-200 not-prose dark:border-gray-700 rounded-lg dark:bg-gray-800">
                 <div class="relative  pt-[60%] rounded-xl sm:pt-[30%] md:pt-[22%]">
                     <img class="absolute top-0 bottom-0 left-0 right-0 w-full h-full m-0 bg-skin-base object-fit rounded-t-xl dark:bg-gray-800"
-                        src="https://live.staticflickr.com/65535/52391254003_99ade44739_h.jpg" alt=""
-                        id="background_image" />
+                        src="{{ $user->backgroundImage() }}" alt="background image of {{ $user->username }}"/>
                 </div>
                 <div class="flex flex-col px-6 my-4 md:flex-row">
                     <div class="relative flex items-start justify-center w-full mb-4 basis-1/3 md:w-1/3">
                         <img class="z-10 w-40 h-40 -mt-24 rounded-full ring-8 ring-white dark:ring-gray-500"
-                            src="{{ asset($user->profile_image) }}"
-                            onerror="this.onerror=null;this.src=`https://avatars.dicebear.com/api/bottts/:{{ $user->username }}.svg`"
-                            alt="Bordered avatar" id="profile_image">
+                            src="{{ $user->avatarUrl() }}"alt="avatar of {{ $user->username }}">
                     </div>
                     <div class="flex flex-col items-center justify-center mb-4 basis-2/3 md:flex-row md:items-start">
                         <div class="flex-1">

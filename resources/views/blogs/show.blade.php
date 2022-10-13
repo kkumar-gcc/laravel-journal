@@ -35,23 +35,17 @@
                             <x-slot name="content">
                                 <ul>
                                     <li>
-                                        <x-dropdown-link
-                                            href="/blogs/edit/{{ $blog->slug}}"
-                                            class="flex ">
+                                        <x-dropdown-link href="/blogs/edit/{{ $blog->slug }}" class="flex ">
                                             {{ __(' Edit') }}
                                         </x-dropdown-link>
                                     </li>
                                     <li>
-                                        <x-dropdown-link
-                                            href="/blogs/manage/{{ $blog->slug}}"
-                                            class="flex ">
+                                        <x-dropdown-link href="/blogs/manage/{{ $blog->slug }}" class="flex ">
                                             {{ __('Manage') }}
                                         </x-dropdown-link>
                                     </li>
                                     <li>
-                                        <x-dropdown-link
-                                            href="/blogs/stats/{{ $blog->slug}}"
-                                            class="flex ">
+                                        <x-dropdown-link href="/blogs/stats/{{ $blog->slug }}" class="flex ">
                                             {{ __('Stats') }}
                                         </x-dropdown-link>
                                     </li>
@@ -161,9 +155,10 @@
                             </svg>
                         </h2>
 
+                        <div class="not-prose">
                         @foreach ($related as $sblog)
-                            <x-cards.blog-card :blog=$sblog class="not-prose" />
-                        @endforeach
+                            <x-cards.blog-card :blog="$sblog"  />
+                        @endforeach</div>
                     </div>
                 @endif
             </div>
@@ -174,7 +169,7 @@
                         <div class="grid grid-cols-4 gap-4 justify-between">
                             <livewire:like-blog :blog_id="$blog->id" :likes_count="$blog->bloglikes->where('status', 1)->count()" :wire:key="$blog->id" />
                             <div>
-                                <x-share :share="$shareBlog"/>
+                                <x-share :share="$shareBlog" />
 
                             </div>
                             <livewire:bookmark :blog_id="$blog->id" :wire:key="$blog->id" />
@@ -215,6 +210,11 @@
                         </div>
                     </div>
                 </x-cards.primary-card>
+                <div class="badge-base LI-profile-badge my-4" data-locale="en_US" data-size="medium" data-theme="light"
+                    data-type="VERTICAL" data-vanity="tanmaya-arora" data-version="v1"><a
+                        class="badge-base__link LI-simple-link"
+                        href="https://www.linkedin.com/tanmaya-arora?trk=profile-badge"></a>
+                </div>
                 <x-cards.primary-card :default=false>
                     <header class="px-4 py-3 text-2xl font-semibold text-gray-700 dark:text-white">
                         <span class="modern-badge modern-badge-danger">#Advertisment</span>

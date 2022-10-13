@@ -72,7 +72,7 @@ class Create extends Component
         $blog = Blog::create([
             'title' => $this->title,
             'body' => $this->body,
-            'status' => "drafted",
+            'published'=>0,
             'user_id' => auth()->id(),
             'cover_image'=> $this->coverImage->store('/','images')
         ]);

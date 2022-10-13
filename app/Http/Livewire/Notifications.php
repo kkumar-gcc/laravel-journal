@@ -18,12 +18,25 @@ class Notifications extends Component
     use WithPagination;
 
     public $notificationCount = 0;
-    public $tab='all';
+    public $tab = 'all';
+
+    protected $queryString = [
+        'tab' => ['except' => 'all']
+    ];
     public function render(): View
     {
+        if ($this->validSort($this->tab)&&$this->tab!='all') {
+
+            $unreadNotifications=Auth::user()->unreadNotifications()->get();
+            $notifications=Auth::user()->readNotifications()->get();
+        } else {
+            $this->tab = 'all';
+            $unreadNotifications=Auth::user()->unreadNotifications()->get();
+            $notifications=Auth::user()->readNotifications()->get();
+        }
         return view('livewire.notifications', [
-            'unreadNotifications' => Auth::user()->unreadNotifications()->get(),
-            'notifications' => Auth::user()->readNotifications()->get(),
+            'unreadNotifications' => $unreadNotifications,
+            'notifications' => $notifications,
         ]);
     }
 
@@ -34,6 +47,18 @@ class Notifications extends Component
         $this->notificationCount = Auth::user()->unreadNotifications()->count();
     }
 
+    public function sortBy($sort): void
+    {
+        $this->tab = $this->validSort($sort) ? $sort : 'all';
+    }
+    public function validSort($sort): bool
+    {
+        return in_array($sort, [
+            'all',
+            'new_blog',
+            'new_user'
+        ]);
+    }
     public function markAsRead(string $notificationId): void
     {
         $notification = DatabaseNotification::findOrFail($notificationId);

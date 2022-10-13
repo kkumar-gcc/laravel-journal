@@ -4,95 +4,99 @@
             <h3>Profile</h3>
         </header>
         <div class="border-t py-4 px-5 last:rounded-b-xl border-gray-200">
-            <div>
-                <div class="fixed top-3 right-3 p-3 mt-4 z-20 bg-skin-base shadow flex flex-shrink-0 rounded-md"
-                    x-data="{ show: false }" x-show="show" x-transition.origin.bottom.duration.500ms
-                    x-init="@this.on('changed', () => {
-                        show = true;
-                        setTimeout(() => show = false, 10000)
-                    })" x-cloack style="display:none">
-                    <div tabindex="0" aria-label="group icon" role="img"
-                        class="focus:outline-none w-8 h-8 flex flex-shrink-0 items-center justify-center">
-                        {{ svg('iconsax-bul-tick-circle', 'h-6 w-6 text-skin-500') }}
+            <div class="fixed top-3 right-3 p-3 mt-4 z-20 bg-skin-base shadow flex flex-shrink-0 rounded-md"
+                x-data="{ show: false }" x-show="show" x-transition.origin.bottom.duration.500ms x-init="@this.on('changed', () => {
+                    show = true;
+                    setTimeout(() => show = false, 10000)
+                })"
+                x-cloack style="display:none">
+                <div tabindex="0" aria-label="group icon" role="img"
+                    class="focus:outline-none w-8 h-8 flex flex-shrink-0 items-center justify-center">
+                    {{ svg('iconsax-bul-tick-circle', 'h-6 w-6 text-skin-500') }}
 
-                    </div>
-                    <div class="pl-3 w-full flex items-center justify-center">
-                        @if (session()->has('message'))
-                            {{ session('message') }}
-                        @endif
-                        <div aria-label="close icon" @click="show=false" role="button"
-                            class="ml-3 focus:outline-none cursor-pointer">
-                            <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/notification_1-svg4.svg"
-                                alt="icon">
-                        </div>
+                </div>
+                <div class="pl-3 w-full flex items-center justify-center">
+                    @if (session()->has('message'))
+                        {{ session('message') }}
+                    @endif
+                    <div aria-label="close icon" @click="show=false" role="button"
+                        class="ml-3 focus:outline-none cursor-pointer">
+                        <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/notification_1-svg4.svg" alt="icon">
                     </div>
                 </div>
             </div>
 
-            <form wire:submit.prevent="update" id="profile_update" enctype="multipart/form-data">
+            <form wire:submit.prevent="update" enctype="multipart/form-data">
                 @csrf
-                {{-- <input type="hidden" name="MAX_FILE_SIZE" value="30000000" /> --}}
-                <div class=" mb-4">
-                    @if ($profileImage)
-                        Photo Preview:
-                        <div class="relative  pt-[60%] rounded-xl sm:pt-[50%] md:pt-[42%] ">
-                            <img class="absolute top-0 bottom-0 left-0 right-0 w-full h-full m-0 bg-skin-base shadow-md object-fit rounded-xl drop-shadow-md dark:bg-gray-800"
-                                src="{{ $profileImage->temporaryUrl() }}" alt="" />
+                <div class="mb-4">
+                    <label
+                        class="text-base font-semibold line-clamp-3  tracking-wide  block mb-4  text-gray-700">Profile
+                        image</label>
+                    <div class="flex flex-row mb-8 items-center">
+                        <div class="">
+                            @if ($profileImage)
+                                <img src="{{ $profileImage->temporaryUrl() }}"
+                                    class="h-16 w-16 bg-gray-50 rounded-full" />
+                            @else
+                                <x-avatar search="{{ auth()->user()->emailAddress() }}" :src="auth()
+                                    ->user()
+                                    ->avatarUrl()"
+                                    class="h-16 w-16 bg-gray-50 rounded-full" provider="gravatar"
+                                    alt="Avatar of {{ auth()->user()->username }}" />
+                            @endif
                         </div>
-                    @endif
-                    <div x-data="{ isUploading: false, progress: 0 }" x-on:livewire-upload-start="isUploading = true"
-                        x-on:livewire-upload-finish="isUploading = false"
-                        x-on:livewire-upload-error="isUploading = false"
-                        x-on:livewire-upload-progress="progress = $event.detail.progress">
-                        <!-- File Input -->
-                        <input type="file" wire:model="profileImage"
-                            class="text-sm my-4 py-4 px-2 text-grey-500
-                            file:mr-5 file:py-3 file:px-10
-                            file:rounded-lg
-                            file:border file:border-solid
-                            file:shadow-sm
-                            hover:file:shadow-md
-                            file:text-md file:font-semibold
-                          file:bg-skin-base
-                            hover:file:cursor-pointer hover:file:opacity-80
-                          ">
-                        <!-- Progress Bar -->
-                        <div x-show="isUploading">
-                            <progress max="100" x-bind:value="progress"></progress>
+                        <div x-data="{ isUploading: false, progress: 0 }" class="flex-1 ml-8" x-on:livewire-upload-start="isUploading = true"
+                            x-on:livewire-upload-finish="isUploading = false"
+                            x-on:livewire-upload-error="isUploading = false"
+                            x-on:livewire-upload-progress="progress = $event.detail.progress">
+                            <!-- File Input -->
+                            <input type="file" wire:model="profileImage" id="profile_image" class="sr-only" />
+                            <label
+                                class="bg-skin-base  capatalize py-2 px-4 leading-6  border inline-flex flex-row justify-center items-center no-underline rounded-md font-semibold cursor-pointer transition duration-200 ease-in-out shadow-sm shadow-gray-100"
+                                for="profile_image">
+                                change
+                            </label>
+
+                            <x-error class="text-red-500" field="profileImage" />
+                            <div x-show="isUploading">
+                                <progress max="100" x-bind:value="progress"></progress>
+                            </div>
                         </div>
                     </div>
-                    <x-error class="text-red-500" field="profileImage" />
                 </div>
-                <div class=" mb-4">
-                    @if ($backgroundImage)
-                        Photo Preview:
-                        <div class="relative  pt-[60%] rounded-xl sm:pt-[50%] md:pt-[42%] ">
-                            <img class="absolute top-0 bottom-0 left-0 right-0 w-full h-full m-0 bg-skin-base shadow-md object-fit rounded-xl drop-shadow-md dark:bg-gray-800"
-                                src="{{ $profileImage->temporaryUrl() }}" alt="" />
+                <div class="mb-4">
+                    <label
+                        class="text-base font-semibold line-clamp-3  tracking-wide  block mb-4  text-gray-700">Background
+                        image</label>
+                    <div class="flex flex-row mb-8 items-center">
+                        <div class="">
+                            @if ($backgroundImage)
+                                <img src="{{ $backgroundImage->temporaryUrl() }}"
+                                    class="max-h-56 max-w-[224px] bg-gray-50 " provider="gravatar"
+                                    alt="Avatar of {{ auth()->user()->username }}" />
+                            @else
+                                <img src="{{ auth()->user()->backgroundImage() }}"
+                                    class="max-h-56 max-w-[224px] bg-gray-50 " provider="gravatar"
+                                    alt="Avatar of {{ auth()->user()->username }}" />
+                            @endif
                         </div>
-                    @endif
-                    <div x-data="{ isUploading: false, progress: 0 }" x-on:livewire-upload-start="isUploading = true"
-                        x-on:livewire-upload-finish="isUploading = false"
-                        x-on:livewire-upload-error="isUploading = false"
-                        x-on:livewire-upload-progress="progress = $event.detail.progress">
-                        <!-- File Input -->
-                        <input type="file" wire:model="backgroundImage"
-                            class="text-sm my-4 py-4 px-2 text-grey-500
-                            file:mr-5 file:py-3 file:px-10
-                            file:rounded-lg
-                            file:border file:border-solid
-                            file:shadow-sm
-                            hover:file:shadow-md
-                            file:text-md file:font-semibold
-                          file:bg-skin-base
-                            hover:file:cursor-pointer hover:file:opacity-80
-                          ">
-                        <!-- Progress Bar -->
-                        <div x-show="isUploading">
-                            <progress max="100" x-bind:value="progress"></progress>
+                        <div x-data="{ isUploading: false, progress: 0 }" x-on:livewire-upload-start="isUploading = true"
+                            x-on:livewire-upload-finish="isUploading = false"
+                            x-on:livewire-upload-error="isUploading = false"
+                            x-on:livewire-upload-progress="progress = $event.detail.progress" class="flex-1 ml-8">
+                            <!-- File Input -->
+                            <input type="file" wire:model="backgroundImage" id="background_image" class="sr-only" />
+                            <label
+                                class="bg-skin-base  capatalize py-2 px-4 leading-6  border inline-flex flex-row justify-center items-center no-underline rounded-md font-semibold cursor-pointer transition duration-200 ease-in-out shadow-sm shadow-gray-100"
+                                for="background_image">
+                                change
+                            </label>
+                            <div x-show="isUploading" class="mb-2">
+                                <progress max="100" x-bind:value="progress"></progress>
+                            </div>
+                            <x-error class="text-red-500" field="backgroundImage" />
                         </div>
                     </div>
-                    <x-error field="backgroundImage" />
                 </div>
 
                 <div class="mb-4">
