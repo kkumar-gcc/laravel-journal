@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\IndexController;
+use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\NotificationController;
@@ -24,7 +27,8 @@ use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
+
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
@@ -43,6 +47,7 @@ Route::post('/email/verification-notification', function (Request $request) {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
+
 Route::group(['middleware' => ['auth', 'verified']], function () {
     // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::post('/comment', [CommentController::class, 'store']);
@@ -53,7 +58,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::put("/user/password/update", [UserController::class, 'resetPassword']);
 
     Route::get("/new-blog", [BlogController::class, 'create'])->name("new-blog");
-    Route::put("/new-blog", [BlogController::class, 'store'])->name("blog.create");
     Route::get("/blogs/edit/{slug}", [BlogController::class, 'edit']);
     Route::put("/blogs/edit", [BlogController::class, 'editStore'])->name('blogs.edit');
     Route::get("/blogs/manage/{slug}", [BlogController::class, 'manage']);
@@ -62,6 +66,14 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get("/blogs/stats/{slug}", [BlogController::class, 'stats']);
     Route::get("/notifications",[NotificationController::class,"index"]);
 });
+Route::middleware(['auth','verified','admin'])->name('admin.')->prefix('admin')->group(function(){
+   Route::get('/',[IndexController::class,'index']);
+   Route::resource('/roles',RoleController::class);
+   Route::resource('/permissions',PermissionController::class);
+   Route::get('/users',[IndexController::class,'users'])->name('users.index');
+   Route::get('/tags',[IndexController::class,'tags'])->name('tags.index');
+});
+
 Route::get("/blogs", [BlogController::class, 'index'])->name('blogs');
 Route::get("/blogs/{slug}", [BlogController::class, 'show']);
 Route::get("blogs/tagged/{slug}", [BlogController::class, "tagSearch"]);

@@ -1,60 +1,19 @@
-<x-base-layout>
-    {{-- @include('blogs.share', ['shareBlog' => $shareBlog]) --}}
-    <?php
-    function nice_number($n)
-    {
-        if (!is_numeric($n)) {
-            return false;
-        }
-        if ($n > 1000000000000) {
-            return round($n / 1000000000000, 1) . 't ';
-        } elseif ($n > 1000000000) {
-            return round($n / 1000000000, 1) . 'b ';
-        } elseif ($n > 1000000) {
-            return round($n / 1000000, 1) . 'm ';
-        } elseif ($n > 1000) {
-            return round($n / 1000, 1) . 'k ';
-        }
-        return number_format($n);
-    }
-    ?>
-    {{-- <div>
-        <div class="fixed top-3 right-3 p-3 mt-4 z-20 bg-white shadow flex flex-shrink-0 rounded-md"
-            x-data="{ show: false }" x-show="show" x-transition.origin.bottom.duration.500ms x-init="@this.on('changed', () => {
-                show = true;
-                setTimeout(() => show = false, 10000)
-            })"
-            x-cloack style="display:none">
-            <div tabindex="0" aria-label="group icon" role="img"
-                class="focus:outline-none w-8 h-8 flex flex-shrink-0 items-center justify-center">
-                {{ svg('iconsax-bul-tick-circle', 'h-6 w-6 text-teal-500') }}
-
-            </div>
-            <div class="pl-3 w-full flex items-center justify-center">
-                @if (session()->has('message'))
-                    {{ session('message') }}
-                @endif
-                <div aria-label="close icon" @click="show=false" role="button"
-                    class="ml-3 focus:outline-none cursor-pointer">
-                    <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/notification_1-svg4.svg" alt="icon">
-                </div>
-            </div>
-        </div>
-    </div> --}}
+<x-base-layout :page="$blog">
     <main
-        class="relative my-10 prose max-w-none lg:max-w-full xl:max-w-none prose-img:rounded-xl prose-img:w-full mx-auto  prose-a:no-underline  dark:prose-invert prose-a:text-teal-600 dark:prose-a:text-teal-500 prose-table px-2">
+        class="relative my-10 prose max-w-none lg:max-w-full xl:max-w-none prose-img:rounded-xl prose-img:w-full mx-auto  prose-a:no-underline  dark:prose-invert prose-a:text-skin-600 dark:prose-a:text-skin-500 prose-table px-2">
 
         <div class="relative  pt-[60%] rounded-xl sm:pt-[50%] md:pt-[42%] ">
-            <img class="absolute top-0 bottom-0 left-0 right-0 w-full h-full m-0 bg-white shadow-md object-fit rounded-xl drop-shadow-md dark:bg-gray-800"
-                src="https://live.staticflickr.com/65535/52390100407_ac668fab12_h.jpg" alt="" />
+            <img class="absolute top-0 bottom-0 left-0 right-0 w-full h-full m-0 bg-skin-base shadow-md object-fit rounded-xl drop-shadow-md dark:bg-gray-800"
+                src="{{ $blog->coverImage() }}" alt="Cover image for {{ $blog->title }}" />
         </div>
+
         <div class="relative flex flex-col w-full mt-3 lg:flex-row ">
             <div class="flex-1 my-2 basis-2/3 lg:w-2/3">
                 <div class="not-prose {{ $blog->adult_warning ? '' : 'hidden' }}">
                     <div
-                        class="flex flex-col items-center justify-center  px-4 py-4 mb-4 text-sm text-[#1f2833] leading-6 border not-prose  border-teal-200 bg-teal-50 rounded-xl dark:bg-[#fddfd8] ">
+                        class="flex flex-col items-center justify-center  px-4 py-4 mb-4 text-sm text-[#1f2833] leading-6 border not-prose  border-skin-200 bg-skin-50 rounded-xl dark:bg-[#fddfd8] ">
                         <p class="text-base">This blog contains adult content.<a href="#"
-                                class="font-black text-teal-600 ml-2">learn more</a></p>
+                                class="font-black text-skin-600 ml-2">learn more</a></p>
                     </div>
                 </div>
                 <div class="not-prose">
@@ -62,14 +21,14 @@
                         <x-tag :tag=$tag />
                     @endforeach
                 </div>
-                <h1 class="text-3xl my-55 md:text-4xl lg:text-5xl dark:text-white">
+                <h5 class="text-3xl my-55 md:text-4xl lg:text-5xl dark:text-white">
                     {{ $blog->title }}
-                </h1>
+                </h5>
                 @can('update', $blog)
                     <div class="flex justify-end not-prose">
                         <x-dropdown align="right" width="48">
                             <x-slot name="trigger">
-                                <x-buttons.primary class="border hover:text-teal-600 ">
+                                <x-buttons.primary class="border hover:text-skin-600 ">
                                     {{ svg('iconsax-bul-setting-2', 'h-6 w-6') }}
                                 </x-buttons.primary>
                             </x-slot>
@@ -110,7 +69,7 @@
                             </article>
                             <div class="">
                                 <div
-                                    class="flex flex-col items-center text-center justify-center px-8 py-16 mb-4 text-sm text-[#1f2833] leading-6 border not-prose  border-teal-200 bg-teal-50 rounded-xl dark:bg-[#fddfd8] ">
+                                    class="flex flex-col items-center text-center justify-center px-8 py-16 mb-4 text-sm text-[#1f2833] leading-6 border not-prose  border-skin-200 bg-skin-50 rounded-xl dark:bg-[#fddfd8] ">
                                     <h2 class="mb-8 text-2xl font-black md:text-3xl lg:text-4xl ">This Blog is for followers
                                         only
                                     </h2>
@@ -118,7 +77,7 @@
                                         blogs
                                         for followers only.</p>
                                     <div class="">
-                                        <a class="flex items-center justify-center px-4 py-3 my-4 text-sm font-medium text-center text-white no-underline cursor-pointer rounded-xl whitespace-nowrap bg-gradient-to-br from-teal-600 to-pink-500 hover:bg-gradient-to-bl focus:ring-2 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800"
+                                        <a class="flex items-center justify-center px-4 py-3 my-4 text-sm font-medium text-center text-white no-underline cursor-pointer rounded-xl whitespace-nowrap bg-gradient-to-br from-skin-600 to-pink-500 hover:bg-gradient-to-bl focus:ring-2 focus:outline-none focus:ring-skin-300 dark:focus:ring-skin-800"
                                             href="/register">
                                             {{ __('Sign up now') }}
                                         </a>
@@ -146,7 +105,7 @@
                                     </article>
                                     <div class="">
                                         <div
-                                            class="flex flex-col items-center text-center justify-center px-8 py-16 mb-4 text-sm text-[#1f2833] leading-6 border not-prose  border-teal-200 bg-teal-50 rounded-xl dark:bg-[#fddfd8] ">
+                                            class="flex flex-col items-center text-center justify-center px-8 py-16 mb-4 text-sm text-[#1f2833] leading-6 border not-prose  border-skin-200 bg-skin-50 rounded-xl dark:bg-[#fddfd8] ">
                                             <h2 class="mb-8 text-2xl font-black md:text-3xl lg:text-4xl ">This Blog is for
                                                 followers only
                                             </h2>
@@ -163,13 +122,13 @@
                                                         value="{{ $blog->user_id }}">
                                                     @if ($blog->user->isFollowing())
                                                         <button type="submit"
-                                                            class="follow_button_{{ $blog->user_id }} my-4 inline-flex justify-center items-center font-medium rounded-lg text-sm px-5 py-2 text-center no-underline cursor-pointer whitespace-nowrap text-white bg-gradient-to-br from-teal-600 to-pink-500 hover:bg-gradient-to-bl focus:ring-2 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800">
+                                                            class="follow_button_{{ $blog->user_id }} my-4 inline-flex justify-center items-center font-medium rounded-lg text-sm px-5 py-2 text-center no-underline cursor-pointer whitespace-nowrap text-white bg-gradient-to-br from-skin-600 to-pink-500 hover:bg-gradient-to-bl focus:ring-2 focus:outline-none focus:ring-skin-300 dark:focus:ring-skin-800">
                                                             {{ svg('bi-person-check-fill', 'mr-2 -ml-1 w-5 h-5') }}
                                                             {{ __('Following') }}
                                                         </button>
                                                     @else
                                                         <button type="submit"
-                                                            class="follow_button_{{ $blog->user_id }} my-4 w-full inline-flex justify-center items-center font-medium rounded-lg text-sm px-5 py-2 text-center no-underline  cursor-pointer whitespace-nowrap text-white bg-gradient-to-br from-teal-600 to-pink-500 hover:bg-gradient-to-bl focus:ring-2 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800">
+                                                            class="follow_button_{{ $blog->user_id }} my-4 w-full inline-flex justify-center items-center font-medium rounded-lg text-sm px-5 py-2 text-center no-underline  cursor-pointer whitespace-nowrap text-white bg-gradient-to-br from-skin-600 to-pink-500 hover:bg-gradient-to-bl focus:ring-2 focus:outline-none focus:ring-skin-300 dark:focus:ring-skin-800">
                                                             {{ svg('bi-person-plus-fill', 'mr-2 -ml-1 w-5 h-5') }}
                                                             {{ __('Follow') }}
                                                         </button>
@@ -215,12 +174,8 @@
                         <div class="grid grid-cols-4 gap-4 justify-between">
                             <livewire:like-blog :blog_id="$blog->id" :likes_count="$blog->bloglikes->where('status', 1)->count()" :wire:key="$blog->id" />
                             <div>
-                                <button type="button"
-                                    class=" flex flex-row items-center mr-1 md:mr-1 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
-                                    data-modal-toggle="shareBlogModal">
-                                    {{ svg('iconsax-bul-share', 'h-6 w-6') }}
-                                    <span class="ml-2">share</span>
-                                </button>
+                                <x-share :share="$shareBlog"/>
+
                             </div>
                             <livewire:bookmark :blog_id="$blog->id" :wire:key="$blog->id" />
                         </div>
@@ -240,7 +195,7 @@
                     <div class="px-4 py-3 rounded-xl not-prose dark:bg-gray-800 ">
                         <header class="">
                             <div class="flex items-center flex-1 ">
-                                <x-avatar search="{{ $blog->user->emailAddress() }}" :src="$blog->user->profile_image = ''"
+                                <x-avatar search="{{ $blog->user->emailAddress() }}" :src="$blog->user->avatarUrl()"
                                     class="h-10 w-10 bg-gray-50 rounded-full cursor-pointer" provider="gravatar" />
                                 <div class="ml-2 font-medium">
                                     <div class="text-gray-900 dark:text-white">{{ $blog->user->username }} </div>
@@ -267,7 +222,7 @@
                     <div
                         class="px-4 py-3 text-gray-700 border-t border-gray-200 last:rounded-b-lg dark:text-gray-400 dark:hover:text-white dark:border-gray-700  hover:shadow dark:bg-gray-800 dark:hover:bg-gray-700">
                         <div class="relative  pt-[60%] w-full rounded-xl sm:pt-[50%] md:pt-[42%] ">
-                            <img class="absolute top-0 bottom-0 left-0 right-0 object-cover w-full h-full m-0 bg-white shadow-md rounded-xl drop-shadow-md dark:bg-gray-800"
+                            <img class="absolute top-0 bottom-0 left-0 right-0 object-cover w-full h-full m-0 bg-skin-base shadow-md rounded-xl drop-shadow-md dark:bg-gray-800"
                                 src="https://picsum.photos/400/300" alt="" />
                         </div>
                     </div>

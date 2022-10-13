@@ -41,7 +41,9 @@ class TagPolicy
      */
     public function create(User $user)
     {
-        //
+        if ($user->can('create tags')) {
+            return true;
+        }
     }
 
     /**
@@ -53,7 +55,9 @@ class TagPolicy
      */
     public function update(User $user, Tag $tag)
     {
-        //
+        if ($user->can('edit tags')) {
+            return true;
+        }
     }
 
     /**
@@ -65,7 +69,9 @@ class TagPolicy
      */
     public function delete(User $user, Tag $tag)
     {
-        //
+        if ($user->can('delete tags')) {
+            return true;
+        }
     }
 
     /**

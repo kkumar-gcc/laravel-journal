@@ -4,8 +4,8 @@
             <header class="flex flex-row not-prose">
                 <div class="flex-1">
                     <div class="flex items-center space-x-4 user-popover">
-                        <x-avatar search="{{ $reply->user->emailAddress() }}" :src="$reply->user->profile_image = ''"
-                            class="h-12 w-12 bg-gray-50 rounded-full" provider="gravatar" />
+                        <x-avatar search="{{ $reply->user->emailAddress() }}" :src="$reply->user->avatarUrl()"
+                            class="h-12 w-12 bg-gray-50 rounded-full" provider="gravatar"  alt="Avatar of {{ $reply->user->username }}"/>
                         <div class="font-medium">
                             <a class="user-popover dark:text-white" href="/users/{{ $reply->user->username }}"
                                 id="user{{ $reply->id }}-{{ $reply->user_id }}">{{ $reply->user->username() }}
@@ -39,7 +39,7 @@
                                         </x-dropdown-link>
                                     </li>
                                 @endcan
-                                @can('update', $reply)
+                                @can('delete', $reply)
                                     <li>
                                         <x-dropdown-link wire:click="delete({{ $reply->id }})" class="text-rose-500">
                                             {{ __('Delete') }}
@@ -68,37 +68,41 @@
                             </button>
                         @else
                             @if ($canReply)
-                                <button type="button" @click="open = ! open"
-                                    class="reply-toggle flex justify-end items-center hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
-                                    <span x-text="open ? 'Hide ':' Reply'"></span>
-                                </button>
+                                @can('create', App\Models\Reply::class)
+                                    <button type="button" @click="open = ! open"
+                                        class="reply-toggle flex justify-end items-center hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                                        <span x-text="open ? 'Hide ':' Reply'"></span>
+                                    </button>
+                                @endcan
                             @endif
                         @endguest
                     </div>
                 </div>
                 @auth
-                    <div x-show="open" x-transition x-transition.top.duration.500ms x-cloak>
-                        <form wire:submit.prevent="reply" class="mt-4">
-                            @csrf
+                    @can('create', App\Models\Reply::class)
+                        <div x-show="open" x-transition x-transition.top.duration.500ms x-cloak>
+                            <form wire:submit.prevent="reply" class="mt-4">
+                                @csrf
 
-                            <div class="mb-5">
-                                {{-- <textarea id="editor2" wire:model="message"
-                                    class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-4 focus:ring-teal-500/20 focus:border-teal-600 block w-full p-2.5 focus:placeholder:placeholder-teal-600 focus:text-teal-600"
+                                <div class="mb-5">
+                                    {{-- <textarea id="editor2" wire:model="message"
+                                    class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-4 focus:ring-skin-500/20 focus:border-skin-600 block w-full p-2.5 focus:placeholder:placeholder-skin-600 focus:text-skin-600"
                                     name="description" maxlength="200" rows="4"></textarea> --}}
-                                <x-milkdown>
-                                    <div class="hidden">
-                                        <x-markdown flavor="github" anchors theme="github-dark">
-                                            {!! $body !!}
-                                        </x-markdown>
-                                    </div>
-                                </x-milkdown>
-                            </div>
-                            <x-buttons.secondary type="submit">{{ __('Reply') }}
-                            </x-buttons.secondary>
-                            <x-buttons.primary class="ml-4" @click="open = ! open">{{ __('Cancel') }}
-                            </x-buttons.primary>
-                        </form>
-                    </div>
+                                    <x-milkdown>
+                                        <div class="hidden">
+                                            <x-markdown flavor="github" anchors theme="github-dark">
+                                                {!! $body !!}
+                                            </x-markdown>
+                                        </div>
+                                    </x-milkdown>
+                                </div>
+                                <x-buttons.secondary type="submit">{{ __('Reply') }}
+                                </x-buttons.secondary>
+                                <x-buttons.primary class="ml-4" @click="open = ! open">{{ __('Cancel') }}
+                                </x-buttons.primary>
+                            </form>
+                        </div>
+                    @endcan
                     @can('update', $reply)
                         <div x-show="editReply" x-transition x-transition.top.duration.500ms x-cloak>
                             <livewire:edit-reply :body="$reply->body()" :reply_id="$reply->id" wire:key="edit-{{ $reply->id }}" />

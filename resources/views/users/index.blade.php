@@ -3,5 +3,4 @@
         <x-sidebar :topTags="true"/>
     </x-slot>
     <livewire:users.index />
-
 </x-app-layout>

@@ -11,9 +11,10 @@ class BaseLayout extends Component
      *
      * @return void
      */
-    public function __construct()
+    public $page;
+    public function __construct($page=null)
     {
-        //
+        $this->page=$page;
     }
 
     /**

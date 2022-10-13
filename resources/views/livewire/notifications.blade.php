@@ -131,7 +131,7 @@
                                             </div>
                                         </div>
 
-                                        <a href="/blogs/{{ Str::slug($unreadNotification->data['title'], '-') }}-{{ $unreadNotification->data['id'] }}"
+                                        <a href="/blogs/{{ $unreadNotification->data['slug'] }}"
                                             class="link link-secondary">
                                             <h5
                                                 class="mb-2 text-2xl font-bold line-clamp-3  tracking-wide text-gray-900  dark:text-white ">
@@ -148,7 +148,7 @@
                                                 {{ \Carbon\Carbon::parse($unreadNotification->data['created_at'])->diffForhumans() }}</span>
                                         </p>
                                         <x-buttons.secondary
-                                            href="/blogs/{{ Str::slug($unreadNotification->data['title'], '-') }}-{{ $unreadNotification->data['id'] }}"
+                                            href="/blogs/{{ $unreadNotification->data['slug'] }}"
                                             class="mt-5 sm:hidden" fullWidth="true">Read Blog</x-buttons.secondary>
                                     </div>
                                     <div class="basis-1/3 relative text-center min-h-fit">
@@ -205,7 +205,7 @@
                                     </div>
                                 </div>
 
-                                <a href="/blogs/{{ Str::slug($notification->data['title'], '-') }}-{{ $notification->data['id'] }}"
+                                <a href="/blogs/{{ $notification->data['slug'] }}"
                                     class="link link-secondary">
                                     <h5
                                         class="mb-2 text-2xl font-bold line-clamp-3  tracking-wide text-gray-900  dark:text-white ">
@@ -222,7 +222,7 @@
                                         {{ \Carbon\Carbon::parse($notification->data['created_at'])->diffForhumans() }}</span>
                                 </p>
                                 <x-buttons.secondary
-                                    href="/blogs/{{ Str::slug($notification->data['title'], '-') }}-{{ $notification->data['id'] }}"
+                                    href="/blogs/{{ $notification->data['slug'] }}"
                                     class="mt-5 sm:hidden" fullWidth="true">Read Blog</x-buttons.secondary>
                             </div>
                             <div class="basis-1/3 relative text-center min-h-fit">

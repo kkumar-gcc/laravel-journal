@@ -5,7 +5,7 @@ namespace App\Policies;
 use App\Models\Blog;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Auth\Access\Response;
+use Illuminate\Contracts\Auth\Access\Gate;
 
 class BlogPolicy
 {
@@ -29,11 +29,24 @@ class BlogPolicy
      * @param  \App\Models\Blog  $blog
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Blog $blog)
+    public function view(?User $user, Blog $blog)
     {
-        return  $user->id === $blog->user_id
-        ? Response::allow()
-        : Response::deny('This action is forbidden.');
+        if ($blog->published) {
+            return true;
+        }
+
+        // visitors cannot view unpublished items
+        if ($user === null) {
+            return false;
+        }
+
+        // admin overrides published status
+        if ($user->can('view unpublished posts')) {
+            return true;
+        }
+
+        // authors can view their own unpublished blogs
+        return $user->id == $blog->user_id;
     }
 
     /**
@@ -44,7 +57,9 @@ class BlogPolicy
      */
     public function create(User $user)
     {
-        //
+        if ($user->can('create blogs')) {
+            return true;
+        }
     }
 
     /**
@@ -56,9 +71,13 @@ class BlogPolicy
      */
     public function update(User $user, Blog $blog)
     {
-        return  $user->id === $blog->user_id
-        ? Response::allow()
-        : Response::deny('This action is forbidden.');
+        if ($user->can('edit all blogs')) {
+            return true;
+        }
+        
+        if ($user->can('edit own blogs')) {
+            return $user->id == $blog->user_id;
+        }
     }
 
     /**
@@ -70,7 +89,13 @@ class BlogPolicy
      */
     public function delete(User $user, Blog $blog)
     {
-        //
+        if ($user->can('delete all blogs')) {
+            return true;
+        }
+
+        if ($user->can('delete own blogs')) {
+            return $user->id == $blog->user_id;
+        }
     }
 
     /**

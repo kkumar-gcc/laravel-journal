@@ -14,11 +14,11 @@
             <div x-show="modal" x-transition="" x-on:click="modal = false"
                 class="relative flex min-h-screen items-center justify-center p-4" style="display: none;">
                 <div x-on:click.stop="" x-trap.noscroll.inert="modal"
-                    class="relative w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-12  shadow-2xl">
+                    class="relative w-full max-w-2xl overflow-y-auto rounded-xl bg-skin-base p-12  shadow-2xl">
                     <header class="flex items-center ">
                         <h5 class="text-3xl font-extrabold line-clamp-3  tracking-wide text-gray-700"></h5>
                         <div class="flex-1 flex justify-end">
-                            <x-buttons.primary @click="modal=false" class="hover:text-teal-600">
+                            <x-buttons.primary @click="modal=false" class="hover:text-skin-600">
                                 <svg class="h-6 w-6" viewBox="0 0 456 512" xmlns="http://www.w3.org/2000/svg"
                                     fill="currentColor">
                                     <title>cancel</title>
@@ -75,41 +75,45 @@
     <div class="">
         @auth
             @if ($canComment)
-                <div>
-                    <div class="flex items-center space-x-4 not-prose">
-                        <x-avatar search="{{ auth()->user()->emailAddress() }}" :src="auth()->user()->profile_image = ''"
-                            class="h-10 w-10 bg-gray-50 rounded-full" provider="gravatar" />
-                        <div class="space-y-1 font-medium ">
-                            <p>Add a comment</p>
+                @can('create', App\Models\Comment::class)
+                    <div>
+                        <div class="flex items-center space-x-4 not-prose">
+                            <x-avatar search="{{ auth()->user()->emailAddress() }}" :src="auth()->user()->avatarUrl()"
+                                class="h-10 w-10 bg-gray-50 rounded-full" provider="gravatar"  alt="Avatar of {{ auth()->user()->username }}"/>
+                            <div class="space-y-1 font-medium ">
+                                <p>Add a comment</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="mt-4">
-                        <form wire:submit.prevent="comment">
-                            @csrf
-                            <div class="mb-5 ">
-                                {{-- <div wire:ignore>
+                        <div class="mt-4">
+                            <form wire:submit.prevent="comment">
+                                @csrf
+                                <div class="mb-5 ">
+                                    {{-- <div wire:ignore>
                                     <div wire:model="message" id="editor" class="relative">
                                         {{ $message }}
                                     </div>
                                 </div> --}}
-                                <div class="container mx-auto">
-                                    <x-milkdown />
+                                    <div class="container mx-auto">
+                                        <x-milkdown />
+                                    </div>
                                 </div>
-                            </div>
-                            <x-buttons.secondary type="submit">
-                                {{ __('Comment') }}
-                            </x-buttons.secondary>
-                        </form>
+                                <x-buttons.secondary type="submit">
+                                    {{ __('Comment') }}
+                                </x-buttons.secondary>
+                            </form>
+                        </div>
                     </div>
-                </div>
+                    <hr>
+                @endcan
             @else
                 <div class="not-prose">
                     <div
-                        class="flex flex-col items-center justify-center  px-8 py-8 mb-4 text-sm text-[#1f2833] leading-6 border not-prose  border-teal-200 bg-teal-50 rounded-xl dark:bg-[#fddfd8] ">
+                        class="flex flex-col items-center justify-center  px-8 py-8 mb-4 text-sm text-[#1f2833] leading-6 border not-prose  border-skin-200 bg-skin-50 rounded-xl dark:bg-[#fddfd8] ">
                         <p class="text-base">Comments are turned off . <a href="#"
-                                class="font-black text-teal-600">learn more</a></p>
+                                class="font-black text-skin-600">learn more</a></p>
                     </div>
                 </div>
+                <hr>
             @endif
         @else
             <x-cards.primary-card class="flex items-center w-full p-4 space-x-4 not-prose">
@@ -119,8 +123,9 @@
                     <p>Add a comment</p>
                 </div>
             </x-cards.primary-card>
+            <hr>
         @endauth
-        <hr>
+
         <div class="my-3" id="comments" x-data="{ showReply: false, openEdit: 0 }">
             @foreach ($comments as $comment)
                 <x-cards.primary-card class="p-3 md:p-6 group" :default=false x-data="{
@@ -131,12 +136,13 @@
                     set editComment(value) {
                         this.openEdit = value ? this.id : null
                     },
-                }" id="comment-{{ $comment->id }}">
+                }"
+                    id="comment-{{ $comment->id }}">
                     <header class="flex flex-row not-prose">
                         <div class="flex-1">
                             <div class="flex items-center space-x-4">
-                                <x-avatar search="{{ $comment->user->emailAddress() }}" :src="$comment->user->profile_image = ''"
-                                    class="h-12 w-12 bg-gray-50 rounded-full" provider="gravatar" />
+                                <x-avatar search="{{ $comment->user->emailAddress() }}" :src="$comment->user->avatarUrl()"
+                                    class="h-12 w-12 bg-gray-50 rounded-full" provider="gravatar"  alt="Avatar of {{ $comment->user->username }}"/>
                                 <div class="font-medium ">
                                     <a class="user-popover dark:text-white"
                                         href="/users/{{ $comment->user->username }}"
@@ -190,37 +196,39 @@
                             </x-dropdown>
                         </div>
                     </header>
-                    <div class="my-3 prose max-w-none sm:max-w-full prose-img:rounded-xl prose-a:text-teal-600 ">
+                    <div class="my-3 prose max-w-none sm:max-w-full prose-img:rounded-xl prose-a:text-skin-600 ">
                         <div x-show="!editComment">
                             <x-markdown flavor="github">
                                 {!! $comment->body() !!}
                             </x-markdown>
                         </div>
-                        <div class="mt-8" x-show="editComment" x-cloak @keyup.enter>
-                            <form wire:submit.prevent="update({{ $comment->id() }})" class="mt-4">
-                                @csrf
-                                <div class="mb-5">
-                                    {{-- <div wire:model="body" wire:ignore id="editor1" class="relative">
+                        @can('update', $comment)
+                            <div class="mt-8" x-show="editComment" x-cloak @keyup.enter>
+                                <form wire:submit.prevent="update({{ $comment->id() }})" class="mt-4">
+                                    @csrf
+                                    <div class="mb-5">
+                                        {{-- <div wire:model="body" wire:ignore id="editor1" class="relative">
                                     </div> --}}
-                                    <x-milkdown>
-                                        <div class="hidden">
-                                            <x-markdown flavor="github" anchors>
-                                                {!! $comment->body() !!}
-                                            </x-markdown>
-                                        </div>
-                                    </x-milkdown>
+                                        <x-milkdown>
+                                            <div class="hidden">
+                                                <x-markdown flavor="github" anchors>
+                                                    {!! $comment->body() !!}
+                                                </x-markdown>
+                                            </div>
+                                        </x-milkdown>
 
 
-                                </div>
-                                <x-buttons.secondary class="inline-flex mr-4" type="submit"
-                                    @click="editComment = ! editComment">
-                                    {{ __('Edit') }}
-                                </x-buttons.secondary>
-                                <x-buttons.primary @click="editComment=false" wire:click="$emit('destroyEditor')">
-                                    {{ __('Cancel') }}
-                                </x-buttons.primary>
-                            </form>
-                        </div>
+                                    </div>
+                                    <x-buttons.secondary class="inline-flex mr-4" type="submit"
+                                        @click="editComment = ! editComment">
+                                        {{ __('Edit') }}
+                                    </x-buttons.secondary>
+                                    <x-buttons.primary @click="editComment=false" wire:click="$emit('destroyEditor')">
+                                        {{ __('Cancel') }}
+                                    </x-buttons.primary>
+                                </form>
+                            </div>
+                        @endcan
                     </div>
                     <footer class="mt-2" x-data="{ open: false }">
                         <div class="flex flew-row">
@@ -245,31 +253,35 @@
                                     </button>
                                 @else
                                     @if ($canComment)
-                                        <button type="button" @click="open = ! open"
-                                            class="reply-toggle flex justify-end items-center hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
-                                            <span x-text="open ? 'Hide ':' Reply'"></span>
-                                        </button>
+                                        @can('create', App\Models\Reply::class)
+                                            <button type="button" @click="open = ! open"
+                                                class="reply-toggle flex justify-end items-center hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                                                <span x-text="open ? 'Hide ':' Reply'"></span>
+                                            </button>
+                                        @endcan
                                     @endif
                                 @endguest
                             </div>
                         </div>
                         @auth
-                            <div x-show="open" x-transition x-transition.top.duration.500ms x-cloak>
-                                <form wire:submit.prevent="reply({{ $comment->id }})" class="mt-4">
-                                    @csrf
-                                    <div class="mb-5">
-                                        {{-- <div wire:model="message" wire:ignore id="editor{{ $comment_id }}"
+                            @can('create', App\Models\Reply::class)
+                                <div x-show="open" x-transition x-transition.top.duration.500ms x-cloak>
+                                    <form wire:submit.prevent="reply({{ $comment->id }})" class="mt-4">
+                                        @csrf
+                                        <div class="mb-5">
+                                            {{-- <div wire:model="message" wire:ignore id="editor{{ $comment_id }}"
                                             class="replyeditor relative">
                                         </div> --}}
-                                        <x-milkdown>
-                                        </x-milkdown>
-                                    </div>
-                                    <x-buttons.secondary type="submit">{{ __('Reply') }}
-                                    </x-buttons.secondary>
-                                    <x-buttons.primary class="ml-4" @click="open=false">{{ __('Cancel') }}
-                                    </x-buttons.primary>
-                                </form>
-                            </div>
+                                            <x-milkdown>
+                                            </x-milkdown>
+                                        </div>
+                                        <x-buttons.secondary type="submit">{{ __('Reply') }}
+                                        </x-buttons.secondary>
+                                        <x-buttons.primary class="ml-4" @click="open=false">{{ __('Cancel') }}
+                                        </x-buttons.primary>
+                                    </form>
+                                </div>
+                            @endcan
                         @endauth
                     </footer>
                 </x-cards.primary-card>

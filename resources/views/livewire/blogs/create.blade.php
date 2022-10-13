@@ -2,7 +2,7 @@
     @csrf
     <div class="p-4 flex flex-row items-center">
         <div class="">
-            <x-buttons.primary href="/blogs" class="hover:text-teal-600 mr-4">
+            <x-buttons.primary href="/blogs" class="hover:text-skin-600 mr-4">
                 <svg class="h-6 w-6" viewBox="0 0 456 512" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
                     <title>cancel</title>
                     <path
@@ -21,20 +21,20 @@
                         <x-buttons.primary x-on:click="previewModal = true" class="mr-2 md:mr-4">
                             <span class="hidden md:block">{{ __('preview') }}</span>
                             <span
-                                class="hover:text-teal-600 md:hidden">{{ svg('iconsax-bul-book-saved', 'h-6 w-6') }}</span>
+                                class="hover:text-skin-600 md:hidden">{{ svg('iconsax-bul-book-saved', 'h-6 w-6') }}</span>
                         </x-buttons.primary>
                     </x-slot:title>
                     <div
-                        class="relative my-10 prose max-w-none lg:max-w-full xl:max-w-none prose-img:rounded-xl prose-img:w-full mx-auto  prose-a:no-underline  dark:prose-invert prose-a:text-teal-600 dark:prose-a:text-teal-500 min-h-fit h-auto">
+                        class="relative my-10 prose max-w-none lg:max-w-full xl:max-w-none prose-img:rounded-xl prose-img:w-full mx-auto  prose-a:no-underline  dark:prose-invert prose-a:text-skin-600 dark:prose-a:text-skin-500 min-h-fit h-auto">
                         {{-- <div class="not-prose">
                             @foreach ($blog->tags as $tag)
                                 <x-tag :tag=$tag id="tag{{ $blog->id }}-{{ $tag->id }}" />
                             @endforeach
                         </div> --}}
-                        @if ($photo)
+                        @if ($coverImage)
                             <div class="relative  pt-[60%] rounded-xl sm:pt-[50%] md:pt-[42%] ">
-                                <img class="absolute top-0 bottom-0 left-0 right-0 w-full h-full m-0 bg-white shadow-md object-fit rounded-xl drop-shadow-md dark:bg-gray-800"
-                                    src="{{ $photo->temporaryUrl() }}" alt="" />
+                                <img class="absolute top-0 bottom-0 left-0 right-0 w-full h-full m-0 bg-skin-base shadow-md object-fit rounded-xl drop-shadow-md dark:bg-gray-800"
+                                    src="{{ $coverImage->temporaryUrl() }}" alt="" />
                             </div>
                         @endif
                         <div class="my-5">
@@ -55,8 +55,8 @@
             <div>
                 <x-buttons.primary class="mr-2 md:mr-4" wire:click="draft">
                     <span class="hidden md:block">{{ __('Save as draft') }}</span>
-
-                    <span class="hover:text-teal-600 md:hidden">{{ svg('iconsax-bul-book-saved', 'h-6 w-6') }}</span>
+                    <span
+                        class="hover:text-skin-600 md:hidden">{{ svg('iconsax-bul-book-saved', 'h-6 w-6') }}</span>
                 </x-buttons.primary>
             </div>
             <div>
@@ -65,18 +65,18 @@
                         Blog Settings
                     </x-slot:header>
                     <x-slot:title>
-                        <x-buttons.primary x-on:click="isModalOpen = true" class="hover:text-teal-600 mr-2 md:mr-4">
+                        <x-buttons.primary x-on:click="isModalOpen = true" class="hover:text-skin-600 mr-2 md:mr-4">
                             {{ svg('iconsax-bul-setting-2', 'h-6 w-6') }}
                         </x-buttons.primary>
                     </x-slot:title>
                     <div class=" my-6">
                         <label class="text-xl font-bold line-clamp-3  tracking-wide  block mb-2  text-gray-700"
                             for="name">Add a cover image</label>
-                        @if ($photo)
-                            Photo Preview:
+                        @if ($coverImage)
+                            coverImage Preview:
                             <div class="relative  pt-[60%] rounded-xl sm:pt-[50%] md:pt-[42%] ">
-                                <img class="absolute top-0 bottom-0 left-0 right-0 w-full h-full m-0 bg-white shadow-md object-fit rounded-xl drop-shadow-md dark:bg-gray-800"
-                                    src="{{ $photo->temporaryUrl() }}" alt="" />
+                                <img class="absolute top-0 bottom-0 left-0 right-0 w-full h-full m-0 bg-skin-base shadow-md object-fit rounded-xl drop-shadow-md dark:bg-gray-800"
+                                    src="{{ $coverImage->temporaryUrl() }}" alt="" />
                             </div>
                         @endif
                         <div x-data="{ isUploading: false, progress: 0 }" x-on:livewire-upload-start="isUploading = true"
@@ -86,7 +86,7 @@
 
                             <!-- File Input -->
 
-                            <input type="file" wire:model="photo"
+                            <input type="file" wire:model="coverImage"
                                 class="text-sm my-4 py-4 px-2 text-grey-500
                             file:mr-5 file:py-3 file:px-10
                             file:rounded-lg
@@ -94,7 +94,7 @@
                             file:shadow-sm
                             hover:file:shadow-md
                             file:text-md file:font-semibold
-                          file:bg-white
+                          file:bg-skin-base
                             hover:file:cursor-pointer hover:file:opacity-80
                           ">
                             <!-- Progress Bar -->
@@ -106,17 +106,16 @@
                             </div>
 
                         </div>
-                        @error('photo')
+                        @error('coverImage')
                             <span class="error">{{ $message }}</span>
                         @enderror
                     </div>
-                    <div class=" my-6">
+                    <div class="my-4">
                         <label class="text-xl font-bold line-clamp-3  tracking-wide  block mb-2  text-gray-700"
                             for="canonical_link">Customize Canonical Link</label>
-                        <input type="text" id="canonical_link"
-                            class="border border-gray-300 text-gray-600 text-base font-bold focus:shadow-md focus:ring-4 focus:ring-teal-500/20 focus:border-teal-600 block w-full p-3.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-4 dark:focus:border-teal-500"
-                            name="canonical_link" value="{{ old('canonical_link', $blog->canonical_link ?? '') }}"
+                        <x-form.input-field type="text" id="canonical_link" wire:model="title"
                             placeholder="Type the canonical link" />
+                        <x-error field="canonical_link" class="text-rose-500" />
                     </div>
                     <div class=" my-6">
                         <div x-data="{ tags: @entangle('tags'), newTag: '' }">
@@ -136,14 +135,12 @@
                                         </button>
                                     </span>
                                 </template>
-
-                                <input type="text" wire:model="search"
+                                <x-form.input-field type="text" wire:model="search"
                                     @keydown.enter.prevent="if (newTag.trim() !== '' && !tags.includes(newTag)) { tags.push(newTag.trim()); newTag = ''} newTag = ''"
                                     @keydown.space.prevent="if (newTag.trim() !== '') tags.push(newTag.trim()); newTag = ''"
                                     @keydown.backspace="if (newTag.trim() === '') tags.pop()" x-model="newTag"
                                     x-bind:placeholder="(tags.length < 5) ? 'Add tags . . .' : 'you can only choose 5 tags.'"
-                                    x-bind:disabled="(tags.length < 5) ? false: true"
-                                    class="border border-gray-300 text-gray-600 text-base font-bold focus:shadow-md focus:ring-4 focus:ring-teal-500/20 focus:border-teal-600 block w-full p-3.5  " />
+                                    x-bind:disabled="(tags.length < 5) ? false: true" />
                                 <p class="mt-2 mb-4 text-sm text-gray-700 font-semibold">press <kbd
                                         class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-md">Enter</kbd>
                                     or <kbd
@@ -155,7 +152,7 @@
                                         <div class="z-50 mt-2 w-full origin-top-left left-0 shadow-md ">
                                             @foreach ($searchTags as $tag)
                                                 <button
-                                                    class="last:rounded-b-lg w-full ring-1 px-4 py-3.5 ring-black ring-opacity-5  bg-white hover:cursor-pointer"
+                                                    class="last:rounded-b-lg w-full ring-1 px-4 py-3.5 ring-black ring-opacity-5  bg-skin-base hover:cursor-pointer"
                                                     @click.prevent="if (tags.length<5 && !tags.includes('{{ $tag->title }}')) tags.push('{{ $tag->title }}') newTag = ''">
 
                                                     <span
@@ -182,15 +179,10 @@
     </div>
     <div class=" mt-2 text-gray-700 px-6 sm:mt-6 md:px-20">
         <h1 class="text-3xl font-extrabold line-clamp-3  tracking-wide text-gray-700 mb-4">Create Blog</h1>
-
-        {{-- <x-auth-validation-errors class="mb-4" :errors="$errors" /> --}}
-
-        <div class=" my-6">
+        <div class="my-4">
             <label class="text-xl font-bold line-clamp-3  tracking-wide  block mb-2  text-gray-700" for="title">Title
                 of blog</label>
-            <input type="text" id="title" wire:model="title"
-                class="border border-gray-300 text-gray-600 text-base font-bold focus:ring-4 focus:shadow-md focus:ring-teal-500/20 focus:border-teal-600 block w-full p-3.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-4 dark:focus:border-teal-500"
-                name="title" placeholder="Tittle . . . ." />
+            <x-form.input-field type="text" id="title" wire:model="title" placeholder="Tittle . . . ." />
             <x-error field="title" class="text-rose-500" />
         </div>
         <x-error field="body" class="text-rose-500" />

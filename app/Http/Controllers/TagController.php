@@ -18,19 +18,19 @@ class TagController extends Controller
     {
         if ($request->tab == 'name') {
             $tags = Tag::withCount(['blogs' => function ($q) {
-                $q->where('status', '=', "posted");
+                $q->published();
             }])->orderBy('title')->paginate(18);
         } else if ($request->tab == 'newest') {
             $tags = Tag::withCount(['blogs' => function ($q) {
-                $q->where('status', '=', "posted");
+                $q->published();
             }])->orderByDesc('created_at')->paginate(18);
         } else  if ($request->tab == 'popular') {
             $tags = Tag::withCount(['blogs' => function ($q) {
-                $q->where('status', '=', "posted");
+                $q->published();
             }])->orderByDesc('blogs_count')->paginate(18);
         } else {
             $tags = Tag::withCount(['blogs' => function ($q) {
-                $q->where('status', '=', "posted");
+                $q->published();
             }])->paginate(18);
         }
         return view('tags.index')->with(["tags" => $tags]);

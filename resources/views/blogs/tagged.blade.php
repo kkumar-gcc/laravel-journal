@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout >
     <x-slot name="sidebar">
         <x-sidebar />
     </x-slot>
@@ -9,9 +9,7 @@
                 <x-tag :tag=$searchTag id="tag-{{ $searchTag->id }}" class="not-prose" />
             </header>
             <div class="px-4 py-3 text-gray-700 last:rounded-b-lg ">
-                <p class="mb-3">Some quick example text to build on the card title and make up the
-                    bulk of
-                    the card's content.</p>
+                <p class="mb-3">{{$searchTag->description}}</p>
             </div>
         </x-cards.primary-card>
         <livewire:blogs.tagged :tag="$searchTag->title" />

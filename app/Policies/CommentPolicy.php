@@ -44,7 +44,9 @@ class CommentPolicy
      */
     public function create(User $user)
     {
-        //
+        if ($user->can('create comments')) {
+            return true;
+        }
     }
 
     /**
@@ -56,9 +58,13 @@ class CommentPolicy
      */
     public function update(User $user, Comment $comment)
     {
-        return $user->id === $comment->user_id
-            ? Response::allow()
-            : Response::deny('This action is forbidden.');
+        if ($user->can('edit all comments')) {
+            return true;
+        }
+
+        if ($user->can('edit own comments')) {
+            return $user->id == $comment->user_id;
+        }
     }
 
     /**
@@ -70,9 +76,12 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment)
     {
-        return $user->id === $comment->user_id
-            ? Response::allow()
-            : Response::deny('This action is forbidden.');
+        if ($user->can('delete all comments')) {
+            return true;
+        }
+        if ($user->can('delete own comments')) {
+            return $user->id == $comment->user_id;
+        }
     }
 
     /**

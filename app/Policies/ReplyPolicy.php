@@ -42,7 +42,9 @@ class ReplyPolicy
      */
     public function create(User $user)
     {
-        //
+        if ($user->can('create replies')) {
+            return true;
+        }
     }
 
     /**
@@ -54,9 +56,13 @@ class ReplyPolicy
      */
     public function update(User $user, Reply $reply)
     {
-        return $user->id === $reply->user_id
-            ? Response::allow()
-            : Response::deny('This action is forbidden.');
+        if ($user->can('edit all replies')) {
+            return true;
+        }
+
+        if ($user->can('edit own replies')) {
+            return $user->id == $reply->user_id;
+        }
     }
 
     /**
@@ -68,9 +74,13 @@ class ReplyPolicy
      */
     public function delete(User $user, Reply $reply)
     {
-        return $user->id === $reply->user_id
-            ? Response::allow()
-            : Response::deny('This action is forbidden.');
+        if ($user->can('delete all replies')) {
+            return true;
+        }
+
+        if ($user->can('delete own replies')) {
+            return $user->id == $reply->user_id;
+        }
     }
 
     /**

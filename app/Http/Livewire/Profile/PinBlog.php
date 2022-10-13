@@ -18,7 +18,7 @@ class PinBlog extends Component
     public function render()
     {
         $this->pins = BlogPin::where("user_id", "=", auth()->user()->id)->get();
-        $this->blogs = Blog::where("user_id", "=", auth()->user()->id)->where([['status', '=', 'posted'], ["is_pinned", "=", false]])->paginate(5);
+        $this->blogs = Blog::where([["user_id", "=",auth()->user()->id],["is_pinned", "=", false]])->published()->paginate(5);
         return view('livewire.profile.pin-blog')
             ->with(["pins" => $this->pins, "blogs" => $this->blogs]);
     }

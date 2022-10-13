@@ -10,9 +10,13 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Support\Facades\Storage;
+use RalphJSmit\Laravel\SEO\Support\HasSEO;
+use RalphJSmit\Laravel\SEO\Support\SEOData;
+
 class Blog extends Model
 {
-    use HasFactory,SoftDeletes,Sluggable;
+    use HasFactory, SoftDeletes, Sluggable, HasSEO;
     protected $fillable = [
         'user_id',
         'title',
@@ -20,7 +24,7 @@ class Blog extends Model
         'cover_image',
         'meta_description',
         'meta_title',
-        "status",
+        "published",
         'slug'
     ];
     public function title(): string
@@ -60,6 +64,11 @@ class Blog extends Model
     {
         $minutes = round(str_word_count($this->body()) / 200);
         return $minutes == 0 ? 1 : $minutes;
+    }
+    public function coverImage(){
+        return $this->cover_image
+        ? Storage::disk('images')->url($this->cover_image)
+        : 'https://live.staticflickr.com/65535/52390100407_ac668fab12_h.jpg';
     }
     // public function toFeedItem():FeedItem{
     //     return FeedItem::create()
@@ -102,28 +111,38 @@ class Blog extends Model
     {
         return $this->bookmarks()->where('user_id', '=', auth()->user()->id)->exists();
     }
-    public function scopeFilter($query){
+    public function scopeFilter($query)
+    {
         // if($filters['query'] ?? false){
-            $query->where("status", "=", "posted")->with(['user','tags','bloglikes','blogviews']);
+        $query->published()->with(['user', 'tags', 'bloglikes', 'blogviews']);
         // }
 
     }
     // public function scopeTag(Builder $query)
     public function scopeFeatured($query): Builder
     {
-         return $query->where('featured',true);
+        return $query->where('featured', true);
     }
+
     public function scopePublished($query): Builder
     {
-         return $query->where([['status','posted'],['access',"!=","private"]]);
+        return $query->where('published', 1);
     }
+    public function scopeUnPublished($query): Builder
+    {
+        return $query->where('published', 0);
+    }
+    // public function scopePublished($query): Builder
+    // {
+    //      return $query->where([['status','posted'],['access',"!=","private"]]);
+    // }
     public function scopeRecentAsc($query): Builder
     {
-        return $query->orderBy('title','asc');
+        return $query->orderBy('title', 'asc');
     }
     public function scopeRecent($query): Builder
     {
-        return $query->orderBy('created_at','desc');
+        return $query->orderBy('created_at', 'desc');
     }
     public function scopePopular($query): Builder
     {
@@ -145,5 +164,13 @@ class Blog extends Model
                 'source' => 'title'
             ]
         ];
+    }
+    public function getDynamicSEOData(): SEOData
+    {
+        return new SEOData(
+            title: $this->title,
+            description: $this->excerpt(),
+            author: $this->user->username,
+        );
     }
 }

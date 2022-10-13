@@ -16,14 +16,14 @@
 
             <button id="tagShortDropdownButton" data-dropdown-toggle="tagShortDropdown"
                 data-dropdown-placement="bottom-end"
-                class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-2 focus:ring-gray-200 font-medium text-center inline-flex items-center rounded-lg text-sm px-5 py-2.5  dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                class="text-gray-900 bg-skin-base border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-2 focus:ring-gray-200 font-medium text-center inline-flex items-center rounded-lg text-sm px-5 py-2.5  dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
                 type="button">Sort By <svg class="ml-2 w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor"
                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
             </button>
             <div id="tagShortDropdown"
-                class="hidden z-10  bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700"
+                class="hidden z-10  bg-skin-base rounded divide-y divide-gray-100 shadow dark:bg-gray-700"
                 data-popper-reference-hidden="" data-popper-escaped="" data-popper-placement="bottom-end">
                 <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="tagShortDropdownButton">
                     <li>

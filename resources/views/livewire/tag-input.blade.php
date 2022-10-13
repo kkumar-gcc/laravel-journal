@@ -26,13 +26,13 @@
         <input type="text" wire:model.lazy="search" @keydown.enter.prevent
             x-bind:placeholder="(tags.length < 5) ? 'Add tags . . .' : 'you can only choose 5 tags.'"
             x-bind:disabled="(tags.length < 5) ? false: true"
-            class="border border-gray-300 text-gray-600 text-base font-bold focus:shadow-md focus:ring-4 focus:ring-teal-500/20 focus:border-teal-600 block w-full p-3.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-4 dark:focus:border-teal-500" />
+            class="border border-gray-300 text-gray-600 text-base font-bold focus:shadow-md focus:ring-4 focus:ring-skin-500/20 focus:border-skin-600 block w-full p-3.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-4 dark:focus:border-skin-500" />
 
         <div :class="(tags.length < 5) ? '' : 'hidden'">
             <div class="z-50 mt-2 w-full origin-top-left left-0">
                 @forelse($searchTags as $tag)
                     <button
-                        class="shadow-md last:rounded-b-lg w-full ring-1 px-4 py-3.5 ring-black ring-opacity-5  bg-white hover:cursor-pointer"
+                        class="shadow-md last:rounded-b-lg w-full ring-1 px-4 py-3.5 ring-black ring-opacity-5  bg-skin-base hover:cursor-pointer"
                         @click.prevent="if (tags.length<5 && !tags.includes('{{ $tag->title }}')) tags.push('{{ $tag->title }}')">
 
                         <span

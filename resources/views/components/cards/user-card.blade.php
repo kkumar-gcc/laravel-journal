@@ -4,9 +4,7 @@
     <div class="py-3 px-4 rounded-xl not-prose dark:bg-gray-800 ">
         <header class="flex flex-col md:flex-row">
             <div class="flex-1 flex items-center ">
-                <img class="w-10 h-10 rounded-full" src="{{ asset($user->profile_image) }}"
-                    onerror="this.onerror=null;this.src=`https://avatars.dicebear.com/api/bottts/:{{ $user->username() }}.svg`"
-                    alt="">
+                <img class="w-10 h-10 rounded-full" src="{{ $user->avatarUrl()}}" alt="avatar of {{ $user->username }}">
                 <div class="ml-2 font-medium ">
                     <div class="dark:text-white">
                         <a href="/users/{{ $user->username() }}">{{ $user->username() }} </a>

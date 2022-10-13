@@ -10,7 +10,7 @@ class TopBlogs extends Component
     public $blogs;
     public function mount()
     {
-        $this->blogs =Blog::select(['id', 'title', 'created_at'])->where("status", "=", "posted")->withCount('blogviews')->orderByDesc('blogviews_count')->limit(5)->get();
+        $this->blogs =Blog::select(['id', 'title', 'created_at'])->published()->withCount('blogviews')->orderByDesc('blogviews_count')->limit(5)->get();
     }
     public function render()
     {

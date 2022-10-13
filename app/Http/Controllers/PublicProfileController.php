@@ -27,7 +27,7 @@ class PublicProfileController extends Controller
             if ($request->tab == 'blogs') {
                 $tab = 'blogs';
                 $pins = BlogPin::where("user_id", "=", $id)->get();
-                $blogs = Blog::with('user','tags')->where("user_id", "=", $id)->where([['status', '=', 'posted'], ["is_pinned", "=", false]])->paginate(5);
+                $blogs = Blog::with('user','tags')->where([["user_id", "=", $id],["is_pinned", "=", false]])->published()->paginate(5);
                 return view("profile.public.index")->with([
                     "user" => $user,
                     "pins" => $pins,
@@ -62,27 +62,6 @@ class PublicProfileController extends Controller
             }
         }
     }
-    // public function detailCard(Request $request)
-    // {
-    //     $userId = $request->get('userId');
-
-    //     $user = User::query()->where('id', '=', $userId)
-    //         ->withCount('friendships')->first();
-    //     $friendship = NULL;
-    //     if (Auth::check()) {
-    //         $friendship = Friendship::where([
-    //             ["user_id", "=", $userId],
-    //             ["follower_id", "=", auth()->user()->id]
-    //         ])->count();
-    //     }
-
-    //     $html = view("profile.public.popover")
-    //         ->with([
-    //             "user" => $user,
-    //             "friendship" => $friendship,
-    //         ])->render();
-    //     return response()->json($html);
-    // }
     /**
      * Show the form for creating a new resource.
      *

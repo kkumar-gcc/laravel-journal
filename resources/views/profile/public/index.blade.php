@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout :page="$user">
     <x-slot name="sidebar">
         <x-sidebar :topTags="true">
             <div class="relative mt-3 w-full text-left  rounded-xl font-normal">
@@ -76,7 +76,7 @@
                     @endauth
                 </div>
             </div>
-            <div class="relative mt-3 w-full text-left  rounded-xl font-normal">
+            {{-- <div class="relative mt-3 w-full text-left  rounded-xl font-normal">
                 <header class="py-3 px-4 text-2xl font-bold tracking-wide text-gray-700 dark:text-white">
                   <h3> Personal Info</h3>
                 </header>
@@ -85,7 +85,7 @@
                         class="py-3 px-4  dark:hover:text-white hover:bg-gray-50 hover:shadow-sm dark:bg-gray-800 dark:hover:bg-gray-700">
 
                         <div class="flex flex-row">
-                            {{ svg('iconsax-bul-bag-happy','h-5 w-5 text-teal-500') }}
+                            {{ svg('iconsax-bul-bag-happy','h-5 w-5 text-skin-500') }}
                             <span class="ml-2">UI Manager / CSS Aficionado</span>
                         </div>
                     </li>
@@ -93,7 +93,7 @@
                         class="py-3 px-4  dark:hover:text-white hover:bg-gray-50 hover:shadow-sm dark:bg-gray-800 dark:hover:bg-gray-700">
 
                         <div class="flex flex-row">
-                            {{ svg('iconsax-bol-location','h-5 w-5 text-teal-500') }}
+                            {{ svg('iconsax-bol-location','h-5 w-5 text-skin-500') }}
                             <span class="ml-2">kanpur</span>
                         </div>
                     </li>
@@ -101,49 +101,26 @@
                         class="py-3 px-4  dark:hover:text-white hover:bg-gray-50 hover:shadow-sm dark:bg-gray-800 dark:hover:bg-gray-700">
 
                         <div class="flex flex-row">
-                            {{ svg('iconsax-bul-cake','h-5 w-5 text-teal-500') }}
+                            {{ svg('iconsax-bul-cake','h-5 w-5 text-skin-500') }}
                             <span class="ml-2">Member Since
                                 {{ \Carbon\Carbon::parse($user->created_at)->format('M , Y') }}</span>
                         </div>
                     </li>
                 </ul>
-            </div>
+            </div> --}}
         </x-sidebar>
     </x-slot>
-    <?php
-    function nice_number($n)
-    {
-        // $n = 0 + str_replace(',', '', $n);
-        if (!is_numeric($n)) {
-            return false;
-        }
-        if ($n > 1000000000000) {
-            return round($n / 1000000000000, 1) + 't ';
-        } elseif ($n > 1000000000) {
-            return round($n / 1000000000, 1) + 'b ';
-        } elseif ($n > 1000000) {
-            return round($n / 1000000, 1) + 'm ';
-        } elseif ($n > 1000) {
-            return round($n / 1000, 1) + 'k ';
-        }
-
-        return number_format($n);
-    }
-    ?>
-
-
-
     <div class="md:p-5 lg:p-7">
         <section class="p-2 w-full">
-            <header class="border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800">
+            <header class="border border-gray-200 dark:border-gray-700 rounded-lg bg-skin-base dark:bg-gray-800">
                 <div class="relative  pt-[60%] rounded-lg sm:pt-[30%] md:pt-[22%] ">
-                    <img class="absolute m-0 top-0 left-0 right-0 bottom-0 w-full h-full object-fit rounded-t-lg  bg-white dark:bg-gray-800"
-                        src="https://live.staticflickr.com/65535/52391254003_99ade44739_h.jpg" alt="" />
+                    <img class="absolute m-0 top-0 left-0 right-0 bottom-0 w-full h-full object-fit rounded-t-lg  bg-skin-base dark:bg-gray-800"
+                        src="{{ $user->backgroundImage() }}" alt="Background image of {{ $user->username }}" />
                 </div>
                 <div class="my-4 flex flex-col md:flex-row px-6">
                     <div class="basis-1/3 mb-4 w-full md:w-1/3 flex items-start justify-center relative">
                         <img class="-mt-24 z-10 w-40 h-40 rounded-full ring-8 ring-white dark:ring-gray-500"
-                            src="{{ $user->avatarurl() }}" alt="Bordered avatar">
+                            src="{{ $user->avatarurl() }}" alt="Avatar of {{ $user->username }}">
                     </div>
                     <div class="basis-2/3 mb-4 flex flex-col md:flex-row items-center justify-center md:items-start">
                         <div class="flex-1">
@@ -159,19 +136,19 @@
                     </div>
                 </div>
             </header>
-            <div class="mb-4  mt-4 overflow-y-hidden">
-                <ul class="flex flex-nowrap  whitespace-nowrap  -mb-px text-sm font-medium text-center" role="tablist">
+            <div class="mb-4  mt-4 overflow-y-hidden font-semibold">
+                <ul class="flex flex-nowrap  whitespace-nowrap  -mb-px text-base text-center" role="tablist">
                     <li class="mr-2" role="presentation">
-                        <a class="inline-block p-4 rounded-t-lg border-b-4  {{ $tab == 'about' ? 'text-teal-600 dark:text-teal-500  border-teal-600 dark:border-teal-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300  text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700 dark:hover:border-gray-300' }}"
+                        <a class="inline-block p-4 rounded-t-lg border-b-4  {{ $tab == 'about' ? 'text-skin-600 dark:text-skin-500  border-skin-600 dark:border-skin-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300  text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700 dark:hover:border-gray-300' }}"
                             href="{{ $user->username }}?tab=about#details" role="tab">About Me</a>
                     </li>
                     <li class="mr-2" role="presentation">
-                        <a class="inline-block p-4 rounded-t-lg border-b-4  {{ $tab == 'blogs' ? 'text-teal-600  dark:text-teal-500  border-teal-600 dark:border-teal-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700 dark:hover:border-gray-300' }}"
+                        <a class="inline-block p-4 rounded-t-lg border-b-4  {{ $tab == 'blogs' ? 'text-skin-600  dark:text-skin-500  border-skin-600 dark:border-skin-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700 dark:hover:border-gray-300' }}"
                             href="{{ $user->username }}?tab=blogs#details" role="tab">Blogs
                         </a>
                     </li>
                     <li class="mr-2" role="presentation">
-                        <a class="inline-block p-4 rounded-t-lg border-b-4  {{ $tab == 'bookmarks' ? 'text-teal-600 dark:text-teal-500  border-teal-600 dark:border-teal-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700 dark:hover:border-gray-300' }}"
+                        <a class="inline-block p-4 rounded-t-lg border-b-4  {{ $tab == 'bookmarks' ? 'text-skin-600 dark:text-skin-500  border-skin-600 dark:border-skin-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700 dark:hover:border-gray-300' }}"
                             href="{{ $user->username }}?tab=bookmarks#details" role="tab">Bookmarks
                         </a>
                     </li>

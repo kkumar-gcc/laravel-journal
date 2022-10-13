@@ -15,12 +15,12 @@
             show = true;
             setTimeout(() => show = false, 10000)
         })" x-cloack style="display:none">
-        <div class="bg-white  capatalize py-2 px-4 leading-6 inline-flex flex-row justify-center items-center no-underline rounded-md font-semibold cursor-pointer transition duration-200 ease-in-out shadow-sm shadow-gray-100">
+        <div class="bg-skin-base  capatalize py-2 px-4 leading-6 inline-flex flex-row justify-center items-center no-underline rounded-md font-semibold cursor-pointer transition duration-200 ease-in-out shadow-sm shadow-gray-100">
             edited
         </div>
     </div>
 
 </form> --}}
 <div>
-    hi there public 
+    hi there public
 </div>

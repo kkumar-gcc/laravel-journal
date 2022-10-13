@@ -6,11 +6,11 @@
         class="fixed top-0 left-0 z-[100] w-full h-full bg-black bg-opacity-80  outline-none overflow-x-hidden overflow-y-auto md:py-2">
         <div x-show="{{ $modal }}" x-trap.noscroll.inert="{{ $modal }}" x-cloak
             @click.away="{{ $modal }}=false" x-transition.duration.500ms
-            {{ $attributes->merge(['class' => 'relative  md:max-w-3xl md:rounded-xl bg-white p-6 md:p-12 mx-auto shadow-lg w-full h-full overflow-y-auto md:h-auto md:overflow-hidden']) }}>
+            {{ $attributes->merge(['class' => 'relative  md:max-w-3xl md:rounded-xl bg-skin-base p-6 md:p-12 mx-auto shadow-lg w-full h-full overflow-y-auto md:h-auto md:overflow-hidden']) }}>
             <header class="flex items-center">
                 <h5 class="text-3xl font-extrabold line-clamp-3  tracking-wide text-gray-700">{{ $header }}</h5>
                 <div class="flex-1 flex justify-end">
-                    <x-buttons.primary @click="{{ $modal }}=false" class="hover:text-teal-600">
+                    <x-buttons.primary @click="{{ $modal }}=false" class="hover:text-skin-600">
                         <svg class="h-6 w-6" viewBox="0 0 456 512" xmlns="http://www.w3.org/2000/svg"
                             fill="currentColor">
                             <title>cancel</title>
@@ -36,11 +36,11 @@
         <div x-show="{{ $modal }}" x-transition="" x-on:click="{{ $modal }} = false"
             class="relative flex min-h-screen items-center justify-center md:p-4" style="display: none;">
             <div x-on:click.stop="" x-trap.noscroll.inert="{{ $modal }}"
-                class="relative w-full min-h-screen md:h-auto  md:max-w-3xl overflow-y-auto md:rounded-xl bg-white p-6 md:p-12">
+                class="relative w-full md:h-auto  md:max-w-3xl overflow-y-auto md:rounded-xl bg-skin-base p-6 md:p-12">
                 <header class="flex items-center">
                     <h5 class="text-3xl font-extrabold line-clamp-3  tracking-wide text-gray-700">{{ $header }}</h5>
                     <div class="flex-1 flex justify-end">
-                        <x-buttons.primary @click="{{ $modal }}=false" class="hover:text-teal-600">
+                        <x-buttons.primary @click="{{ $modal }}=false" class="hover:text-skin-600">
                             <svg class="h-6 w-6" viewBox="0 0 456 512" xmlns="http://www.w3.org/2000/svg"
                                 fill="currentColor">
                                 <title>cancel</title>

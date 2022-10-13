@@ -55,8 +55,9 @@ class NewBlogNotification extends Notification
     {
         return [
             'type'=>"new_blog",
-            'id'=>$this->blog->id(),
+            'id'=>$this->blog->id,
             'title'=>$this->blog->title(),
+            'slug'=>$this->blog->slug,
             'created_at'=>$this->blog->createdAt(),
             'auther'=>$this->user->username(),
         ];

@@ -5,9 +5,13 @@ namespace App\Providers;
 // use Illuminate\Support\Facades\Gate;
 
 use App\Models\Comment;
+use App\Models\Tag;
 use App\Policies\CommentPolicy;
 use App\Policies\NotificationPolicy;
-use Illuminate\Auth\Access\Gate;
+use App\Policies\ReplyPolicy;
+use App\Policies\TagPolicy;
+// use Illuminate\Auth\Access\Gate;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Notifications\DatabaseNotification as Notification;
 class AuthServiceProvider extends ServiceProvider
@@ -22,7 +26,9 @@ class AuthServiceProvider extends ServiceProvider
     // ];
     protected $policies = [
         Comment::class => CommentPolicy::class,
+        Reply::class => ReplyPolicy::class,
         Notification::class => NotificationPolicy::class,
+        Tag::class => TagPolicy::class,
     ];
     /**
      * Register any authentication / authorization services.
@@ -34,5 +40,11 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         // Gate::define('delete-comment',[CommentPolicy::class, 'delete']);
+        Gate::before(function ($user, $ability) {
+            if ($user->hasRole('super-admin')) {
+                return true;
+            }
+        });
+
     }
 }

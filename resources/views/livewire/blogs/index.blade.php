@@ -1,6 +1,6 @@
 <div class="w-full px-2 md:px-12  my-4 relative">
-    <div wire:loading class="fixed bg-white bottom-3 left-3 mb-2 flex justify-center">
-        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-teal-500" xmlns="http://www.w3.org/2000/svg" fill="none"
+    <div wire:loading class="fixed bg-skin-base bottom-3 left-3 mb-2 flex justify-center">
+        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-skin-500" xmlns="http://www.w3.org/2000/svg" fill="none"
             viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
             </circle>
@@ -10,18 +10,18 @@
         </svg>
     </div>
     <div class="tabs mb-4  mt-4 dark:border-gray-700 overflow-y-hidden">
-        <ul class="flex flex-nowrap  whitespace-nowrap  -mb-px text-sm font-medium text-center -primary "
+        <ul class="flex flex-nowrap  whitespace-nowrap  -mb-px text-base font-semibold text-center -primary "
             role="tablist">
             <li class="mr-2" role="presentation">
-                <a class="inline-block p-4 rounded-t-lg  cursor-pointer border-b-4  {{ $tab == 'recent' ? 'text-teal-600  dark:text-teal-500  border-teal-600 dark:border-teal-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700' }}"
+                <a class="inline-block p-4 rounded-t-lg  cursor-pointer border-b-4  {{ $tab == 'recent' ? 'text-skin-600  dark:text-skin-500  border-skin-600 dark:border-skin-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700' }}"
                     wire:click="sortBy('recent')" role="tab">Recent</a>
             </li>
             <li class="mr-2" role="presentation">
-                <a class="inline-block p-4 rounded-t-lg cursor-pointer border-b-4 {{ $tab == 'popular' ? 'text-teal-600  dark:text-teal-500  border-teal-600 dark:border-teal-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700' }}"
+                <a class="inline-block p-4 rounded-t-lg cursor-pointer border-b-4 {{ $tab == 'popular' ? 'text-skin-600  dark:text-skin-500  border-skin-600 dark:border-skin-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700' }}"
                     wire:click="sortBy('popular')" role="tab">Popular</a>
             </li>
             <li class="mr-2" role="presentation">
-                <a class="inline-block p-4 rounded-t-lg  cursor-pointer border-b-4 {{ $tab == 'view' ? 'text-teal-600  dark:text-teal-500  border-teal-600 dark:border-teal-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700' }}"
+                <a class="inline-block p-4 rounded-t-lg  cursor-pointer border-b-4 {{ $tab == 'view' ? 'text-skin-600  dark:text-skin-500  border-skin-600 dark:border-skin-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700' }}"
                     wire:click="sortBy('view')" role="tab">Top Viewed</a>
             </li>
         </ul>

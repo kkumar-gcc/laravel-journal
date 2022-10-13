@@ -8,18 +8,21 @@ use App\Models\Tag;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 class Create extends Component
 {
     use WithFileUploads;
+    use AuthorizesRequests;
     public $title;
     public $body;
     public $message;
-    public $photo;
+    public $coverImage;
     public $tags = [];
     public $search;
     public $searchTags=[];
     protected $rules = [
-        // 'cover_image' => ['required', 'mimes:png,jpg,svg,gif', 'max:2048'],
+        'coverImage' => ['required', 'mimes:png,jpg,svg,gif', 'max:2048'],
         'title' => ['required', 'max:200', 'min:20'],
         'body' => ['required', 'min:20'],
         'tags' => ['required', 'array', 'min:1', 'max:5']
@@ -34,19 +37,22 @@ class Create extends Component
         return view('livewire.blogs.create');
     }
 
-    public function updatedPhoto()
+    public function updatedCoverImage()
     {
         $this->validate([
-            'photo' => 'image|max:1024', // 1MB Max
+            'coverImage' => 'image|max:1024', // 1MB Max
         ]);
     }
     public function submit()
     {
+        $this->authorize('create',Blog::class);
         $this->validate();
         $blog = Blog::create([
             'title' => $this->title,
             'body' => $this->body,
-            'user_id' => auth()->id()
+            'published'=>1,
+            'user_id' => auth()->id(),
+            'cover_image'=> $this->coverImage->store('/','images')
         ]);
         $tagIds = [];
         foreach ($this->tags as $tag) {
@@ -61,12 +67,14 @@ class Create extends Component
     }
     public function draft()
     {
+        $this->authorize('create',Blog::class);
         $this->validate();
         $blog = Blog::create([
             'title' => $this->title,
             'body' => $this->body,
             'status' => "drafted",
-            'user_id' => auth()->id()
+            'user_id' => auth()->id(),
+            'cover_image'=> $this->coverImage->store('/','images')
         ]);
         $tagIds = [];
         foreach ($this->tags as $tag) {

@@ -8,11 +8,15 @@ use App\Models\BlogView;
 use App\Models\Comment;
 use App\Models\Tag;
 use App\Models\User;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-
+use Jorenvh\Share\ShareFacade;
 class BlogController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -30,82 +34,8 @@ class BlogController extends Controller
      */
     public function create()
     {
-        if (Auth::check()) {
-            $last_draft = Blog::where([['user_id', auth()->user()->id], ['status', "drafted"]])->OrderBy('updated_at', 'desc')->first();
-            $tagTitles = [];
-            if ($last_draft) {
-                foreach ($last_draft->tags as $tag) {
-                    $tagTitles[] = $tag->title;
-                }
-            }
-            $isDraftNull = 0;
-            if ($last_draft) {
-                $isDraftNull = 1;
-            }
-            return view("blogs.create")
-                ->with(["draft" => $last_draft, "tagTitles" => json_encode($tagTitles), "isDraftNull" => $isDraftNull]);
-        } else {
-            return view("auth.login")->with(["warning" => "You must be logged in to create Blog."]);
-        }
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreBlogRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function draft(Request $request)
-    {
-
-        $blogId = $request->get('blogId');
-        $blogTitle = $request->get('blogTitle');
-        $blogDescription = $request->get('blogDescription');
-        $tagNames = json_decode($request->get('tags'));
-
-        if ($blogId != '') {
-
-            $blog = Blog::find($blogId);
-            $blog->title = $blogTitle;
-            $blog->description = $blogDescription;
-            $tagIds = [];
-            $tagTitles = [];
-            foreach ($tagNames as $tagName) {
-                $tag = Tag::firstOrCreate(['title' => $tagName]);
-                if ($tag) {
-                    $tagIds[] = $tag->id;
-                    $tagTitles[] = $tag->title;
-                }
-            };
-            $blog->save();
-            $blog->tags()->sync($tagIds);
-        } else {
-            $blog = new Blog();
-            $blog->title = $blogTitle;
-            $blog->description = $blogDescription;
-            $blog->status = "drafted";
-            $blog->user_id = auth()->user()->id;
-            $tagIds = [];
-            $tagTitles = [];
-            foreach ($tagNames as $tagName) {
-
-                $tag = Tag::firstOrCreate(['title' => $tagName]);
-                if ($tag) {
-                    $tagIds[] = $tag->id;
-                    $tagTitles[] = $tag->title;
-                }
-            };
-            $blog->save();
-            $blog->tags()->sync($tagIds);
-
-            $blogId = $blog->id;
-        }
-
-        return response()->json([
-            "success" => 'post created successfully',
-            "blogId" => $blogId,
-            "tagTitles" => $request->get('tags')
-        ]);
+        $this->authorize('create',Blog::class);
+        return view("blogs.create");
     }
 
     /**
@@ -117,50 +47,46 @@ class BlogController extends Controller
     public function show(Request $request, $slug)
     {
         $blog = Blog::where("slug", $slug)->first();
+        $this->authorize('view', $blog);
         if ($blog) {
-            if ($blog->status == "posted") {
-                // $shareBlog =  ShareFacade::page(
-                //     URL::current(),
-                //     $blog->title,
-                // )
-                //     ->facebook()
-                //     ->twitter()
-                //     ->linkedin()
-                //     ->telegram()
-                //     ->whatsapp()
-                //     ->reddit()
-                //     ->getRawLinks();
-                //    dd($blog->body());
-
-
-                $existView = BlogView::where([['ip_address', "=", $request->ip()], ["blog_id", "=", $blog->id]])->count();
-                if ($existView < 1) {
-                    $newView = new BlogView();
-                    $newView->ip_address = $request->ip();
-                    $newView->blog_id = $blog->id;
-                    $newView->save();
-                }
-                $related = Blog::where("status", "=", "posted")->with(['user', 'tags', 'bloglikes', 'blogviews'])->whereHas('tags', function ($query) use ($blog) {
-                    $query->whereIn('title', $blog->tags->pluck('title'));
-                }, '>=', count($blog->tags->pluck('title')))->where("id", "!=", $blog->id)->limit(5)->withCount('tags')
-                    ->get();
-                return view("blogs.show")->with([
-                    "blog" => $blog,
-                    "related" => $related,
-                ]);
+            $shareBlog =  ShareFacade::page(
+                URL::current(),
+                $blog->title,
+            )
+                ->facebook()
+                ->twitter()
+                ->linkedin()
+                ->telegram()
+                ->whatsapp()
+                ->reddit()
+                ->getRawLinks();
+            $existView = BlogView::where([['ip_address', "=", $request->ip()], ["blog_id", "=", $blog->id]])->count();
+            if ($existView < 1) {
+                $newView = new BlogView();
+                $newView->ip_address = $request->ip();
+                $newView->blog_id = $blog->id;
+                $newView->save();
             }
+            $related = Blog::published()->with(['user', 'tags', 'bloglikes', 'blogviews'])->whereHas('tags', function ($query) use ($blog) {
+                $query->whereIn('title', $blog->tags->pluck('title'));
+            }, '>=', count($blog->tags->pluck('title')))->where("id", "!=", $blog->id)->limit(5)->withCount('tags')
+                ->get();
+            return view("blogs.show")->with([
+                "blog" => $blog,
+                "related" => $related,
+                "shareBlog"=>$shareBlog,
+            ]);
         }
         return abort(404);;
     }
     public function edit($slug)
     {
         $blog = Blog::where("slug", $slug)->first();
-        $this->Authorize('view', $blog);
+        $this->authorize('update', $blog);
         if ($blog) {
             return view("blogs.update")->with(["blog" => $blog]);
         }
     }
-
     public function manage($slug)
     {
         $blog = Blog::where("slug", $slug)->first();
@@ -232,13 +158,10 @@ class BlogController extends Controller
      * @param  \App\Models\Blog  $blog
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Blog $blog)
     {
-        if (auth()->user()->id == $request->get('user_id')) {
-            $blog = Blog::findOrFail($id);
-            $blog->delete();
-            return redirect('/blogs')->with(["deleteSuccess" => "blog deleted successfully."]);
-        }
-        return view('error');
+        $this->authorize('delete', $blog);
+        $blog->delete();
+        return redirect('/blogs')->with(["deleteSuccess" => "blog deleted successfully."]);
     }
 }

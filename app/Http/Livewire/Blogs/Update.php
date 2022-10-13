@@ -13,15 +13,14 @@ class Update extends Component
     use WithFileUploads;
     use AuthorizesRequests;
     public $title;
-
     public $body;
     public $blog;
     public $message;
-    public $photo;
+    public $coverImage;
     public $tags = [];
     public $search;
     protected $rules = [
-        // 'cover_image' => ['required', 'mimes:png,jpg,svg,gif', 'max:2048'],
+        'coverImage' => ['required', 'mimes:png,jpg,svg,gif', 'max:2048'],
         'title' => ['required', 'max:200', 'min:20'],
         'body' => ['required', 'min:20'],
         'tags' => ['required', 'array', 'min:1', 'max:5']
@@ -53,6 +52,7 @@ class Update extends Component
         $this->blog->update([
             'title' => $this->title,
             'body' => $this->body,
+            'cover_image'=> $this->coverImage->store('/','images')
         ]);
         $tagIds = [];
         foreach ($this->tags as $tag) {

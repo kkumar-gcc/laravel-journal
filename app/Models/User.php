@@ -7,11 +7,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Str;
+use Spatie\Permission\Traits\HasRoles;
+use RalphJSmit\Laravel\SEO\Support\HasSEO;
+use RalphJSmit\Laravel\SEO\Support\SEOData;
+
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, HasSEO;
 
     /**
      * The attributes that are mass assignable.
@@ -53,7 +58,7 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
     public function id(): int
     {
-       return $this->id;
+        return $this->id;
     }
     public function emailAddress(): string
     {
@@ -61,40 +66,40 @@ class User extends Authenticatable implements MustVerifyEmail
     }
     public function firstName(): ?string
     {
-       return $this->first_name;
+        return $this->first_name;
     }
     public function lastName(): ?string
     {
-       return $this->last_name;
+        return $this->last_name;
     }
 
     public function username(): string
     {
-       return $this->username;
+        return $this->username;
     }
     public function shortBio(): ?string
     {
-       return $this->short_bio;
+        return $this->short_bio;
     }
     public function aboutMe()
     {
-       return $this->about_me;
+        return $this->about_me;
     }
     public function location(): ?string
     {
-       return $this->location;
+        return $this->location;
     }
     public function twitterUrl(): ?string
     {
-       return $this->twitter_url;
+        return $this->twitter_url;
     }
     public function websiteUrl(): ?string
     {
-       return $this->website_url;
+        return $this->website_url;
     }
     public function isBanned(): bool
     {
-        return ! is_null($this->banned_at);
+        return !is_null($this->banned_at);
     }
     public function isLoggedInUser(): bool
     {
@@ -164,20 +169,35 @@ class User extends Authenticatable implements MustVerifyEmail
     // }
     public function followings()
     {
-        return $this->belongsToMany(User::class, 'subscribers', 'subscriber_id','user_id');
+        return $this->belongsToMany(User::class, 'subscribers', 'subscriber_id', 'user_id');
     }
     // users that follow this user
     public function subscribers()
     {
-        return $this->belongsToMany(User::class, 'subscribers','user_id', 'subscriber_id');
+        return $this->belongsToMany(User::class, 'subscribers', 'user_id', 'subscriber_id');
     }
     public function isSubscriber()
     {
         return $this->subscribers()->where('user_id', '=', auth()->user()->id)->exists();
     }
-    public function avatarUrl():string
+    public function backgroundImage(): string
     {
-        return 'https://www.gravatar.com/avatar/'.md5(Str::lower(trim('krishkumar9352@gmail.com')));
+        return $this->background_image
+            ? Storage::disk('images')->url($this->background_image)
+            : 'https://live.staticflickr.com/65535/52391254003_99ade44739_h.jpg';
+    }
+    public function avatarUrl(): string
+    {
+        return $this->profile_image
+            ? Storage::disk('images')->url($this->profile_image)
+            : 'https://www.gravatar.com/avatar/' . md5(Str::lower(trim('krishkumar9352@gmail.com')));
     }
 
+    public function getDynamicSEOData(): SEOData
+    {
+        return new SEOData(
+            title: $this->username,
+            description: $this->shortBio(),
+        );
+    }
 }

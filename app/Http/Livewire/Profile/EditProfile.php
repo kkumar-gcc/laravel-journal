@@ -4,9 +4,11 @@ namespace App\Http\Livewire\Profile;
 
 use App\Models\User;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class EditProfile extends Component
 {
+    use WithFileUploads;
     public $username;
     public $name;
     public $location;
@@ -15,12 +17,14 @@ class EditProfile extends Component
     public $shortBio;
     public $aboutMe;
     public $websiteUrl;
+    public $profileImage;
+    public $backgroundImage;
     public function mount()
     {
         $user = auth()->user();
         $this->username = $user->username();
         $this->name = $user->name;
-        $this->location = $user->location();
+        $this->location = $user->location;
         $this->firstName = $user->firstName();
         $this->lastName = $user->lastName();
         $this->shortBio = $user->shortBio();
@@ -32,24 +36,21 @@ class EditProfile extends Component
         return view('livewire.profile.edit-profile');
     }
     protected $rules = [
-        // "profile_image" => 'sometimes|mimes:png,jpg,jpeg,gif,svg|max:2048',
-        //     "background_image" => 'sometimes|mimes:png,jpg,jpeg,gif,svg|max:2048',
+        "profileImage" => 'sometimes|mimes:png,jpg,jpeg,gif,svg|max:2048',
+        "backgroundImage" => 'sometimes|mimes:png,jpg,jpeg,gif,svg|max:2048',
         "username" => 'required',
         "shortBio" => "required|min:20|max:300"
-
     ];
     public function update()
     {
         $this->validate();
         $user = User::find(auth()->user()->id);
-        // if ($request->hasFile('profile_image')) {
-        //     $profileImage = $this->uploads($request->file('profile_image'));
-        //     $user->profile_image = $profileImage['filePath'];
-        // }
-        // if ($request->hasFile('background_image')) {
-        //     $backgroundImage = $this->uploads($request->file('background_image'));
-        //     $user->background_image = $backgroundImage['filePath'];
-        // }
+        if ($this->profileImage) {
+            $user->profile_image = $this->profileImage->store('/','images');
+        }
+        if ($this->backgroundImage) {
+            $user->background_image = $this->backgroundImage->store('/','images');
+        }
         $user->name = $this->name;
         $user->first_name = $this->firstName;
         $user->last_name = $this->lastName;

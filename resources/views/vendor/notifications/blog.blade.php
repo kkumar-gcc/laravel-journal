@@ -62,8 +62,8 @@
                     <span class="ml-1 text-sm">posted
                         {{ \Carbon\Carbon::parse($blog->created_at)->diffForhumans() }}</span>
                 </p>
-                <x-buttons.secondary href="/blogs/{{ Str::slug($blog->title(), '-') }}-{{ $blog->id() }}"
-                    class="mt-5 sm:hidden" fullWidth="true">Read Blog</x-buttons.secondary>
+                <x-buttons.secondary href="/blogs/{{ $blog->slug }}" class="mt-5 sm:hidden" fullWidth="true">Read
+                    Blog</x-buttons.secondary>
             </div>
             <div
                 class="basis-1/3 relative text-center min-h-fit {{ $blog->adult_warning ? 'prose prose-img:blur-lg' : '' }}">

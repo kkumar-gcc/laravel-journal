@@ -3,5 +3,4 @@
         <x-sidebar :topTags="true"/>
     </x-slot>
     <livewire:blogs.index />
-
 </x-app-layout>

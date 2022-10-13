@@ -11,6 +11,12 @@ class AppLayout extends Component
      *
      * @return \Illuminate\View\View
      */
+    public $page;
+    public function __construct($page = null)
+    {
+        $this->page = $page;
+    }
+
     public function render()
     {
         return view('layouts.app');

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('body');
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
-            $table->enum("status", ['posted', 'drafted']);
+            $table->boolean('published')->default(true);
             $table->enum("access", ['public', 'private','subscriber'])->default('public');
             $table->enum("comment_access", ['enable', 'disable'])->default('enable');
             $table->boolean("adult_warning")->default(false);

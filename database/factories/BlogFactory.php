@@ -21,7 +21,7 @@ class BlogFactory extends Factory
         return [
             'title'=>$title,
             'body'=>$this->faker->realText(),
-            'status'=>$this->faker->randomElement(['posted', 'drafted']),
+            'published'=>$this->faker->boolean(),
             'slug'=> SlugService::createSlug(Blog::class, 'slug', $title),
         ];
     }

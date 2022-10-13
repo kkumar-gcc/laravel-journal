@@ -45,7 +45,7 @@ class PrivateProfileController extends Controller
             ]);
         } else if ($request->tab == "blogs") {
             $tab = 'blogs';
-            $blogs = Blog::where("user_id", "=", auth()->user()->id)->where('status', '=', 'posted')->paginate(5);
+            $blogs = Blog::where("user_id", "=", auth()->user()->id)->published()->paginate(5);
             return view("profile.private.index")->with([
                 "user" =>  $user,
                 "blogs" => $blogs,
@@ -53,7 +53,7 @@ class PrivateProfileController extends Controller
             ]);
         } else if ($request->tab == "drafts") {
             $tab = 'drafts';
-            $drafts = Blog::where("user_id", "=", auth()->user()->id)->where('status', '=', 'drafted')->paginate(5);
+            $drafts = Blog::where("user_id", "=", auth()->user()->id)->unpublished()->paginate(5);
             return view("profile.private.index")->with([
                 "user" =>  $user,
                 "drafts" => $drafts,
@@ -90,7 +90,7 @@ class PrivateProfileController extends Controller
             ]);
         } else if ($request->tab == 'comments') {
             $tab = 'comments';
-            $comments = Comment::where('user_id', '=', Auth()->user()->id)->get();
+            $comments = Comment::where('user_id', '=', Auth()->user()->id)->orderBy('created_at','DESC')->paginate(20);
             // ->paginate(5);
             return view("profile.private.index")->with([
                 "user" =>  $user,

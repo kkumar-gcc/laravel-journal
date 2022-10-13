@@ -11,8 +11,7 @@
                     <a href="/users/{{ $topUser->username }}" class="flex items-center space-x-4 user-popover"
                         id="user-1" id="user-{{ $topUser->id }}" data-popover-placement="left">
                         {{-- <x-avatar :user="$topUser" class="w-8 h-8 rounded-full" unlinked /> --}}
-                        <x-avatar search="{{ $topUser->username }}" :src="$topUser->profile_image = ''"  class="h-12 w-12 bg-gray-50 rounded-full" provider="gravatar"/>
-
+                        <x-avatar search="{{ $topUser->username }}" :src="$topUser->avatarUrl()"  class="h-12 w-12 bg-gray-50 rounded-full" provider="gravatar" alt="Avatar of {{ $topUser->username }}"/>
                         <div class="space-y-1 font-medium ">
                             <div>{{ $topUser->username }}</div>
                         </div>
