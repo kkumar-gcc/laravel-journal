@@ -4,6 +4,8 @@ namespace App\Http\Livewire;
 
 use App\Models\Comment as ModelsComment;
 use App\Models\Reply as ModelsReply;
+use App\Gamify\Points\CommentCreated;
+use App\Gamify\Points\ReplyCreated;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -48,11 +50,12 @@ class Comment extends Component
     public function comment()
     {
         if ($this->canComment) {
-            ModelsComment::create([
+            $comment=ModelsComment::create([
                 'body' =>  $this->body,
                 'blog_id' => $this->blog_id,
                 'user_id' => auth()->id()
             ]);
+            givePoint(new CommentCreated($comment));
             $this->reset('body');
             $this->comments_count++;
             $this->body = '';
@@ -74,11 +77,12 @@ class Comment extends Component
     }
     public function reply($comment_id)
     {
-        ModelsReply::create([
+        $reply=ModelsReply::create([
             'body' =>  $this->body,
             'comment_id' => $comment_id,
             'user_id' => auth()->id()
         ]);
+        givePoint(new ReplyCreated($reply));
         $this->reset('body');
         // $this->emit('editorClose','destroyEditor');
     }
@@ -90,6 +94,7 @@ class Comment extends Component
         if ($comment->replies->count() > 0) {
             dd("you can't delete it completely");
         } else {
+            undoPoint(new CommentCreated($comment));
             $comment->delete();
             $this->comments_count--;
         }

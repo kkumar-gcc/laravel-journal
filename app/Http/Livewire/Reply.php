@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Gamify\Points\ReplyCreated;
 use App\Models\Reply as ModelsReply;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
@@ -41,15 +42,17 @@ class Reply extends Component
 
         $reply = ModelsReply::find($reply_id);
         $this->authorize('delete', $reply);
+        undoPoint(new ReplyCreated($reply));
         $reply->delete();
     }
     public function reply()
     {
-        ModelsReply::create([
+        $reply=ModelsReply::create([
             'body' =>  $this->body,
             'comment_id' => $this->comment_id,
             'user_id' => auth()->id()
         ]);
+        givePoint(new ReplyCreated($reply));
         $this->reset('body');
     }
 

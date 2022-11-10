@@ -21,6 +21,7 @@
         "laravel/tinker": "^2.7",
         "league/commonmark": "^2.3",
         "livewire/livewire": "^2.10",
+        "qcod/laravel-gamify": "^1.0",
         "ralphjsmit/laravel-seo": "^1.2",
         "saade/blade-iconsax": "^1.0",
         "spatie/laravel-permission": "^5.5",

@@ -10,13 +10,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Str;
+use QCod\Gamify\Gamify;
 use Spatie\Permission\Traits\HasRoles;
 use RalphJSmit\Laravel\SEO\Support\HasSEO;
 use RalphJSmit\Laravel\SEO\Support\SEOData;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, HasSEO;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, HasSEO,Gamify;
 
     /**
      * The attributes that are mass assignable.

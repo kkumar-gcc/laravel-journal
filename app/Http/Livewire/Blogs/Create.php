@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Blogs;
 
 use App\Events\BlogWasCreated;
+use App\Gamify\Points\BlogCreated;
 use App\Models\Blog;
 use App\Models\Tag;
 use Livewire\Component;
@@ -20,7 +21,7 @@ class Create extends Component
     public $coverImage;
     public $tags = [];
     public $search;
-    public $searchTags=[];
+    public $searchTags = [];
     protected $rules = [
         'coverImage' => ['required', 'mimes:png,jpg,svg,gif', 'max:2048'],
         'title' => ['required', 'max:200', 'min:20'],
@@ -30,9 +31,9 @@ class Create extends Component
     public function render()
     {
         if ($this->search != NULL) {
-            $this->searchTags = Tag::query()->where('title', 'LIKE', '%'.$this->search.'%')->take(5)->get();
-        }else{
-            $this->searchTags=[];
+            $this->searchTags = Tag::query()->where('title', 'LIKE', '%' . $this->search . '%')->take(5)->get();
+        } else {
+            $this->searchTags = [];
         }
         return view('livewire.blogs.create');
     }
@@ -45,14 +46,14 @@ class Create extends Component
     }
     public function submit()
     {
-        $this->authorize('create',Blog::class);
+        $this->authorize('create', Blog::class);
         $this->validate();
         $blog = Blog::create([
             'title' => $this->title,
             'body' => $this->body,
-            'published'=>1,
+            'published' => 1,
             'user_id' => auth()->id(),
-            'cover_image'=> $this->coverImage->store('/','images')
+            'cover_image' => $this->coverImage->store('/', 'images')
         ]);
         $tagIds = [];
         foreach ($this->tags as $tag) {
@@ -63,18 +64,19 @@ class Create extends Component
         };
         $blog->tags()->sync($tagIds);
         BlogWasCreated::dispatch($blog);
-        return redirect()->to('/blogs/'.$blog->slug);
+        givePoint(new BlogCreated($blog));
+        return redirect()->to('/blogs/' . $blog->slug);
     }
     public function draft()
     {
-        $this->authorize('create',Blog::class);
+        $this->authorize('create', Blog::class);
         $this->validate();
         $blog = Blog::create([
             'title' => $this->title,
             'body' => $this->body,
-            'published'=>0,
+            'published' => 0,
             'user_id' => auth()->id(),
-            'cover_image'=> $this->coverImage->store('/','images')
+            'cover_image' => $this->coverImage->store('/', 'images')
         ]);
         $tagIds = [];
         foreach ($this->tags as $tag) {

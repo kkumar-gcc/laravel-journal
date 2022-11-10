@@ -14,7 +14,7 @@
     @livewireStyles
 </head>
 
-<body class="font-sans antialiased max-w-7xl mx-auto 2xl:shadow-lg 2xl:border-x theme-teal">
+<body class="font-sans antialiased max-w-7xl mx-auto 2xl:shadow-lg 2xl:border-x theme-rose">
     <div class="min-h-screen bg-skin-base">
         @include('layouts.navigation')
         <!-- Page Content -->

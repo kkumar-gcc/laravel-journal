@@ -2,10 +2,11 @@
     <main
         class="relative prose max-w-none lg:max-w-full xl:max-w-none prose-img:rounded-xl dark:prose-invert prose-a:text-skin-600 dark:prose-a:text-skin-500">
         <section>
-            <header class="bg-skin-base border border-gray-200 not-prose dark:border-gray-700 rounded-lg dark:bg-gray-800">
+            <header
+                class="bg-skin-base border border-gray-200 not-prose dark:border-gray-700 rounded-lg dark:bg-gray-800">
                 <div class="relative  pt-[60%] rounded-xl sm:pt-[30%] md:pt-[22%]">
                     <img class="absolute top-0 bottom-0 left-0 right-0 w-full h-full m-0 bg-skin-base object-fit rounded-t-xl dark:bg-gray-800"
-                        src="{{ $user->backgroundImage() }}" alt="background image of {{ $user->username }}"/>
+                        src="{{ $user->backgroundImage() }}" alt="background image of {{ $user->username }}" />
                 </div>
                 <div class="flex flex-col px-6 my-4 md:flex-row">
                     <div class="relative flex items-start justify-center w-full mb-4 basis-1/3 md:w-1/3">
@@ -30,6 +31,33 @@
                 </div>
             </header>
         </section>
+        <h5>Reputations</h5>
+        @foreach ($user->reputations as $reputation)
+            {{-- // name of the point type --}}
+            {{ $reputation->name }}
+
+            {{-- // payee user --}}
+            {{ $reputation->payee->username}}
+
+            {{-- // how many points --}}
+            {{ $reputation->point }}
+
+            {{-- // model on which point was given --}}
+            {{ $reputation->subject->title }}
+        @endforeach
+        @foreach ($user->badges as $badge)
+            {{-- // name of the point type --}}
+            {{ $badge->name }}
+
+            {{-- // payee user --}}
+            {{ $badge->description}}
+
+            {{-- // how many points --}}
+            {{ $reputation->level }}
+
+            {{-- // model on which point was given --}}
+            {{ $reputation->icon }}
+        @endforeach
         <div class="relative flex flex-col w-full mt-3 lg:flex-row ">
             <aside class="basis-1/4 not-prose" aria-label="Sidebar">
                 <div id="sticky-sidebar" class="hidden py-4 overflow-y-auto rounded lg:block">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Blogs;
 
+use App\Gamify\Points\BlogCreated;
 use App\Models\Blog;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
@@ -47,6 +48,7 @@ class Manage extends Component
     public function delete()
     {
         $this->authorize('delete', $this->blog);
+        undoPoint(new BlogCreated($this->blog));
         $this->blog->delete();
         return redirect()->to('/blogs');
     }
