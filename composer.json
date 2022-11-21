@@ -28,7 +28,7 @@
         "symfony/http-client": "^6.1",
         "symfony/mailgun-mailer": "^6.1",
         "symfony/yaml": "^6.1",
-        "fakerphp/faker": "^1.9.1",
+        "fakerphp/faker": "^1.9.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.7",
