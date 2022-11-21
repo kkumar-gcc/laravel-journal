@@ -1,0 +1,71 @@
+{
+  "node_modules/material-icons/iconfont/material-icons.woff2": {
+    "file": "assets/material-icons.8265f647.woff2",
+    "src": "node_modules/material-icons/iconfont/material-icons.woff2"
+  },
+  "node_modules/material-icons/iconfont/material-icons-round.woff2": {
+    "file": "assets/material-icons-round.c948f126.woff2",
+    "src": "node_modules/material-icons/iconfont/material-icons-round.woff2"
+  },
+  "node_modules/material-icons/iconfont/material-icons-outlined.woff2": {
+    "file": "assets/material-icons-outlined.35dca8a7.woff2",
+    "src": "node_modules/material-icons/iconfont/material-icons-outlined.woff2"
+  },
+  "node_modules/material-icons/iconfont/material-icons-sharp.woff2": {
+    "file": "assets/material-icons-sharp.d31bfb81.woff2",
+    "src": "node_modules/material-icons/iconfont/material-icons-sharp.woff2"
+  },
+  "node_modules/material-icons/iconfont/material-icons-two-tone.woff2": {
+    "file": "assets/material-icons-two-tone.1e673ba8.woff2",
+    "src": "node_modules/material-icons/iconfont/material-icons-two-tone.woff2"
+  },
+  "node_modules/material-icons/iconfont/material-icons.woff": {
+    "file": "assets/material-icons.fd84f88b.woff",
+    "src": "node_modules/material-icons/iconfont/material-icons.woff"
+  },
+  "node_modules/material-icons/iconfont/material-icons-round.woff": {
+    "file": "assets/material-icons-round.1c135b15.woff",
+    "src": "node_modules/material-icons/iconfont/material-icons-round.woff"
+  },
+  "node_modules/material-icons/iconfont/material-icons-outlined.woff": {
+    "file": "assets/material-icons-outlined.8e94758c.woff",
+    "src": "node_modules/material-icons/iconfont/material-icons-outlined.woff"
+  },
+  "node_modules/material-icons/iconfont/material-icons-sharp.woff": {
+    "file": "assets/material-icons-sharp.fa3888ef.woff",
+    "src": "node_modules/material-icons/iconfont/material-icons-sharp.woff"
+  },
+  "node_modules/material-icons/iconfont/material-icons-two-tone.woff": {
+    "file": "assets/material-icons-two-tone.3d34f30a.woff",
+    "src": "node_modules/material-icons/iconfont/material-icons-two-tone.woff"
+  },
+  "resources/js/app.js": {
+    "file": "assets/app.62b42b6d.js",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "css": [
+      "assets/app.19d33af4.css"
+    ],
+    "assets": [
+      "assets/material-icons.8265f647.woff2",
+      "assets/material-icons.fd84f88b.woff",
+      "assets/material-icons-outlined.35dca8a7.woff2",
+      "assets/material-icons-outlined.8e94758c.woff",
+      "assets/material-icons-round.c948f126.woff2",
+      "assets/material-icons-round.1c135b15.woff",
+      "assets/material-icons-sharp.d31bfb81.woff2",
+      "assets/material-icons-sharp.fa3888ef.woff",
+      "assets/material-icons-two-tone.1e673ba8.woff2",
+      "assets/material-icons-two-tone.3d34f30a.woff"
+    ]
+  },
+  "resources/js/app.css": {
+    "file": "assets/app.19d33af4.css",
+    "src": "resources/js/app.css"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app.6de49dda.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  }
+}
