@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::factory()->count(100)->create()
+        User::factory()->count(20)->create()
             ->each(function ($user) {
                 Fun::factory()->count(rand(1, 4))->create(
                     [
