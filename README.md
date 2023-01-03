@@ -44,4 +44,4 @@ Please read [the contributing guide](CONTRIBUTING.md) before creating an issue o
 Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing or engaging in discussions.
 ## License
 
-This project is licensed under the MIT License - see [the license file](LICENSE.md) for details.
+This project is licensed under the BSD-3-Clause license  - see [the license file](LICENSE.md) for details.
