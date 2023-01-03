@@ -9,6 +9,13 @@ This is a platform for writers to share their blog posts and for readers to disc
 - Discover new content through the explore page and search function
 - Leave comments and engage with other writers
 - Share your blog posts on social media
+## Requirements
+
+The following tools are required in order to start the installation.
+
+- PHP 8.1
+- [Composer](https://getcomposer.org/download/)
+- [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
 ## Installation
 
