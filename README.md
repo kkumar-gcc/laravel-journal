@@ -1,4 +1,4 @@
-# Welcome to the Open Source Blog Community Portal!
+# Welcome to the Open Source Blog Community Portal template!
 ![image](https://user-images.githubusercontent.com/84431594/210421046-955c4670-9da3-4af4-99e3-b4ad198ae2cc.png)
 
 This is a platform for writers to share their blog posts and for readers to discover new and interesting content. The portal is completely open source, meaning that anyone can contribute to the development and improvement of the platform.
